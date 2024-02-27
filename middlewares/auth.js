@@ -1,51 +1,72 @@
 const User = require('../models/userModel')
 
-const isLogout = (req, res, next) => {
+module.exports = {
+ isLogout : (req, res, next) => {
     if (!req.session.user) {
         next()
     } else {
         res.redirect('/')
     }
-}
-// 
-const isLogged = (req, res, next) => {
+},
+
+isLogged: (req, res, next) => {
     if (req.session.user) {
         req.user = req.session.user
         next()
     } else {
         res.redirect('/login')
     }
-}
-const isAdmin = (req, res, next) => {
+},
+
+// Doctor
+
+isDoctor :(req, res, next) => {
     if(req.session.admin) {
-        req.admin = req.session.admin 
+        req.doctor = req.session.doctor 
         next()
     }else{
-        res.redirect('/admin/login')
+        res.redirect('/doctor/login')
     }
-}
+},
 
-const loggedOutAdmin=  (req, res, next) => {
-    if(!req.session.admin){
+ loggedOutDoctor:  (req, res, next) => {
+    if(!req.session.doctor){
         next()
     }else{
-        res.redirect('/admin/dashboard')
+        res.redirect('/doctor/dashboard')
     }
-}
+},
 
-const isVerified = async  (req,res,next) => {
+ isVerified : async  (req,res,next) => {
     const user = await User.findById(req.user)
     if (user.is_varified === 1) {
         next()
     } else {
         res.redirect('/login')
     }
-}
+},
 
-module.exports = {
-    isLogout,
-    isLogged,
-    isAdmin,
-    loggedOutAdmin,
-    isVerified
+
+
+// Admin
+
+isAdmin :(req, res, next) => {
+    if(req.session.admin) {
+        req.admin = req.session.admin 
+        next()
+    }else{
+        res.redirect('/admin/login')
+    }
+},
+
+ loggedOutAdmin:  (req, res, next) => {
+    if(!req.session.admin){
+        next()
+    }else{
+        res.redirect('/admin/dashboard')
+    }
+},
+
+
+    
 }
