@@ -7,6 +7,8 @@ const MedicineDistribution =require('../models/MdcnDstrbtionModel')
 
 
 module.exports = {
+
+  
 loadLogin:(req, res) => {
   res.render("doctor/login", { error: null, message: null });
 },

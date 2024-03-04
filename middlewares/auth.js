@@ -21,7 +21,7 @@ isLogged: (req, res, next) => {
 // Doctor
 
 isDoctor :(req, res, next) => {
-    if(req.session.admin) {
+    if(req.session.doctor) {
         req.doctor = req.session.doctor 
         next()
     }else{
@@ -59,7 +59,7 @@ isAdmin :(req, res, next) => {
     }
 },
 
- loggedOutAdmin:  (req, res, next) => {
+ loggedInAdmin:  (req, res, next) => {
     if(!req.session.admin){
         next()
     }else{
