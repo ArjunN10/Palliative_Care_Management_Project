@@ -4,23 +4,33 @@ const Medicine = require("../models/medicineModel");
 const MedicineDistribution = require("../models/MdcnDstrbtionModel");
 const bcrypt = require("bcrypt");
 
-const securePassword = async (password) => {
+
+
+
+
+module.exports = {
+
+
+ securePassword : async (password) => {
   try {
     const passwordHash = await bcrypt.hash(password, 10);
     return passwordHash;
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const loadRegister = async (req, res) => {
+
+ loadRegister : async (req, res) => {
   try {
     res.render("users/registration", { error: null, message: null });
   } catch (error) {
     console.log(error.message);
   }
-};
-const insertUser = async (req, res) => {
+},
+
+
+ insertUser : async (req, res) => {
   try {
     const userExists = await User.findOne({ email: req.body.email });
     if (userExists)
@@ -48,18 +58,20 @@ const insertUser = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const loadLogin = async (req, res) => {
+
+ loadLogin : async (req, res) => {
   const { error } = req.query;
   try {
     res.render("users/login", { message: null, error: error ? error : null });
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const validLogin = async (req, res) => {
+
+ validLogin : async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -74,21 +86,22 @@ const validLogin = async (req, res) => {
         error: "Wrong password.",
         message: null,
       });
-    // if (user.is_varified === 1) {
-    //   req.session.user = user._id;
-    //   res.redirect("/");
-    // } else {
-    //   res.render("users/login", {
-    //     error: "Please wait for the verification by the admin",
-    //     message: null,
-    //   });
-    // }
+    if (user.is_varified === 1) {
+      req.session.user = user._id;
+      res.redirect("/");
+    } else {
+      res.render("users/login", {
+        error: "Please wait for the verification by the admin",
+        message: null,
+      });
+    }
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const loadIndex = async (req, res) => {
+
+ loadIndex : async (req, res) => {
   try {
     const user = await User.findById(req.user);
     const patients = await Patient.aggregate([
@@ -105,9 +118,10 @@ const loadIndex = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const searchPatient = async (req, res) => {
+
+ searchPatient : async (req, res) => {
   const user = await User.findById(req.user);
   const { q } = req.body;
   try {
@@ -144,9 +158,10 @@ const searchPatient = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const getMedicines = async (req, res) => {
+
+ getMedicines : async (req, res) => {
   try {
     const user = await User.findById(req.user);
     const medicines = await Medicine.find();
@@ -159,9 +174,10 @@ const getMedicines = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const searchMedicine = async (req, res) => {
+
+ searchMedicine : async (req, res) => {
   const user = await User.findById(req.user);
   const { q } = req.body;
   try {
@@ -180,9 +196,10 @@ const searchMedicine = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const getPatientMedicines = async (req, res) => {
+
+ getPatientMedicines : async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(req.user);
   const Pid = await Patient.findById(id);
@@ -219,9 +236,10 @@ const getPatientMedicines = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const distributeMedicines = async (req, res) => {
+
+ distributeMedicines : async (req, res) => {
   const staff = await User.findById(req.session.user);
   const { patientId } = req.params;
   const { medicineId, count } = req.body;
@@ -284,9 +302,10 @@ const distributeMedicines = async (req, res) => {
     console.log(error.message);
     return res.status(500).json({ error: "Internal Server Error" });
   }
-};
+},
 
-const distributioHistory = async (req, res) => {
+
+ distributioHistory : async (req, res) => {
   try {
     const user = await User.findById(req.session.user);
     const medicineDistributions = await MedicineDistribution.find().populate(
@@ -296,32 +315,20 @@ const distributioHistory = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const printList = async (req, res) => {
+
+ printList : async (req, res) => {
   const { id } = req.params;
   const patient = await Patient.findById(id);
   const recievedMedicines = await MedicineDistribution.find({ patient: id });
   res.render("users/printList", { recievedMedicines, patient });
-};
+},
 
-const logout = (req, res) => {
+
+ logout : (req, res) => {
   req.session.destroy();
   res.redirect("/login");
-};
+},
 
-module.exports = {
-  loadRegister,
-  insertUser,
-  loadLogin,
-  validLogin,
-  loadIndex,
-  logout,
-  searchPatient,
-  getMedicines,
-  searchMedicine,
-  getPatientMedicines,
-  distributeMedicines,
-  distributioHistory,
-  printList,
 };

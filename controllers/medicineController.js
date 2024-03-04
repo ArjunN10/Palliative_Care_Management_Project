@@ -1,26 +1,44 @@
 const Medicine = require("../models/medicineModel");
 const randomString = require("randomstring");
 
-exports.showMedicines = async (req,res)=>{
+
+module.exports={
+
+showMedicines : async (req,res)=>{
   try {
     const medicines = await Medicine.find()
-    return res.render('admin/medicines/Medicines',{medicines})
+    return res.render('doctor/medicines/Medicines',{medicines})
+
+    // {
+    //   status: "success",
+    //   message: "Medicins fetched succcessully",
+    //   error: null,
+    //   error_message: null
+    // }
   } catch (error) {
     console.log(error.message);
+    // {
+    //   status: "failure",
+    //   message: error.message,
+    //   error: error.code,
+    //   error_message: "Something went wrong"
+    // }
     res.send("internal Server error");
   }
-}
+},
 
-exports.ShowAddMedicine = async (req, res) => {
+
+ShowAddMedicine : async (req, res) => {
   try {
-    res.render("admin/medicines/AddMedicine", { error: null, message: null });
+    res.render("doctor/medicines/AddMedicine", { error: null, message: "ShowAddMedicine Successfull" });
   } catch (error) {
     console.log(error.message);
     res.send("internal Server error");
   }
-};
+},
 
-exports.addMedicine = async (req, res) => {
+
+addMedicine : async (req, res) => {
   const { name, brand, batch, expiry, stock } = req.body;
   function generateSlno() {
     let UniqueNum = randomString.generate({
@@ -46,27 +64,27 @@ exports.addMedicine = async (req, res) => {
       stock,
     });
     await medicine.save();
-    return res.redirect("/admin/medicines");
+    return res.redirect("/doctor/medicines");
   } catch (error) {
     console.log(error.message);
     res.send("internal Server error");
   }
-};
+},
 
 
-exports.showEditMed = async (req,res)=>{
+showEditMed : async (req,res)=>{
   try {
      const id = req.params.id
      const medicine = await Medicine.findById(id)
-     return res.render('admin/medicines/EditMedicine',{medicine,message:null,error:null})
+     return res.render('doctor/medicines/EditMedicine',{medicine,message:null,error:null})
   } catch (error) {
     console.log(error.message);
     res.send("internal Server error");
   }
-}
+},
 
 
-exports.updateMedicine = async (req,res)=>{
+updateMedicine : async (req,res)=>{
   const { id,name, brand, batch, expiry, stock } = req.body;
   try {
      const medicine = await Medicine.findById(id)     
@@ -78,27 +96,28 @@ exports.updateMedicine = async (req,res)=>{
        expiry,
        stock
      }},{new:true})
-     return res.redirect('/admin/medicines')
+     return res.redirect('/doctor/medicines')
 
   } catch (error) {
     console.log(error.message);
     res.send("internal Server error");
   }
-}
+},
 
-exports.deleteMedicine = async (req,res)=>{
+
+deleteMedicine : async (req,res)=>{
   const id = req.params.id
   try {
     await Medicine.findByIdAndDelete(id)
-    res.redirect('/admin/medicines')
+    res.redirect('/doctor/medicines')
   } catch (error) {
     console.log(error.message);
     res.send("internal Server error");
   }
-}
+},
 
 
-exports.searchMedicine=async (req,res)=>{
+searchMedicine:async (req,res)=>{
   const { q } = req.body
   try {
       let medicines;
@@ -107,8 +126,10 @@ exports.searchMedicine=async (req,res)=>{
       }else{
         medicines = await Medicine.find()
       }
-      res.render('admin/medicines/Medicines',{medicines, message:null, error:null})
+      res.render('doctor/medicines/Medicines',{medicines, message:null, error:null})
   } catch (error) {
       console.log(error.message)
   }
+}
+
 }

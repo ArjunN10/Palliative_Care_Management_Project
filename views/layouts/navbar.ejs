@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/admin/dashboard">Doctor Dashboard</a>
+      <a class="navbar-brand" href="/doctor/dashboard">Doctor Dashboard</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -11,19 +11,19 @@
                 More
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/admin/createUser">Add staff</a></li>
+              <li><a class="dropdown-item" href="/doctor/createUser">Add staff</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/patients">Patients list</a></li>
+              <li><a class="dropdown-item" href="/doctor/patients">Patients list</a></li>
               <li><hr class="dropdown-divider"></li>
               <li>
-                <form action="/admin/logout" method="post" class="dropdown-item">
+                <form action="/doctor/logout" method="post" class="dropdown-item">
                     <button type="submit" class="dropdown-item p-0">Logout</button>
                 </form>
               </li>
             </ul>
           </li>
         </ul>
-        <form action="/admin/dashboard" method="GET">
+        <form action="/doctor/dashboard" method="GET">
             <div class="d-flex">
                 <input type="search" name="q" placeholder="Search user" class="form-control rounded-pill" value="<%= q ? q : null %>" />
                 <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
