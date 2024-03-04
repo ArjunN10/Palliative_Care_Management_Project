@@ -6,10 +6,10 @@ const TrycatchMiddleware=require("../middlewares/TryCatch")
 const { isDoctor, loggedOutDoctor } = require("../middlewares/auth");
 
 router
-.use(TrycatchMiddleware)
-.get("/login", loggedOutDoctor, doctorController.loadLogin)
+// .use(TrycatchMiddleware)
+.get("/login", TrycatchMiddleware,loggedOutDoctor, doctorController.loadLogin)
 
-.post("/login", loggedOutDoctor, doctorController.DoctorLogin)
+.post("/login", TrycatchMiddleware,loggedOutDoctor, doctorController.DoctorLogin)
 
 .get("/dashboard", isDoctor, doctorController.dashboard)
 .put("/users/:id", isDoctor, doctorController.updateUser)
