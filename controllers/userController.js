@@ -4,33 +4,23 @@ const Medicine = require("../models/medicineModel");
 const MedicineDistribution = require("../models/MdcnDstrbtionModel");
 const bcrypt = require("bcrypt");
 
-
-
-
-
-module.exports = {
-
-
- securePassword : async (password) => {
+const securePassword = async (password) => {
   try {
     const passwordHash = await bcrypt.hash(password, 10);
     return passwordHash;
   } catch (error) {
     console.log(error.message);
   }
-},
+};
 
-
- loadRegister : async (req, res) => {
+const loadRegister = async (req, res) => {
   try {
     res.render("users/registration", { error: null, message: null });
   } catch (error) {
     console.log(error.message);
   }
-},
-
-
- insertUser : async (req, res) => {
+};
+const insertUser = async (req, res) => {
   try {
     const userExists = await User.findOne({ email: req.body.email });
     if (userExists)
@@ -58,20 +48,18 @@ module.exports = {
   } catch (error) {
     console.log(error.message);
   }
-},
+};
 
-
- loadLogin : async (req, res) => {
+const loadLogin = async (req, res) => {
   const { error } = req.query;
   try {
     res.render("users/login", { message: null, error: error ? error : null });
   } catch (error) {
     console.log(error.message);
   }
-},
+};
 
-
- validLogin : async (req, res) => {
+const validLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -86,22 +74,21 @@ module.exports = {
         error: "Wrong password.",
         message: null,
       });
-    if (user.is_varified === 1) {
-      req.session.user = user._id;
-      res.redirect("/");
-    } else {
-      res.render("users/login", {
-        error: "Please wait for the verification by the admin",
-        message: null,
-      });
-    }
+    // if (user.is_varified === 1) {
+    //   req.session.user = user._id;
+    //   res.redirect("/");
+    // } else {
+    //   res.render("users/login", {
+    //     error: "Please wait for the verification by the admin",
+    //     message: null,
+    //   });
+    // }
   } catch (error) {
     console.log(error.message);
   }
-},
+};
 
-
- loadIndex : async (req, res) => {
+const loadIndex = async (req, res) => {
   try {
     const user = await User.findById(req.user);
     const patients = await Patient.aggregate([
@@ -118,10 +105,9 @@ module.exports = {
   } catch (error) {
     console.log(error.message);
   }
-},
+};
 
-
- searchPatient : async (req, res) => {
+const searchPatient = async (req, res) => {
   const user = await User.findById(req.user);
   const { q } = req.body;
   try {
@@ -158,10 +144,9 @@ module.exports = {
   } catch (error) {
     console.log(error.message);
   }
-},
+};
 
-
- getMedicines : async (req, res) => {
+const getMedicines = async (req, res) => {
   try {
     const user = await User.findById(req.user);
     const medicines = await Medicine.find();
@@ -174,10 +159,9 @@ module.exports = {
   } catch (error) {
     console.log(error.message);
   }
-},
+};
 
-
- searchMedicine : async (req, res) => {
+const searchMedicine = async (req, res) => {
   const user = await User.findById(req.user);
   const { q } = req.body;
   try {
@@ -196,10 +180,9 @@ module.exports = {
   } catch (error) {
     console.log(error.message);
   }
-},
+};
 
-
- getPatientMedicines : async (req, res) => {
+const getPatientMedicines = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(req.user);
   const Pid = await Patient.findById(id);
@@ -236,10 +219,9 @@ module.exports = {
   } catch (error) {
     console.log(error.message);
   }
-},
+};
 
-
- distributeMedicines : async (req, res) => {
+const distributeMedicines = async (req, res) => {
   const staff = await User.findById(req.session.user);
   const { patientId } = req.params;
   const { medicineId, count } = req.body;
@@ -302,10 +284,9 @@ module.exports = {
     console.log(error.message);
     return res.status(500).json({ error: "Internal Server Error" });
   }
-},
+};
 
-
- distributioHistory : async (req, res) => {
+const distributioHistory = async (req, res) => {
   try {
     const user = await User.findById(req.session.user);
     const medicineDistributions = await MedicineDistribution.find().populate(
@@ -315,20 +296,32 @@ module.exports = {
   } catch (error) {
     console.log(error.message);
   }
-},
+};
 
-
- printList : async (req, res) => {
+const printList = async (req, res) => {
   const { id } = req.params;
   const patient = await Patient.findById(id);
   const recievedMedicines = await MedicineDistribution.find({ patient: id });
   res.render("users/printList", { recievedMedicines, patient });
-},
+};
 
-
- logout : (req, res) => {
+const logout = (req, res) => {
   req.session.destroy();
   res.redirect("/login");
-},
+};
 
+module.exports = {
+  loadRegister,
+  insertUser,
+  loadLogin,
+  validLogin,
+  loadIndex,
+  logout,
+  searchPatient,
+  getMedicines,
+  searchMedicine,
+  getPatientMedicines,
+  distributeMedicines,
+  distributioHistory,
+  printList,
 };
