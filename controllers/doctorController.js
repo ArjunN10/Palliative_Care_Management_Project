@@ -38,10 +38,10 @@ DoctorLogin: async (req, res) => {
         message: null,
       });
     if (user.is_Admin === 1) {
-      req.session.admin = user._id;
+      req.session.doctor = user._id;
       res.redirect("/doctor/dashboard");
     } else {
-      res.redirect("/login?error=" + encodeURIComponent("You are not admin"));
+      res.redirect("/login?error=" + encodeURIComponent("You are not Doctor"));
     }
   } catch (error) {
     console.log(error.message);
