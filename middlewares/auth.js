@@ -51,6 +51,7 @@ isDoctor :(req, res, next) => {
 // Admin
 
 isAdmin :(req, res, next) => {
+    console.log(req.session.admin,"isAdminSession")
     if(req.session.admin) {
         req.admin = req.session.admin 
         next()
@@ -59,7 +60,7 @@ isAdmin :(req, res, next) => {
     }
 },
 
- loggedInAdmin:  (req, res, next) => {
+ loggedInAdmin:  (req,res,next) => {
     if(!req.session.admin){
         next()
     }else{
