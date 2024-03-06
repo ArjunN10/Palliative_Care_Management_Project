@@ -11,10 +11,10 @@ const {isAdmin,loggedInAdmin}=require("../middlewares/auth")
 router
 
 
-.get("/login", loggedInAdmin, adminController.loadLogin)
-.post("/login", loggedInAdmin, adminController.AdminLogin)
+.get("/login", loggedInAdmin,TrycatchMiddleware(adminController.loadLogin) )
+.post("/login", loggedInAdmin, TrycatchMiddleware(adminController.AdminLogin))
 
-//.post("/dashboard", isAdmin, adminController.    );
+.get("/dashboard",isAdmin,TrycatchMiddleware(adminController.AdminDashboard));
 
 
 
