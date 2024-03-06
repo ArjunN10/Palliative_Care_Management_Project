@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require('express')
 const mongoose = require('mongoose')
 const session = require('express-session')
@@ -23,6 +24,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
+
 app.use(nocache())
 app.use(methodOverride('_method'))
 app.use(flash())
