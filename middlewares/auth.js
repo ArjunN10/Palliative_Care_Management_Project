@@ -37,7 +37,7 @@ isDoctor :(req, res, next) => {
     }
 },
 
- isVerified : async  (req,res,next) => {
+ isStaffVerified : async  (req,res,next) => {
     const user = await User.findById(req.user)
     if (user.is_varified === 1) {
         next()
@@ -51,9 +51,9 @@ isDoctor :(req, res, next) => {
 // Admin
 
 isAdmin :(req, res, next) => {
-    console.log(req.session.admin,"isAdminSession")
     if(req.session.admin) {
         req.admin = req.session.admin 
+        // console.log(req.session.admin,"isAdminSession")
         next()
     }else{
         res.redirect('/admin/login')

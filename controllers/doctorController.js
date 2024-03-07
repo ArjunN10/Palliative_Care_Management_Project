@@ -5,20 +5,25 @@ const bcrypt = require("bcrypt");
 const MedicineDistribution =require('../models/MdcnDstrbtionModel')
 
 
-
-module.exports = {
-loadLogin:(req, res) => {
-  res.render("doctor/login", { error: null, message: null });
-},
-
-securePassword :async (password) => {
+const securePassword =async (password) => {
   try {
     const passwordHash = await bcrypt.hash(password, 10);
     return passwordHash;
   } catch (error) {
     console.log(error.message);
   }
+};
+
+
+
+module.exports = {
+
+securePassword,
+
+loadLogin:(req, res) => {
+  res.render("doctor/login", { error: null, message: null });
 },
+
 
   DoctorLogin: async (req, res) => {
   const { email, password } = req.body;
@@ -57,7 +62,7 @@ dashboard : async (req, res) => {
         is_Admin: 0,
       });
     } else {
-      users = await User.find({ is_Admin: 0 });
+      users = await User.find({ is_varified: 1 });
     }
     res.render("doctor/dashboard", { users, q });
   } catch (error) {
@@ -159,6 +164,8 @@ logoutDoctor:(req, res) => {
     console.log(error.message);
   }
 },
+
+
 
  getAddPatient :async (req, res) => {
   try {

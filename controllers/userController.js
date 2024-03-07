@@ -74,15 +74,15 @@ const validLogin = async (req, res) => {
         error: "Wrong password.",
         message: null,
       });
-    // if (user.is_varified === 1) {
-    //   req.session.user = user._id;
-    //   res.redirect("/");
-    // } else {
-    //   res.render("users/login", {
-    //     error: "Please wait for the verification by the admin",
-    //     message: null,
-    //   });
-    // }
+    if (user.is_varified === 1) {
+      req.session.user = user._id;
+      res.redirect("/");
+    } else {
+      res.render("users/login", {
+        error: "Please wait for the verification by the admin",
+        message: null,
+      });
+    }
   } catch (error) {
     console.log(error.message);
   }

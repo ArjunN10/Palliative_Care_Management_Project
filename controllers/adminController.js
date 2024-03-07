@@ -1,9 +1,12 @@
 const Patients=require("../models/patientModel")
-const Users=require("../models/userModel")
+const User=require("../models/userModel")
 const Medicines=require("../models/medicineModel")
 const bcrypt=require("bcrypt")
 
 module.exports={
+
+
+// ===============================< Login >================================//
 
     loadLogin: async (req, res) => {
         try {
@@ -14,56 +17,49 @@ module.exports={
         }
     },
 
+
     AdminLogin: async (req, res) => {
-        const { email, password } = req.body
+        const { email, password } = req.body;
       
         try {
             if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
                 req.session.admin = true;
-                return res.render("admin/dashboard", { message: "Admin Logged in", error: null, q: req.query.q  });
+    
+                const users = await User.find({ is_varified: 1 });
+                const q = req.query.q;
+    
+                return res.render("admin/dashboard", { users, q, message: "Admin Logged in", error: null });
             } else {
-                return res.render("admin/login", { message: null, error: "Invalid email or password" });
+                return res.redirect("/admin/login?error=Invalid email or password");
             }
         } catch (error) {
             console.log(error.message);
             res.status(500).send("Internal Server Error");
         }
     },
-
-    // AdminDashboard: async (req, res) => {
-    //     try {
-    //         // Check if the admin session variable is set
-    //         if (req.session.admin) {
-    //             // Render admin dashboard view
-    //             return res.render("admin/dashboard");
-    //         } else {
-    //             // If not logged in, redirect to admin login page
-    //             return res.redirect("/admin/login");
-    //         }
-    //     } catch (error) {
-    //         console.log(error.message);
-    //         res.status(500).send("Internal Server Error");
-    //     }
-    // }
+    
 
 
-    AdminDashboard: async (req, res) => {
+// ===============================< Dashboard >================================//
+
+
+      AdminDashboard : async (req, res) => {
+        const { q } = req.query;
         try {
-          // Fetch the list of users from the database
-          const users = await Users.find();
-          console.log(users, "Users fetched");
-      
-          // Retrieve the value of the 'q' query parameter from the request
-          const q = req.query.q;
-      
-          // Render the admin dashboard template and pass the users array and the 'q' variable to it
-          res.render("admin/dashboard", { users: users, q: q });
+          let users;
+          if (q && q.length > 0) {
+            users = await User.find({
+              name: { $regex: ".*" + q + ".*" },
+              is_varified: 1,
+            });
+          } else {
+            users = await User.find({is_varified:1});
+          }
+          res.render("admin/dashboard", { users, q });
         } catch (error) {
           console.log(error.message);
-          res.status(500).send("Internal Server Error");
         }
       },
-      
     
 
 }
