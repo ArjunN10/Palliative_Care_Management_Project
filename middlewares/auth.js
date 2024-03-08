@@ -38,22 +38,22 @@ isDoctor :(req, res, next) => {
 },
 
 
-const isLaboratoryStaff = (req,res,next) => {
+isLaboratoryStaff :(req,res,next) => {
     if(req.session.LaboratoryStaff){
         req.LaboratoryStaff = req.session.LaboratoryStaff
         next()
     }else {
         res.redirect('/staff/login')
     }
-}
+},
 
-const loggedOutLaboratoryStaff = (req,res,next) => {
+loggedOutLaboratoryStaff :(req,res,next) => {
     if(!req.session.LaboratoryStaff){
         next()
     }else {
         res.redirect('/staff/dashboard')
     }
-}
+},
 
 
  isStaffVerified : async  (req,res,next) => {
@@ -66,11 +66,6 @@ const loggedOutLaboratoryStaff = (req,res,next) => {
     }
 },
 
-module.exports = {
-    isLogout,
-    isLogged,
-    isLaboratoryStaff,
-    loggedOutLaboratoryStaff,
     
 
 // Admin
