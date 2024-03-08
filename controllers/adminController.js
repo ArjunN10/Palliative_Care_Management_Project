@@ -3,8 +3,24 @@ const User=require("../models/userModel")
 const Medicines=require("../models/medicineModel")
 const bcrypt=require("bcrypt")
 
+
+
+
+const securePassword =async (password) => {
+  try {
+    const passwordHash = await bcrypt.hash(password, 10);
+    return passwordHash;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+
+
+
 module.exports={
 
+  securePassword,
 
 // ===============================< Login >================================//
 
@@ -39,7 +55,6 @@ module.exports={
     },
     
 
-
 // ===============================< Dashboard >================================//
 
 
@@ -60,6 +75,110 @@ module.exports={
           console.log(error.message);
         }
       },
+
+// ===============================< Admin Logout >================================//
+
+      logoutAdmin:(req, res) => {
+        req.session.destroy();
+        res.redirect("/admin/login");
+      },
     
+// ===============================< Volunteer Management >================================//
+
+
+      createVolunteer : async (req, res) => {
+        const { name, email, password, mobile, is_varified } = req.body;
+        const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        try {
+          if (!email)
+            return res.render("admin/createVolunteers", { error: "Email is required" });
+          if (!emailRegex.test(email))
+            return res.render("admin/user_new", {
+              error: "Email must be a valid email!",
+            });
+            if(password<6){
+              return res.render("admin/createVolunteers", {
+                message: null,
+                error: "password must be atleast 6 letters",
+              });
+            }
+          const isExists = await User.findOne({ email });
+          if (isExists)
+            return res.render("admin/createVolunteers", {
+              error: "User already exists",
+              message: null,
+            });
+            const secPassword = await securePassword(req.body.password);
+          const user = new User({
+            name,
+            email,
+            mobile,
+            password:secPassword,
+            is_varified,
+          });
+          await user.save();
+          return res.redirect("/admin/dashboard");
+        } catch (error) {
+          console.log(error.message);
+        }
+      },
+
+      ViewVolunteer : async (req, res) => {
+        try {
+          res.render("admin/createVolunteers", { error: null, message: null });
+        } catch (error) {
+          console.log(error.message);
+        }
+      },
+
+      loadEditVolunteer : async (req, res) => {
+        const { id } = req.params;
+        try {
+          const user = await User.findById(id);
+          res.render("admin/editVolunteers", { user });
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+
+      updateVolunteer : async (req, res) => {
+        const { id } = req.params;
+        const { name, email, mobile, is_varified } = req.body;
+        try {
+          const user = await User.findByIdAndUpdate(
+            id,
+            {
+              $set: {
+                name,
+                email,
+                mobile,
+                is_varified,
+              },
+            },
+            { new: true }
+          );
+          res.redirect("/admin/dashboard");
+        } catch (error) {
+          console.log(error);
+        }
+      },
+
+      deleteVolunteer: async (req, res) => {
+        const { id } = req.params;
+        try {
+          const user = await User.findOneAndDelete({ _id: id });
+          if (req.session.user_session === user._id) {
+            req.session.destroy();
+          }
+          return res.redirect("/admin/dashboard");
+        } catch (error) {
+          console.log(error.message);
+        }
+      },
+
+
+// ===============================< Doctor Management >================================//
+
 
 }
