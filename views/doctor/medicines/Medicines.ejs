@@ -13,16 +13,16 @@
                 More
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/admin/dashboard">Staffs</a></li>
+              <li><a class="dropdown-item" href="/doctor/dashboard">Staffs</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/patients">Patients</a></li>
+              <li><a class="dropdown-item" href="/doctor/patients">Patients</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/medicines">Medicines</a></li>
+              <li><a class="dropdown-item" href="/doctor/medicines">Medicines</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/medicineHistory">Medicine Distributions</a></li>
+              <li><a class="dropdown-item" href="/doctor/medicineHistory">Medicine Distributions</a></li>
                 <li><hr class="dropdown-divider"></li>
               <li>
-                <form action="/admin/logout" method="post" class="dropdown-item">
+                <form action="/doctor/logout" method="post" class="dropdown-item">
                     <button type="submit" class="dropdown-item p-0">Logout</button>
                 </form>
               </li>
@@ -30,9 +30,9 @@
           </li>
         </ul>
         <div class="d-flex">
-        <a href="/admin/addMedicine" type="button" class="btn btn-outline-primary rounded-pill ms-2">Add Medicine</a>
+        <a href="/doctor/addMedicine" type="button" class="btn btn-outline-primary rounded-pill ms-2">Add Medicine</a>
     </div>
-        <form action="/admin/medicines/search" method="post">
+        <form action="/doctor/medicines/search" method="post">
             <div class="d-flex">
                 <input type="search" name="q" placeholder="Search Medicine" class="form-control rounded-pill"/>
                 <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
@@ -67,8 +67,8 @@
                     <td style="background-color: red;"><%= medicine.batch %></td>
                     <td style="background-color: red;"><%= medicine.expiry.toDateString() %></td>
                     <td style="background-color: red;">
-                        <a href="/admin/medicines/<%= medicine._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
-                        <form action="/admin/medicines/<%= medicine._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
+                        <a href="/doctor/medicines/<%= medicine._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
+                        <form action="/doctor/medicines/<%= medicine._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
                             <button type="submit" onclick="return alert('Are you sure to delete this medicine?')" class="btn btn-sm btn-danger rounded-pill">Delete</a>
                         </form>
                     </td>
@@ -82,8 +82,8 @@
                     <td><%= medicine.batch %></td>
                     <td><%= medicine.expiry.toDateString() %></td>
                     <td>
-                        <a href="/admin/medicines/<%= medicine._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
-                        <form action="/admin/medicines/<%= medicine._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
+                        <a href="/doctor/medicines/<%= medicine._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
+                        <form action="/doctor/medicines/<%= medicine._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
                             <button type="submit" onclick="return alert('Are you sure to delete this medicine?')" class="btn btn-sm btn-danger rounded-pill">Delete</a>
                         </form>
                     </td>

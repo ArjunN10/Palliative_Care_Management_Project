@@ -1,7 +1,10 @@
+require("dotenv").config();
 const express = require('express')
 const mongoose = require('mongoose')
 const session = require('express-session')
 const userRoute = require('./routes/userRoute')
+const doctorRoute=require('./routes/doctorRoute')
+const adminRoute=require('./routes/adminRoute')
 const nocache = require('nocache')
 const flash = require('express-flash')
 const path = require('path')
@@ -21,14 +24,19 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
+
 app.use(nocache())
 app.use(methodOverride('_method'))
 app.use(flash())
 
 
 app.use('/', userRoute)
-app.use('/admin', require('./routes/adminRoute'))
+
+
 app.use('/staff', require('./routes/staffRoute'))
+app.use('/doctor',doctorRoute )
+app.use('/admin',adminRoute)
+
 
 app.listen(4000, () => {
     console.log("Server Started!");

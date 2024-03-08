@@ -1,40 +1,37 @@
-const router = require("express").Router();
-const adminController = require("../controllers/adminController");
-const medicineController = require("../controllers/medicineController");
-const { isAdmin, loggedOutAdmin } = require("../middlewares/auth");
+const router = require("express").Router()
 
-router.get("/login", loggedOutAdmin, adminController.loadLogin);
-router.post("/login", loggedOutAdmin, adminController.adminLogin);
+const adminController=require("../controllers/adminController")
+const medicineController=require("../controllers/medicineController")
+const TrycatchMiddleware=require("../middlewares/TryCatch")
 
-router.get("/dashboard", isAdmin, adminController.dashboard);
-
-router.get("/users/:id/edit", isAdmin, adminController.loadEditUser);
-router.put("/users/:id", isAdmin, adminController.updateUser);
-router.delete("/users/:id/destroy", isAdmin, adminController.deleteUser);
-
-router.get("/createUser", isAdmin, adminController.AdminAddUser);
-router.post("/createUser", isAdmin, adminController.createUser);
-
-//patients
-router.get("/addPatient", isAdmin, adminController.getAddPatient);
-router.post("/addPatient", isAdmin, adminController.AddPatient);
-router.get("/patients", isAdmin, adminController.getPatientsList);
-router.post("/searchPatients", isAdmin, adminController.searchPatient);
-router.get("/patients/:id/edit", isAdmin, adminController.editPatient);
-router.post("/updatePatient", isAdmin, adminController.updatePatient);
-router.delete("/patients/:id/destroy", isAdmin, adminController.deletePatient);
-
-//medicine
-router.get("/medicines", isAdmin, medicineController.showMedicines);
-router.get("/addMedicine", isAdmin, medicineController.ShowAddMedicine);
-router.post("/createMedicine", isAdmin, medicineController.addMedicine);
-router.get("/medicines/:id/edit", isAdmin, medicineController.showEditMed);
-router.post("/editMedicine", isAdmin, medicineController.updateMedicine);
-router.delete("/medicines/:id/destroy",isAdmin,medicineController.deleteMedicine);
-router.post("/medicines/search", isAdmin, medicineController.searchMedicine);
+const {isAdmin,loggedInAdmin}=require("../middlewares/auth")
 
 
-router.get("/medicineHistory", isAdmin, adminController.medicineHistory);
-router.post("/logout", isAdmin, adminController.logoutAdmin);
 
-module.exports = router;
+router
+
+// ===============================< Login/Logout >================================//
+
+.get("/login", loggedInAdmin,TrycatchMiddleware(adminController.loadLogin) )
+.post("/login", loggedInAdmin, TrycatchMiddleware(adminController.AdminLogin))
+
+.post("/logout", isAdmin, TrycatchMiddleware( adminController.logoutAdmin))
+
+
+// ===============================< Dashboard >================================//
+
+.get("/dashboard",isAdmin,TrycatchMiddleware(adminController.AdminDashboard))
+
+// ===============================< Staff Management >================================//
+
+.post("/createVolunteers",isAdmin,TrycatchMiddleware(adminController.createVolunteer) )
+.get("/createVolunteers", isAdmin,TrycatchMiddleware(adminController.ViewVolunteer) )
+
+.get("/volunteers/:id/edit",isAdmin,TrycatchMiddleware(adminController.loadEditVolunteer) )
+.put("/volunteers/:id",isAdmin,TrycatchMiddleware( adminController.updateVolunteer))
+.delete("/volunteers/:id/destroy",isAdmin,TrycatchMiddleware(adminController.deleteVolunteer))
+
+// ===============================< Doctor Management >================================//
+
+
+module.exports=router

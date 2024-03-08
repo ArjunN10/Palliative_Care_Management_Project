@@ -8,7 +8,7 @@
                         <h4 class="mb-0 text-center py-2">Edit user</h4>
                     </div>
                     <div class="card-body">
-                        <form action="/admin/users/<%= user._id %>?_method=PUT" method="POST">
+                        <form action="/admin/volunteers/<%= user._id %>?_method=PUT" method="POST">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Name</label>
                                 <input type="text" name="name" id="name" pattern="[A-Za-z]+" value="<%= user.name %>" class="form-control"

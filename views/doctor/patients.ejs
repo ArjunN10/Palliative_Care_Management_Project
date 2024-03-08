@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/admin/dashboard">Doctor Dashboard</a>
+      <a class="navbar-brand" href="/doctor/dashboard">Doctor Dashboard</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -13,16 +13,16 @@
                 More
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/admin/dashboard">Staffs</a></li>
+              <li><a class="dropdown-item" href="/doctor/dashboard">Staffs</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/patients">Patients</a></li>
+              <li><a class="dropdown-item" href="/doctor/patients">Patients</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/medicines">Medicines</a></li>
+              <li><a class="dropdown-item" href="/doctor/medicines">Medicines</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/medicineHistory">Medicine Distributions</a></li>
+              <li><a class="dropdown-item" href="/doctor/medicineHistory">Medicine Distributions</a></li>
                 <li><hr class="dropdown-divider"></li>
               <li>
-                <form action="/admin/logout" method="post" class="dropdown-item">
+                <form action="/doctor/logout" method="post" class="dropdown-item">
                     <button type="submit" class="dropdown-item p-0">Logout</button>
                 </form>
               </li>
@@ -30,9 +30,9 @@
           </li>
         </ul>
         <div class="d-flex">
-            <a href="/admin/addPatient" type="button"  class="btn btn-outline-primary rounded-pill  ms-2">Add Patient</a>
+            <a href="/doctor/addPatient" type="button"  class="btn btn-outline-primary rounded-pill  ms-2">Add Patient</a>
         </div>
-        <form action="/admin/searchPatients" method="post">
+        <form action="/doctor/searchPatients" method="post">
             <div class="d-flex">
                 <input type="search" name="q" placeholder="Search Patient" class="form-control rounded-pill" />
                 <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
@@ -74,8 +74,8 @@
                     
                     <td><%= patient.addingDate.toDateString() %></td>
                     <td>
-                        <a href="/admin/patients/<%= patient._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
-                        <form action="/admin/patients/<%= patient._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
+                        <a href="/doctor/patients/<%= patient._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
+                        <form action="/doctor/patients/<%= patient._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
                             <button type="submit" onclick="return alert('Are you sure to remove this patient?')" class="btn btn-sm btn-danger rounded-pill">Delete</a>
                           </form>
                     </td>

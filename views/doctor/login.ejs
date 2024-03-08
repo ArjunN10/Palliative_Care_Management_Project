@@ -21,10 +21,10 @@
                                           class="mb-0"
                                           style="width: 180px; height: 120px;"
                                         />
-                                        <h4 class="mb-0 text-secondary" style="font-family:'Times New Roman', Times, serif;text-shadow: 10px;">ADMIN LOGIN</h4>
+                                        <h4 class="mb-0 text-secondary" style="font-family:'Times New Roman', Times, serif;text-shadow: 10px;">DOCTOR LOGIN</h4>
                                       </div>
                                     <div class="card-body">
-                                        <form method="post" id="login-form" action="/admin/login" novalidate>
+                                        <form method="post" id="login-form" action="/doctor/login" novalidate>
                                             <div class="mb-3">
                                                 <label for="email" class="form-label">Email</label>
                                                 <input type="email" id="email" name="email" class="form-control"
@@ -48,12 +48,15 @@
                                     </div>
                                 </div>
                                 <div class="d-grid pt-3">
-                                    <a href="/doctor/login" class="btn btn-secondary rounded-pill">Doctor Login</a>
-                                </div>
-            </div>
-        </div>
-    </div>
-
+                                    <a href="/login" class="btn btn-secondary rounded-pill">Back to Staff login</a>
+                            </div>
+                                <div class="d-grid pt-3">
+                                    <a href="/admin/login" class="btn btn-secondary rounded-pill">Admin Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+ 
     <script>
         const form = document.getElementById("login-form")
 
@@ -61,7 +64,7 @@
 
         form.addEventListener('submit', event => {
             if (!form.checkValidity()) {
-                // event.preventDefault()
+                event.preventDefault()
                 event.stopPropagation()
                 form.classList.add('was-validated')
             } else {
