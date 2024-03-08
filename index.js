@@ -31,8 +31,12 @@ app.use(flash())
 
 
 app.use('/', userRoute)
+
+
+app.use('/staff', require('./routes/staffRoute'))
 app.use('/doctor',doctorRoute )
 app.use('/admin',adminRoute)
+
 
 app.listen(4000, () => {
     console.log("Server Started!");

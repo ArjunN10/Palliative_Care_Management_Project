@@ -38,6 +38,7 @@ const insertUser = async (req, res) => {
 
     const userData = await user.save();
     if (userData) {
+      
       res.redirect("/login");
     } else {
       res.render("users/registration", {

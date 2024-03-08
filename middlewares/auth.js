@@ -37,7 +37,27 @@ isDoctor :(req, res, next) => {
     }
 },
 
+
+const isLaboratoryStaff = (req,res,next) => {
+    if(req.session.LaboratoryStaff){
+        req.LaboratoryStaff = req.session.LaboratoryStaff
+        next()
+    }else {
+        res.redirect('/staff/login')
+    }
+}
+
+const loggedOutLaboratoryStaff = (req,res,next) => {
+    if(!req.session.LaboratoryStaff){
+        next()
+    }else {
+        res.redirect('/staff/dashboard')
+    }
+}
+
+
  isStaffVerified : async  (req,res,next) => {
+
     const user = await User.findById(req.user)
     if (user.is_varified === 1) {
         next()
@@ -46,7 +66,12 @@ isDoctor :(req, res, next) => {
     }
 },
 
-
+module.exports = {
+    isLogout,
+    isLogged,
+    isLaboratoryStaff,
+    loggedOutLaboratoryStaff,
+    
 
 // Admin
 
@@ -68,6 +93,4 @@ isAdmin :(req, res, next) => {
     }
 },
 
-
-    
 }
