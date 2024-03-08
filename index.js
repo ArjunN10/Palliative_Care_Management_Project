@@ -7,8 +7,7 @@ const flash = require('express-flash')
 const path = require('path')
 const methodOverride = require('method-override')
 
-// mongoose.connect('mongodb://127.0.0.1:27017/USM').then(() => console.log('DB Connected')).catch(err => console.log(err))
-mongoose.connect('mongodb+srv://fazzfasi7:fazi5566@palliative-care.bjmyy8m.mongodb.net/USM?retryWrites=true&w=majority').then(() => console.log('DB Connected')).catch(err => console.log(err))
+mongoose.connect('mongodb+srv://arjunrameshh12:rA7sBc8wywxspAeV@cluster3.xyqbca7.mongodb.net/Paliative_Care_Management').then(() => console.log('DB Connected')).catch(err => console.log(err))
 
 const app = express()
 
@@ -29,6 +28,7 @@ app.use(flash())
 
 app.use('/', userRoute)
 app.use('/admin', require('./routes/adminRoute'))
+app.use('/staff', require('./routes/staffRoute'))
 
 app.listen(4000, () => {
     console.log("Server Started!");

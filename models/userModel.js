@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    is_Lab_Staff:{
+        type:Number,
+        default : 0
+    },
+    
     is_varified: {
         type: Number,
         default: 0
