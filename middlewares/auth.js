@@ -1,24 +1,33 @@
 const User = require('../models/userModel')
 
 module.exports = {
- isLogout : (req, res, next) => {
-    if (!req.session.user) {
+
+
+
+
+// ===============================< Admin >================================//
+
+
+isAdmin :(req, res, next) => {
+    if(req.session.admin) {
+        req.admin = req.session.admin 
+        // console.log(req.session.admin,"isAdminSession")
         next()
-    } else {
-        res.redirect('/')
+    }else{
+        res.redirect('/admin/login')
     }
 },
 
-isLogged: (req, res, next) => {
-    if (req.session.user) {
-        req.user = req.session.user
+ loggedInAdmin:  (req,res,next) => {
+    if(!req.session.admin){
         next()
-    } else {
-        res.redirect('/login')
+    }else{
+        res.redirect('/admin/dashboard')
     }
 },
 
-// Doctor
+
+// ===============================< Doctor >================================//
 
 isDoctor :(req, res, next) => {
     if(req.session.doctor) {
@@ -36,6 +45,31 @@ isDoctor :(req, res, next) => {
         res.redirect('/doctor/dashboard')
     }
 },
+
+
+
+// ===============================< Volunteer >================================//
+
+ isLogout : (req, res, next) => {
+    if (!req.session.user) {
+        next()
+    } else {
+        res.redirect('/')
+    }
+},
+
+isLogged: (req, res, next) => {
+    if (req.session.user) {
+        req.user = req.session.user
+        next()
+    } else {
+        res.redirect('/login')
+    }
+},
+
+
+
+// ===============================< L-Staff >================================//
 
 
 isLaboratoryStaff :(req,res,next) => {
@@ -68,24 +102,5 @@ loggedOutLaboratoryStaff :(req,res,next) => {
 
     
 
-// Admin
-
-isAdmin :(req, res, next) => {
-    if(req.session.admin) {
-        req.admin = req.session.admin 
-        // console.log(req.session.admin,"isAdminSession")
-        next()
-    }else{
-        res.redirect('/admin/login')
-    }
-},
-
- loggedInAdmin:  (req,res,next) => {
-    if(!req.session.admin){
-        next()
-    }else{
-        res.redirect('/admin/dashboard')
-    }
-},
 
 }

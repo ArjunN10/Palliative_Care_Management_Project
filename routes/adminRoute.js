@@ -34,4 +34,17 @@ router
 // ===============================< Doctor Management >================================//
 
 
+.post("/createDoctor", isAdmin, TrycatchMiddleware(adminController.CreateDoctor))
+.get("/createDoctor", isAdmin, TrycatchMiddleware(adminController.ViewDoctor))
+
+.get("/doctors", isAdmin, TrycatchMiddleware(adminController.getPatientsList))
+.post("/searchPatients", isAdmin,TrycatchMiddleware(adminController.searchPatient) )
+
+.get("/doctors/:id/edit", isAdmin,TrycatchMiddleware(adminController.EditDoctor) )
+.post("/updatePatient", isAdmin, TrycatchMiddleware(adminController.updateDoctor))
+.delete("/doctors/:id/destroy", isAdmin, TrycatchMiddleware(adminController.deleteDoctor))
+
+
+
+
 module.exports=router
