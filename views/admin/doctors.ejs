@@ -13,11 +13,11 @@
             More
           </a>
           <ul class="dropdown-menu" style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
-            <li><a class="dropdown-item" href="/admin/patients">Doctor's</a></li>
+            <li><a class="dropdown-item" href="/admin/dashboard">Volunteers</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="/admin/patients">Patient's</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/dashboard">Volunteers</a></li>
+            <li><a class="dropdown-item" href="/admin/patients">Doctor's</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="/admin/staffs">Laboratory Staffs</a></li>
             <li><hr class="dropdown-divider"></li>
@@ -34,7 +34,7 @@
         </li>
       </ul>
       <div class="d-flex">
-        <a href="/admin/createVolunteers" type="button" class="btn btn-outline-primary rounded-pill me-3 ms-2">Add Volunteer</a>
+        <a href="/admin/createDoctor" type="button" class="btn btn-outline-primary rounded-pill me-3 ms-2">Add Volunteer</a>
       </div>
       <form action="/admin/dashboard" method="GET" class="d-flex flex-grow-1 justify-content-end">
         <div class="input-group" style="max-width: 390px;">
@@ -47,7 +47,7 @@
 </nav>
 
 <div class="container mt-4">
-  <h2 style="font-style: oblique;">VOLUNTEERS LIST</h2>
+  <h2 style="font-style: oblique;">DOCTORS LIST</h2>
   <div class="table-responsive">
     <table class="table table-bordered">
       <thead>
@@ -67,8 +67,8 @@
           <td><%= user.mobile %></td>
           <td><%= user.is_varified ? 'Yes' : 'No' %></td>
           <td>
-            <a href="/admin/volunteers/<%= user._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
-            <form action="/admin/volunteers/<%= user._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
+            <a href="/admin/doctors/<%= user._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
+            <form action="/admin/doctors/<%= user._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
               <button type="submit" onclick="return alert('Are you sure to remove this Staff?')" class="btn btn-sm btn-danger rounded-pill">Delete</button>
             </form>
           </td>

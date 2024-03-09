@@ -180,5 +180,145 @@ module.exports={
 
 // ===============================< Doctor Management >================================//
 
+CreateDoctor : async (req, res) => {
+  const { name, email, password, mobile, is_Admin } = req.body;
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  try {
+    if (!email)
+      return res.render("admin/createDoctor", { error: "Email is required" });
+    if (!emailRegex.test(email))
+      return res.render("admin/user_new", {
+        error: "Email must be a valid email!",
+      });
+      if(password<6){
+        return res.render("admin/createDoctor", {
+          message: null,
+          error: "password must be atleast 6 letters",
+        });
+      }
+    const isExists = await User.findOne({ email });
+    if (isExists)
+      return res.render("admin/createDoctor", {
+        error: "User already exists",
+        message: null,
+      });
+      const secPassword = await securePassword(req.body.password);
+    const user = new User({
+      name,
+      email,
+      mobile,
+      password:secPassword,
+      is_Admin,
+    });
+    await user.save();
+    return res.redirect("/admin/doctors");
+  } catch (error) {
+    console.log(error.message);
+  }
+},
+
+
+ViewDoctor : async (req, res) => {
+  try {
+    res.render("admin/createDoctor", { error: null, message: null });
+  } catch (error) {
+    console.log(error.message);
+  }
+},
+
+EditDoctor : async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    res.render("admin/editDoctor", { user });
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+
+
+searchDoctor : async (req, res) => {
+  const { q } = req.body;
+  try {
+    let patients;
+
+    if (q) {
+      patients = await doctor.aggregate([
+        {
+          $match: {
+            name: { $regex: ".*" + q + ".*" }
+          }
+        },
+        {
+          $lookup: {
+            from: "medicines",
+            localField: "Medicines.medicine",
+            foreignField: "_id",
+            as: "Medicines.medicine"
+          }
+        }
+      ]);
+    } else {
+      patients = await Patients.aggregate([
+        {
+          $lookup: {
+            from: "medicines",
+            localField: "Medicines.medicine",
+            foreignField: "_id",
+            as: "Medicines.medicine"
+          }
+        }
+      ]);
+    }
+
+    res.render("doctor/patients", { patients, message: null, error: null });
+  } catch (error) {
+    console.log(error.message);
+  }
+},
+
+
+updateDoctor : async (req, res) => {
+  const { id } = req.params;
+  const { name, email, mobile, is_Admin } = req.body;
+  try {
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          name,
+          email,
+          mobile,
+          is_Admin,
+        },
+      },
+      { new: true }
+    );
+    res.redirect("/admin/doctors");
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+deleteDoctor: async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findOneAndDelete({ _id: id });
+    if (req.session.admin_session === user._id) {
+      req.session.destroy();
+    }
+    return res.redirect("/admin/doctors");
+  } catch (error) {
+    console.log(error.message);
+  }
+},
+
+
+
+
+
+
+
 
 }
