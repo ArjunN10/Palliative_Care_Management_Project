@@ -73,8 +73,8 @@
                       
                       <td><%= patient.addingDate.toDateString() %></td>
                       <td>
-                          <a href="/admin/patients/<%= patient._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
-                          <form action="/admin/patients/<%= patient._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
+                          <a href="/staff/dashboard/<%= patient._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
+                          <form action="/staff/dashboard/<%= patient._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
                               <button type="submit" onclick="return alert('Are you sure to remove this patient?')" class="btn btn-sm btn-danger rounded-pill">Delete</a>
                             </form>
                       </td>
