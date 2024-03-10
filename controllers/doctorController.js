@@ -19,6 +19,8 @@ module.exports = {
 
 securePassword,
 
+// ===============================< Login >================================//
+
 loadLogin:(req, res) => {
   res.render("doctor/login", { error: null, message: null });
 },
@@ -49,6 +51,15 @@ loadLogin:(req, res) => {
     console.log(error.message);
   }
 },
+
+    // ===============================< Logout >================================//
+
+logoutDoctor:(req, res) => {
+  req.session.destroy();
+  res.redirect("/doctor/login");
+},
+
+// ===============================< Volunteer Management >================================//
 
 
 dashboard : async (req, res) => {
@@ -122,10 +133,6 @@ DoctorAddUser : async (req, res) => {
   }
 },
 
-logoutDoctor:(req, res) => {
-  req.session.destroy();
-  res.redirect("/doctor/login");
-},
 
  createUser : async (req, res) => {
   const { name, email, password, mobile, is_varified } = req.body;
@@ -164,6 +171,7 @@ logoutDoctor:(req, res) => {
   }
 },
 
+// ===============================< Patient Management >================================//
 
 
  getAddPatient :async (req, res) => {
@@ -297,7 +305,7 @@ logoutDoctor:(req, res) => {
           from: "medicines",
           localField: "Medicines.medicine",
           foreignField: "_id",
-          as: "Medicines.medicine", // Store the medicine details in an array
+          as: "Medicines.medicine", 
         },
       },
     ]);
@@ -318,7 +326,6 @@ logoutDoctor:(req, res) => {
     });
   } catch (error) {
     console.log(error.message);
-    // Handle other errors here
     res.status(500).send("Internal Server Error");
   }
 },
@@ -376,6 +383,10 @@ logoutDoctor:(req, res) => {
     console.log(error.message);
   }
 },
+
+
+// ===============================<  medicine distribution history >================================//
+
 
  medicineHistory :async (req,res)=>{
   try {

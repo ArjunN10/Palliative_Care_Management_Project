@@ -5,12 +5,15 @@ const TrycatchMiddleware=require("../middlewares/TryCatch")
 
 const { isDoctor, loggedOutDoctor } = require("../middlewares/auth");
 
+
+
 router
 .get("/login",loggedOutDoctor,TrycatchMiddleware(doctorController.loadLogin) )
 
 .post("/login", loggedOutDoctor,TrycatchMiddleware( doctorController.DoctorLogin))
 
-//volunteers
+    // ===============================< volunteers >================================//
+
 
 .get("/dashboard", isDoctor,TrycatchMiddleware(doctorController.dashboard) )
 .put("/users/:id", isDoctor,TrycatchMiddleware( doctorController.updateUser))
@@ -20,7 +23,8 @@ router
 .post("/createUser", isDoctor,TrycatchMiddleware(doctorController.createUser) )
 .get("/createUser", isDoctor,TrycatchMiddleware(doctorController.DoctorAddUser) )
 
-//patients
+    // ===============================< patients >================================//
+
 
 .post("/addPatient", isDoctor, TrycatchMiddleware(doctorController.AddPatient))
 .get("/addPatient", isDoctor, TrycatchMiddleware(doctorController.getAddPatient))
@@ -30,7 +34,8 @@ router
 .post("/updatePatient", isDoctor, TrycatchMiddleware(doctorController.updatePatient))
 .delete("/patients/:id/destroy", isDoctor, TrycatchMiddleware(doctorController.deletePatient))
 
-//medicine
+    // ===============================< medicine >================================//
+
 .get("/medicines", isDoctor, TrycatchMiddleware(medicineController.showMedicines))
 .get("/addMedicine", isDoctor,TrycatchMiddleware(medicineController.ShowAddMedicine) )
 .post("/createMedicine", isDoctor, TrycatchMiddleware(medicineController.addMedicine))
