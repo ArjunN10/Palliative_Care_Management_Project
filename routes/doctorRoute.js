@@ -10,6 +10,8 @@ router
 
 .post("/login", loggedOutDoctor,TrycatchMiddleware( doctorController.DoctorLogin))
 
+//volunteers
+
 .get("/dashboard", isDoctor,TrycatchMiddleware(doctorController.dashboard) )
 .put("/users/:id", isDoctor,TrycatchMiddleware( doctorController.updateUser))
 .get("/users/:id/edit", isDoctor,TrycatchMiddleware(doctorController.loadEditUser) )
