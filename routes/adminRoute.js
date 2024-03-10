@@ -45,6 +45,34 @@ router
 .delete("/doctors/:id/destroy", isAdmin, TrycatchMiddleware(adminController.deleteDoctor))
 
 
+// ===============================< Patient Management >================================//
+
+.get("/patients", isAdmin, TrycatchMiddleware(adminController.ViewPatientsList))
+.post("/searchPatients", isAdmin,TrycatchMiddleware(adminController.searchPatient) )
+
+
+// ===============================< Staff Management >================================//
+
+
+.get("/staffs", isAdmin,TrycatchMiddleware(adminController.ViewLabStaff) )
+
+.post("/createStaff", isAdmin,TrycatchMiddleware(adminController.createStaff) )
+.get("/createStaff", isAdmin,TrycatchMiddleware(adminController.AdminAddedStaff) )
+.post("/searchStaff", isAdmin,TrycatchMiddleware(adminController.searchPatient) )
+
+.get("/staffs/:id/edit", isAdmin,TrycatchMiddleware(adminController.loadEditStaff) )
+.put("/staffs/:id", isAdmin,TrycatchMiddleware( adminController.updateStaff))
+.delete("/staffs/:id/destroy", isAdmin, TrycatchMiddleware(adminController.deleteStaff))
+
+
+
+
+// .post("/createVolunteers",isAdmin,TrycatchMiddleware(adminController.createVolunteer) )
+// .get("/createVolunteers", isAdmin,TrycatchMiddleware(adminController.ViewVolunteer) )
+
+// .get("/volunteers/:id/edit",isAdmin,TrycatchMiddleware(adminController.loadEditVolunteer) )
+// .put("/volunteers/:id",isAdmin,TrycatchMiddleware( adminController.updateVolunteer))
+// .delete("/volunteers/:id/destroy",isAdmin,TrycatchMiddleware(adminController.deleteVolunteer))
 
 
 module.exports=router
