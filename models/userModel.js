@@ -30,9 +30,15 @@ const userSchema = new mongoose.Schema({
     is_varified: {
         type: Number,
         default: 0
-    }
+    } ,
 
-})
+    attendanceHistory: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Attendence', // Reference to the Attendance model
+      }],
+
+});
+
 
 
 module.exports = mongoose.model('User', userSchema)
