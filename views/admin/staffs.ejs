@@ -9,10 +9,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle ms-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 More
             </a>
-            <ul class="dropdown-menu" style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
+            <ul class="dropdown-menu " style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
               <li><a class="dropdown-item" href="/admin/dashboard">Volunteers</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/admin/patients">Patient's</a></li>
@@ -36,13 +36,13 @@
           </li>
         </ul>
           <div class="d-flex">
-            <a href="/admin/createStaff" type="button" class="btn btn-outline-primary rounded-pill me-3 ms-2">Add Laboratory Staff</a>
+            <a href="/admin/createStaff" type="button" class="btn btn-outline-primary rounded-pill me-3 ms-3">Add Laboratory Staff</a>
           </div>
-        <form action="/admin/searchPatients" method="post">
-            <div class="d-flex">
-                <input type="search" name="q" placeholder="Search Patient" class="form-control rounded-pill" />
-                <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
-            </div>
+        <form action="/admin/staffs" method="GET" class="d-flex flex-grow-1 justify-content-end">
+          <div class="input-group" style="max-width: 390px;">
+            <input type="search" name="q" placeholder="Search Volunteer" class="form-control rounded-pill" value="<%= q ? q : null %>" />
+            <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
+          </div>
         </form>
       </div>
     </div>
@@ -70,9 +70,10 @@
               <td>
                 <a href="/admin/staffs/<%= user._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
                 <form action="/admin/staffs/<%= user._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
-                  <button type="submit" onclick="return alert('Are you sure to remove this Staff?')" class="btn btn-sm btn-danger rounded-pill">Delete</button>
+                  <button type="submit" onclick="return confirm('Are you sure you want to remove this LABORATORY STAFF?')" class="btn btn-sm btn-danger rounded-pill">Delete</button>
                 </form>
               </td>
+              
             </tr>
             <% }) %>
           </tbody>

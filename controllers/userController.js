@@ -147,6 +147,9 @@ const searchPatient = async (req, res) => {
   }
 };
 
+
+// ===============================< Medicine Management >================================//
+
 const getMedicines = async (req, res) => {
   try {
     const user = await User.findById(req.user);
