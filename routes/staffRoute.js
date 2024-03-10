@@ -18,5 +18,12 @@ router.post ("/updatePatient",isLaboratoryStaff,trycatch(LaboratoryStaff.updateP
 router.delete("/dashboard/:id/destroy",isLaboratoryStaff,trycatch(LaboratoryStaff.deletePatient));
 
 
+// attendence management 
+
+router.get("/markAttendence",isLaboratoryStaff,trycatch(LaboratoryStaff.getAttendence))
+router.post ("/markAttendence",isLaboratoryStaff,trycatch(LaboratoryStaff.MarkAttendence))
+router.get("/attendanceDisplay/:id",isLaboratoryStaff,trycatch(LaboratoryStaff.renderAttendenceDisplay))
+
+
 
 module.exports = router;

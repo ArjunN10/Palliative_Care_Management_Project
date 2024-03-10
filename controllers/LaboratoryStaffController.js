@@ -2,6 +2,7 @@ const User = require('../models/userModel')
 const bcrypt = require ('bcrypt')
 const Medicine = require("../models/medicineModel");
 const Patient = require("../models/patientModel");
+const Attendence = require("../models/attendanceModel")
 
 
 
@@ -36,6 +37,7 @@ const staffLogin = async (req,res)=>{
 };
 
 const dashboard = async (req, res) => {
+  console.log('....')
   const { q } = req.query;
   
     let users;
@@ -235,7 +237,43 @@ const deletePatient = async (req,res) => {
   const {id} = req.params 
     await Patient.findByIdAndDelete(id)
     res.redirect("/staff/dashboard")
-  }
+  };
+
+
+const getAttendence = async (req,res) => {
+  res.render("staff/attendanceForm")
+}
+
+const MarkAttendence = async (req,res) => {
+  const {userId , status , date  } = req.body
+
+  const existingAttendence = await Attendence.findOne({userId,date})
+
+  if(existingAttendence){
+  existingAttendence.status = status ;
+  await existingAttendence.save();
+  res.redirect("/staff/dashboard")
+
+} else{
+  
+  const attendence = new Attendence ({userId,status,date})
+  await attendence.save()
+
+  res.redirect("/staff/dashboard")
+}
+  
+ } 
+
+ const renderAttendenceDisplay = async (req,res) =>{
+  const  { id } = req.params;
+  console.log(id)
+
+    // Find the user by ID and populate the attendanceHistory
+    const attendenceRecord = await User.findById(id).populate('attendanceHistory');
+    console.log(attendenceRecord)
+  res.render("staff/attendanceDisplay",{attendenceRecord})
+  
+ }
 
 
 
@@ -250,7 +288,11 @@ module.exports = {
   searchPatient,
   editPatient,
   updatePatient,
-  deletePatient
+  deletePatient,
+  getAttendence,
+  MarkAttendence,
+  renderAttendenceDisplay
+
 }
 
 
