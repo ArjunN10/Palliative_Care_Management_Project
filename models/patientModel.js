@@ -45,6 +45,10 @@ const patientSchema = new mongoose.Schema({
       },
     },
   ],
+  test_result: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'test', // Reference to the test result model
+  }]
 });
 
 module.exports = mongoose.model("Patient", patientSchema);

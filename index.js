@@ -10,6 +10,7 @@ const flash = require('express-flash')
 const path = require('path')
 const methodOverride = require('method-override')
 
+
 mongoose.connect('mongodb+srv://arjunrameshh12:rA7sBc8wywxspAeV@cluster3.xyqbca7.mongodb.net/Paliative_Care_Management').then(() => console.log('DB Connected')).catch(err => console.log(err))
 
 const app = express()

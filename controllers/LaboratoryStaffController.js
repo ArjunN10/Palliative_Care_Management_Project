@@ -3,6 +3,7 @@ const bcrypt = require ('bcrypt')
 const Medicine = require("../models/medicineModel");
 const Patient = require("../models/patientModel");
 const Attendence = require("../models/attendanceModel")
+const Test = require("../models/TestResultModel")
 
 
 
@@ -10,34 +11,39 @@ const loadLogin = (req, res) => {
     res.render("staff/login", { error: null, message: null });
   };
 
-const staffLogin = async (req,res)=>{
-
-  const {email,password} = req.body
-    
-        const staff = await User.findOne({email})
-        if(!staff)
-            return res.render ('staff/login',{
-               message: null ,
-               error : 'staff not found'
-            })
-           
-        const isMatch  = await bcrypt.compare(password,staff.password)
-        if(!isMatch)
-        return res.render('user/login',{
-                message : null,
-                error : 'wrong password'
-        })
-
-        if(staff.is_Lab_Staff === 1){
-            req.session.LaboratoryStaff = staff._id
-            res.redirect('/staff/dashboard')
-        }else {
-            res.render("/login?error=" + encodeURIComponent("You're nor laboratary staff"));
-          }
-};
+  const staffLogin = async (req, res) => {
+    console.log('.....')
+    const { email, password } = req.body;
+    try {
+      const user = await User.findOne({ email });
+      console.log(user)
+      if (!user)
+        return res.render("staff/login", {
+          message: null,
+          error: "staff not found.",
+        });
+  
+      const isMatch = await bcrypt.compare(password, user.password);
+      console.log(isMatch) 
+      if (!isMatch)
+        return res.render("staff/login", {
+          error: "Wrong password.",
+          message: null,
+        });
+        console.log(user.is_Lab_Staff === 1 && user.is_varified === 1)
+      if (user.is_Lab_Staff === 1 && user.is_varified === 1) { 
+        req.session.LaboratoryStaff = user._id;
+        return res.redirect("/staff/dashboard")
+      } else {
+        return res.redirect("/staff/login?error=" + encodeURIComponent("You are not a verified Doctor"));
+      }
+    } catch (error) {
+      console.log(error.message);
+      return res.status(500).send("Internal Server Error");
+    }
+  }
 
 const dashboard = async (req, res) => {
-  console.log('....')
   const { q } = req.query;
   
     let users;
@@ -265,6 +271,7 @@ const MarkAttendence = async (req,res) => {
  } 
 
  const renderAttendenceDisplay = async (req,res) =>{
+  console.log('....')
   const  { id } = req.params;
   console.log(id)
 
@@ -272,8 +279,40 @@ const MarkAttendence = async (req,res) => {
     const attendenceRecord = await User.findById(id).populate('attendanceHistory');
     console.log(attendenceRecord)
   res.render("staff/attendanceDisplay",{attendenceRecord})
+
+  
   
  }
+
+ const getTestResult = async (req,res) => {
+  res.render("staff/testUpload")
+}
+
+const uploadImage = async (req,res) => {
+  const { patientId, name, disease, test_result } = req.body;
+  console.log(req.body.test_result)
+  const patient = await Patient.findById(patientId)
+  if (!patient) {
+    return res.status(404).json({ error: "Patient not found" });
+  }
+  const newTest = new Test({
+    patient: patientId,
+    name,
+    disease,
+    test_result,
+  });
+  console.log(newTest)
+  await newTest.save()
+  patient.test_result.push(newTest._id);
+  await patient.save();
+  res.render("staff/DisplaytestResult",{newTest})
+  
+}
+
+
+
+
+
 
 
 
@@ -291,7 +330,9 @@ module.exports = {
   deletePatient,
   getAttendence,
   MarkAttendence,
-  renderAttendenceDisplay
+  renderAttendenceDisplay,
+  uploadImage,
+  getTestResult
 
 }
 

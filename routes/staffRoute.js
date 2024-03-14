@@ -2,6 +2,9 @@ const router = require('express').Router()
 const LaboratoryStaff = require('../controllers/LaboratoryStaffController')
 const { isLaboratoryStaff, loggedOutLaboratoryStaff } = require("../middlewares/auth");
 const trycatch = require("../middlewares/TryCatch")
+const cors = require("cors") ;
+const imageupload = require('../middlewares/image upload/imageUpload')
+
 
 
 router.get("/login", loggedOutLaboratoryStaff,trycatch(LaboratoryStaff.loadLogin))
@@ -23,6 +26,16 @@ router.delete("/dashboard/:id/destroy",isLaboratoryStaff,trycatch(LaboratoryStaf
 router.get("/markAttendence",isLaboratoryStaff,trycatch(LaboratoryStaff.getAttendence))
 router.post ("/markAttendence",isLaboratoryStaff,trycatch(LaboratoryStaff.MarkAttendence))
 router.get("/attendanceDisplay/:id",isLaboratoryStaff,trycatch(LaboratoryStaff.renderAttendenceDisplay))
+
+//test result
+
+
+
+  router.get("/testresult",isLaboratoryStaff,trycatch(LaboratoryStaff.getTestResult))
+
+  router.post('/upload-pdf', imageupload,trycatch(LaboratoryStaff.uploadImage) )
+
+
 
 
 
