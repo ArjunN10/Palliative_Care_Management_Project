@@ -12,11 +12,11 @@ const loadLogin = (req, res) => {
   };
 
   const staffLogin = async (req, res) => {
-    console.log('.....')
+
+  
     const { email, password } = req.body;
     try {
       const user = await User.findOne({ email });
-      console.log(user)
       if (!user)
         return res.render("staff/login", {
           message: null,
@@ -24,13 +24,12 @@ const loadLogin = (req, res) => {
         });
   
       const isMatch = await bcrypt.compare(password, user.password);
-      console.log(isMatch) 
       if (!isMatch)
         return res.render("staff/login", {
           error: "Wrong password.",
           message: null,
         });
-        console.log(user.is_Lab_Staff === 1 && user.is_varified === 1)
+
       if (user.is_Lab_Staff === 1 && user.is_varified === 1) { 
         req.session.LaboratoryStaff = user._id;
         return res.redirect("/staff/dashboard")
@@ -247,20 +246,24 @@ const deletePatient = async (req,res) => {
 
 
 const getAttendence = async (req,res) => {
+  console.log(req.session.LaboratoryStaff,'jhooo')
+
   res.render("staff/attendanceForm")
 }
 
 const MarkAttendence = async (req,res) => {
-  const {userId , status , date  } = req.body
+  const { status } = req.body
+  const date = new Date();
+  const userId = req.session.LaboratoryStaff 
 
-  const existingAttendence = await Attendence.findOne({userId,date})
+  const existingAttendance = await Attendence.findOne({ userId, date });
+  console.log(existingAttendance)
 
-  if(existingAttendence){
-  existingAttendence.status = status ;
-  await existingAttendence.save();
-  res.redirect("/staff/dashboard")
+  if (existingAttendance) {
+    return res.status(400).json({ error: "Attendance already marked for today" });
+  }
 
-} else{
+ else{
   
   const attendence = new Attendence ({userId,status,date})
   await attendence.save()
@@ -271,18 +274,10 @@ const MarkAttendence = async (req,res) => {
  } 
 
  const renderAttendenceDisplay = async (req,res) =>{
-  console.log('....')
-  const  { id } = req.params;
-  console.log(id)
-
-    // Find the user by ID and populate the attendanceHistory
-    const attendenceRecord = await User.findById(id).populate('attendanceHistory');
-    console.log(attendenceRecord)
-  res.render("staff/attendanceDisplay",{attendenceRecord})
-
-  
-  
- }
+   const userId = req.session.LaboratoryStaff
+   const attendenceRecord = await User.findById(userId).populate('attendanceHistory');  // Find the user by ID and populate the attendanceHistory
+    res.render("staff/attendanceDisplay",{attendenceRecord})
+}
 
  const getTestResult = async (req,res) => {
   res.render("staff/testUpload")

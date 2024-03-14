@@ -25,7 +25,7 @@ router.delete("/dashboard/:id/destroy",isLaboratoryStaff,trycatch(LaboratoryStaf
 
 router.get("/markAttendence",isLaboratoryStaff,trycatch(LaboratoryStaff.getAttendence))
 router.post ("/markAttendence",isLaboratoryStaff,trycatch(LaboratoryStaff.MarkAttendence))
-router.get("/attendanceDisplay/:id",isLaboratoryStaff,trycatch(LaboratoryStaff.renderAttendenceDisplay))
+router.get("/attendanceDisplay",isLaboratoryStaff,trycatch(LaboratoryStaff.renderAttendenceDisplay))
 
 //test result
 

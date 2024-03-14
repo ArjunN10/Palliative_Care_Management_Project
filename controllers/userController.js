@@ -89,7 +89,7 @@ const loadLogin = async (req, res) => {
   }
 };
 
-const validLogin = async (req, res) => {
+const validLogin= async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -98,23 +98,22 @@ const validLogin = async (req, res) => {
         message: null,
         error: "User not found.",
       });
-    const isMatch = await bcrypt.compare(password, user.password);
+
+    const isMatch = await bcrypt.compare(password, user.password); 
     if (!isMatch)
       return res.render("users/login", {
         error: "Wrong password.",
         message: null,
       });
-    if (user.is_varified === 1) {
-      req.session.user = user._id;
-      res.redirect("/");
+    if (user.is_volunteer === 1 && user.is_varified === 1) { 
+      req.session.volunteer = user._id;
+      return res.redirect("/")
     } else {
-      res.render("users/login", {
-        error: "Please wait for the verification by the admin",
-        message: null,
-      });
+      return res.redirect("/users/login?error=" + encodeURIComponent("You are not a verified Doctor"));
     }
   } catch (error) {
     console.log(error.message);
+    return res.status(500).send("Internal Server Error");
   }
 };
 

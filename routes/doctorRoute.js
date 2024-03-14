@@ -64,7 +64,7 @@ router
 
 router.get("/markAttendence",isDoctor,TrycatchMiddleware(doctorController.getAttendence))
 router.post ("/markAttendence",isDoctor,TrycatchMiddleware(doctorController.MarkAttendence))
-router.get("/attendanceDisplay/:id",isDoctor,TrycatchMiddleware(doctorController.renderAttendenceDisplay))
+router.get("/attendanceDisplay",isDoctor,TrycatchMiddleware(doctorController.renderAttendenceDisplay))
 
 
 
