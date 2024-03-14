@@ -3,6 +3,7 @@ const Patient = require("../models/patientModel");
 const Medicine = require("../models/medicineModel");
 const bcrypt = require("bcrypt");
 const MedicineDistribution =require('../models/MdcnDstrbtionModel')
+const Attendance = require('../models/attendanceModel')
 
 
 const securePassword =async (password) => {
@@ -27,6 +28,7 @@ loadLogin:(req, res) => {
 
 
   DoctorLogin: async (req, res) => {
+    console.log('/////////')
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -35,16 +37,19 @@ loadLogin:(req, res) => {
         message: null,
         error: "User not found.",
       });
+      console.log(user)
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log(isMatch)
     if (!isMatch)
       return res.render("users/login", {
         error: "Wrong password.",
         message: null,
       });
-    if (user.is_Admin === 1) {
+    if (user.name === "tony") {
       req.session.doctor = user._id;
       res.redirect("/doctor/dashboard");
-    } else {
+    } 
+    else {
       res.redirect("/login?error=" + encodeURIComponent("You are not Doctor"));
     }
   } catch (error) {
@@ -395,6 +400,46 @@ DoctorAddUser : async (req, res) => {
   } catch (error) {
     console.log(error.message)    
   }
+} , 
+
+ getAttendence : async (req,res) => {
+  res.render("doctor/attendanceForm")
+},
+
+MarkAttendence : async (req,res) => {
+  const {userId , status , date  } = req.body
+
+  const existingAttendence = await Attendance.findOne({userId,date})
+
+  if(existingAttendence){
+  existingAttendence.status = status ;
+  await existingAttendence.save();
+  res.redirect("/doctor/dashboard")
+
+} else{
+  
+  const attendence = new Attendance ({userId,status,date})
+  await attendence.save()
+  console.log(attendence)
+
+  res.redirect("/doctor/dashboard")
 }
+  
+ } ,
+
+ renderAttendenceDisplay : async (req,res) =>{
+  const  { id } = req.params;
+  console.log(id)
+
+    // Find the user by ID and populate the attendanceHistory
+    const attendenceRecord = await User.findById(id).populate('attendanceHistory');
+    console.log(attendenceRecord)
+  res.render("doctor/attendanceDisplay",{attendenceRecord})
+
+  
+  
+ }
+
+
 
 };

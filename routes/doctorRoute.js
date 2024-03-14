@@ -48,4 +48,11 @@ router
 .get("/medicineHistory", isDoctor,  TrycatchMiddleware(doctorController.medicineHistory))
 .post("/logout", isDoctor, TrycatchMiddleware( doctorController.logoutDoctor))
 
+
+router.get("/markAttendence",isDoctor,TrycatchMiddleware(doctorController.getAttendence))
+router.post ("/markAttendence",isDoctor,TrycatchMiddleware(doctorController.MarkAttendence))
+router.get("/attendanceDisplay/:id",isDoctor,TrycatchMiddleware(doctorController.renderAttendenceDisplay))
+
+
+
 module.exports = router;

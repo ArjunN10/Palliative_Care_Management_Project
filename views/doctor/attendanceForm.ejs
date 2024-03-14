@@ -1,0 +1,36 @@
+<!-- attendanceForm.ejs -->
+<%- include('../layouts/header.ejs') %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mark Attendance</title>
+</head>
+<body>
+
+  <h1>Mark Attendance</h1>
+
+  <form action="/doctor/markAttendence" method="POST">
+    <!-- Employee ID -->
+    <label for="employeeId">Employee ID:</label>
+    <input type="text" id="userId" name="userId" required />
+
+    <!-- Date -->
+    <label for="attendanceDate">Attendance Date:</label>
+    <input type="date" id="date" name="date" required />
+
+    <!-- Status -->
+    <label for="status">Attendance Status:</label>
+    <select id="status" name="status" required>
+      <option value="Present">Present</option>
+      <option value="Absent">Absent</option>
+      <option value="HalfDay">HalfDay</option>
+    </select>
+
+    <button type="submit">Submit Attendance</button>
+  </form>
+
+</body>
+</html>
