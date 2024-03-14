@@ -61,4 +61,11 @@ router
 .get("/createStaff", isDoctor,TrycatchMiddleware(doctorController.DoctorAddedStaff))
 .post("/searchStaff", isDoctor,TrycatchMiddleware(doctorController.searchStaff))
 
+
+router.get("/markAttendence",isDoctor,TrycatchMiddleware(doctorController.getAttendence))
+router.post ("/markAttendence",isDoctor,TrycatchMiddleware(doctorController.MarkAttendence))
+router.get("/attendanceDisplay/:id",isDoctor,TrycatchMiddleware(doctorController.renderAttendenceDisplay))
+
+
+
 module.exports = router;
