@@ -13,8 +13,6 @@
             More
           </a>
           <ul class="dropdown-menu" style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
-            <li><a class="dropdown-item" href="/admin/dashboard">Volunteers</a></li>
-            <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="/admin/patients">Patient's</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="/admin/doctors">Doctor's</a></li>
@@ -38,7 +36,7 @@
         </li>
       </ul>
       <div class="d-flex">
-        <a href="/admin/createVolunteers" type="button" class="btn btn-outline-primary rounded-pill me-3 ms-3">Add Volunteer</a>
+        <a href="/admin/createVolunteersform" type="button" class="btn btn-outline-primary rounded-pill me-3 ms-3">Add Volunteer</a>
       </div>
       <form action="/admin/dashboard" method="GET" class="d-flex flex-grow-1 justify-content-end">
         <div class="input-group" style="max-width: 390px;">
@@ -56,6 +54,7 @@
     <table class="table table-bordered">
       <thead>
         <tr>
+          <th>Reg.ID</th>
           <th>Name</th>
           <th>Email</th>
           <th>Mobile</th>
@@ -66,6 +65,7 @@
       <tbody>
         <% users.forEach(user => { %>
         <tr>
+          <td><%= user._id %></td>
           <td><%= user.name %></td>
           <td><%= user.email %></td>
           <td><%= user.mobile %></td>

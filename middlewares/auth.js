@@ -11,7 +11,6 @@ module.exports = {
 isAdmin :(req, res, next) => {
     if(req.session.admin) {
         req.admin = req.session.admin 
-        // console.log(req.session.admin,"isAdminSession")
         next()
     }else{
         res.redirect('/admin/login')
@@ -29,22 +28,36 @@ isAdmin :(req, res, next) => {
 
 // ===============================< Doctor >================================//
 
+
+
 isDoctor :(req, res, next) => {
     if(req.session.doctor) {
-        req.doctor = req.session.doctor 
+        req.doctor = req.session.doctor   //after logg
         next()
     }else{
         res.redirect('/doctor/login')
     }
 },
 
- loggedOutDoctor:  (req, res, next) => {
-    if(!req.session.doctor){
-        next()
-    }else{
+
+isDoctorLogged : (req, res, next) => {
+    if (!req.session.doctor) {
+        next()                               //before logg
+    } else {
         res.redirect('/doctor/dashboard')
     }
 },
+
+
+// isDoctorVerified: async (req, res, next) => {
+//     const user = await User.findById(req.user); 
+//     if (user.is_doctor === 1) {
+//         next();
+//     } else {
+//         res.redirect('/doctor/login');
+//     }
+// },
+
 
 
 
@@ -53,13 +66,13 @@ isDoctor :(req, res, next) => {
  isLogout : (req, res, next) => {
     if (!req.session.user) {
         next()
-    } else {
+    } else {                          //before logg
         res.redirect('/')
     }
 },
 
 isLogged: (req, res, next) => {
-    if (req.session.user) {
+    if (req.session.user) {               //after logg
         req.user = req.session.user
         next()
     } else {
@@ -67,6 +80,14 @@ isLogged: (req, res, next) => {
     }
 },
 
+isStaffVerified : async  (req,res,next) => {
+    const user = await User.findById(req.user)
+    if (user.is_varified === 1) {
+        next()
+    } else {
+        res.redirect('/login')
+    }
+},
 
 
 // ===============================< L-Staff >================================//
@@ -90,15 +111,7 @@ loggedOutLaboratoryStaff :(req,res,next) => {
 },
 
 
- isStaffVerified : async  (req,res,next) => {
 
-    const user = await User.findById(req.user)
-    if (user.is_varified === 1) {
-        next()
-    } else {
-        res.redirect('/login')
-    }
-},
 
     
 

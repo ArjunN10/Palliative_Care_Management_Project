@@ -18,16 +18,20 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    is_Admin: {
+    is_doctor: {    //doctor
         type: Number,
         default: 0
     },
-    is_Lab_Staff:{
+    is_Lab_Staff:{  //staff
         type:Number,
         default : 0
     },
     
-    is_varified: {
+    is_volunteer: {  //volunteer
+        type: Number,
+        default: 0
+    } ,
+    is_varified: {  //verify
         type: Number,
         default: 0
     } ,

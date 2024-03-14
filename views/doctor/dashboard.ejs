@@ -13,7 +13,7 @@
               More
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/doctor/dashboard">staffs</a></li>
+            <li><a class="dropdown-item" href="/doctor/dashboard">Volunteers</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="/doctor/patients">Patients</a></li>
             <li><hr class="dropdown-divider"></li>
@@ -29,21 +29,21 @@
           </ul>
         </li>
       </ul>
-      <div class="d-flex">
-        <a href="/doctor/createUser" type="button"  class="btn btn-outline-primary rounded-pill  ms-2">Add Staff</a>
+      <!-- <div class="d-flex">
+        <a href="/doctor/createUser" type="button"  class="btn btn-outline-primary rounded-pill  ms-2">Add Volunteer</a>
     </div>
       <form action="/doctor/dashboard" method="GET">
           <div class="d-flex">
               <input type="search" name="q" placeholder="Search Staff" class="form-control rounded-pill" value="<%= q ? q : null %>" />
               <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
           </div>
-      </form>
+      </form> -->
     </div>
   </div>
 </nav>
 
 <div class="container mt-4">
-  <h2>Staffs List</h2>
+  <h2>Volunteers List</h2>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -51,7 +51,7 @@
                 <th>Email</th>
                 <th>Mobile</th>
                 <th>Verified</th>
-                <th>Actions</th>
+                <!-- <th>Actions</th> -->
             </tr>
         </thead>
         <tbody>
@@ -61,12 +61,12 @@
                     <td><%= user.email %></td>
                     <td><%= user.mobile %></td>
                     <td><%= user.is_varified ? 'Yes' : 'No' %></td>
-                    <td>
+                    <!-- <td>
                         <a href="/doctor/users/<%= user._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
                         <form action="/doctor/users/<%= user._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
                             <button type="submit" onclick="return alert('Are you sure to remove this Staff?')" class="btn btn-sm btn-danger rounded-pill">Delete</a>
                           </form>
-                    </td>
+                    </td> -->
                 </tr>
             <% }) %>
         </tbody>

@@ -19,14 +19,65 @@ module.exports = {
 
 securePassword,
 
-// ===============================< Login >================================//
-
-loadLogin:(req, res) => {
-  res.render("doctor/login", { error: null, message: null });
+loadRegister :async (req, res) => {
+  try {
+    res.render("doctor/registration", { error: null, message: null });
+  } catch (error) {
+    console.log(error.message);
+  }
 },
 
 
-  DoctorLogin: async (req, res) => {
+
+insertDoctor: async (req, res) => {
+  const { name, email, password, mobile } = req.body;
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  try {
+    if (!email)
+      return res.render("doctor/registration", { error: "Email is required" });
+    if (!emailRegex.test(email))
+      return res.render("doctor/registration", {
+        error: "Email must be a valid email address!",
+      });
+
+    if (password.length < 6) {
+      return res.render("doctor/registration", {
+        error: "Password must be at least 6 characters long",
+      });
+    }
+    const isExists = await User.findOne({ email });
+    if (isExists)
+      return res.render("doctor/registration", {
+        error: "User with this email already exists",
+      });
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({
+      name,
+      email,
+      mobile,
+      password: hashedPassword, // Save hashed password
+      is_doctor: 1,
+    });
+    await user.save();
+    return res.redirect("/doctor/dashboard");
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).send("Internal Server Error");
+  }
+},
+
+
+
+// ===============================< Login >================================//
+
+loadLogin:(req, res) => {
+  res.render("doctor/login", { error: null, message: null });  
+},
+
+
+DoctorLogin: async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -35,22 +86,26 @@ loadLogin:(req, res) => {
         message: null,
         error: "User not found.",
       });
-    const isMatch = await bcrypt.compare(password, user.password);
+
+    const isMatch = await bcrypt.compare(password, user.password); 
     if (!isMatch)
-      return res.render("users/login", {
+      return res.render("doctor/login", {
         error: "Wrong password.",
         message: null,
       });
-    if (user.is_Admin === 1) {
+    if (user.is_doctor === 1 && user.is_varified === 1) { 
       req.session.doctor = user._id;
-      res.redirect("/doctor/dashboard");
+      return res.redirect("/doctor/dashboard")
     } else {
-      res.redirect("/login?error=" + encodeURIComponent("You are not Doctor"));
+      return res.redirect("/doctor/login?error=" + encodeURIComponent("You are not a verified Doctor"));
     }
   } catch (error) {
     console.log(error.message);
+    return res.status(500).send("Internal Server Error");
   }
 },
+
+
 
     // ===============================< Logout >================================//
 
@@ -59,8 +114,26 @@ logoutDoctor:(req, res) => {
   res.redirect("/doctor/login");
 },
 
-// ===============================< Volunteer Management >================================//
+// ===============================< Volunteer Management >======================//
 
+
+// dashboard : async (req, res) => {
+//   const { q } = req.query;
+//   try {
+//     let users;
+//     if (q && q.length > 0) {
+//       users = await User.find({
+//         name: { $regex: ".*" + q + ".*" },
+//         is_Admin: 0,
+//       });
+//     } else {
+//       users = await User.find({ is_varified: 1 });
+//     }
+//     res.render("doctor/dashboard", { users, q });
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// },
 
 dashboard : async (req, res) => {
   const { q } = req.query;
@@ -69,14 +142,20 @@ dashboard : async (req, res) => {
     if (q && q.length > 0) {
       users = await User.find({
         name: { $regex: ".*" + q + ".*" },
-        is_Admin: 0,
+        is_volunteer:1,
+        is_verified: { $in:[0, 1] }
       });
     } else {
-      users = await User.find({ is_varified: 1 });
+      users = await User.find({
+        is_volunteer:1,
+        is_varified: { $in:[0, 1] }
+      });
     }
+    console.log(users,"uu")
     res.render("doctor/dashboard", { users, q });
   } catch (error) {
     console.log(error.message);
+    res.status(500).send("Internal Server Error");
   }
 },
 
@@ -170,6 +249,76 @@ DoctorAddUser : async (req, res) => {
     console.log(error.message);
   }
 },
+    // ===============================< staff management>================================//
+
+
+
+    ViewLabStaff : async (req, res) => {
+      const { q } = req.query;
+      try {
+        let users;
+        if (q && q.length > 0) {
+          users = await User.find({
+            name: { $regex: ".*" + q + ".*" },
+            is_Admin: 0,
+          });
+        } else {
+          users = await User.find({ is_Lab_Staff: 1 });
+          console.log(users,"usss")
+        }
+        res.render("doctor/staffs", { users, q });
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
+
+    searchStaff : async (req, res) => {
+      const { q } = req.body;
+      try {
+        let users;
+    
+        if (q) {
+          users = await User.aggregate([
+            {
+              $match: {
+                name: { $regex: ".*" + q + ".*" }
+              }
+            },
+            {
+              $lookup: {
+                from: "medicines",
+                localField: "Medicines.medicine",
+                foreignField: "_id",
+                as: "Medicines.medicine"
+              }
+            }
+          ]);
+        } else {
+          users = await User.aggregate([
+            {
+              $lookup: {
+                from: "medicines",
+                localField: "Medicines.medicine",
+                foreignField: "_id",
+                as: "Medicines.medicine"
+              }
+            }
+          ]);
+        }
+    
+        res.render("admin/staffs", { users, message: null, error: null });
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
+
+
+
+
+
+
+
+
 
 // ===============================< Patient Management >================================//
 

@@ -22,12 +22,12 @@
                             <div class="mb-3">
                                 <label for="mobile" class="form-label">Mobile</label>
                                 <input type="number" name="mobile" id="mobile" value="<%= user.mobile %>"
-                                    class="form-control" pattern="[0-9]{10}" required>
+                                    class="form-control" pattern="[0-9]{10}" required> 
                             </div>
                             <div class="mb-3">
                                 <div class="form-check disabled">
                                     <input class="form-check-input" type="radio" name="is_varified" id="verify"
-                                        <%=user.is_Admin===1 ? "checked" : "" %> value="1">
+                                        <%=user.is_varified===1 ? "checked" : "" %> value="1">
                                     <label class="form-check-label" for="verify">
                                         Verify
                                     </label>
@@ -36,12 +36,13 @@
                             <div class="mb-3">
                                 <div class="form-check disabled">
                                     <input class="form-check-input" type="radio" name="is_varified"
-                                        <%=user.is_Admin===0 ? "checked" : "" %> id="not_verify" value="0">
+                                        <%=user.is_varified===0 ? "checked" : "" %> id="not_verify" value="0">
                                     <label class="form-check-label" for="not_verify">
                                         Not Verify
                                     </label>
                                 </div>
                             </div>
+                            
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary rounded-pill">Update</button>
                             </div>
