@@ -64,7 +64,7 @@ isDoctorLogged : (req, res, next) => {
 // ===============================< Volunteer >================================//
 
  isLogout : (req, res, next) => {
-    if (!req.session.user) {
+    if (!req.session.volunteer) {
         next()
     } else {                          //before logg
         res.redirect('/')
@@ -72,8 +72,8 @@ isDoctorLogged : (req, res, next) => {
 },
 
 isLogged: (req, res, next) => {
-    if (req.session.user) {               //after logg
-        req.user = req.session.user
+    if (req.session.volunteer) {               //after logg
+        req.user = req.session.volunteer
         next()
     } else {
         res.redirect('/login')

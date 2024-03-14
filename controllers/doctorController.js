@@ -535,7 +535,9 @@ DoctorAddUser : async (req, res) => {
 },
 
 MarkAttendence : async (req,res) => {
-  const {userId , status , date  } = req.body
+  const { status } = req.body
+  const date = new Date();
+  const userId = req.session.doctor 
 
   const existingAttendence = await Attendance.findOne({userId,date})
 
@@ -556,11 +558,11 @@ MarkAttendence : async (req,res) => {
  } ,
 
  renderAttendenceDisplay : async (req,res) =>{
-  const  { id } = req.params;
-  console.log(id)
+  const userId = req.session.doctor
+
 
     // Find the user by ID and populate the attendanceHistory
-    const attendenceRecord = await User.findById(id).populate('attendanceHistory');
+    const attendenceRecord = await User.findById(userId).populate('attendanceHistory');
     console.log(attendenceRecord)
   res.render("doctor/attendanceDisplay",{attendenceRecord})
 
