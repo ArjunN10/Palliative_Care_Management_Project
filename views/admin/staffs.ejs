@@ -19,8 +19,6 @@
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/admin/doctors">Doctor's</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/staffs">Laboratory Staffs</a></li>
-              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/admin/medicines">Medicines</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/admin/medicineHistory">Medicine Distributions</a></li>
@@ -66,7 +64,7 @@
               <td><%= user.name %></td>
               <td><%= user.email %></td>
               <td><%= user.mobile %></td>
-              <td><%= user.is_Lab_Staff ? 'Yes' : 'No' %></td>
+              <td><%= user.is_varified ? 'Yes' : 'No' %></td>
               <td>
                 <a href="/admin/staffs/<%= user._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
                 <form action="/admin/staffs/<%= user._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
