@@ -29,7 +29,7 @@ loadRegister :async (req, res) => {
 },
 
 
-
+  
 insertDoctor: async (req, res) => {
   const { name, email, password, mobile } = req.body;
   const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -118,23 +118,6 @@ logoutDoctor:(req, res) => {
 // ===============================< Volunteer Management >======================//
 
 
-// dashboard : async (req, res) => {
-//   const { q } = req.query;
-//   try {
-//     let users;
-//     if (q && q.length > 0) {
-//       users = await User.find({
-//         name: { $regex: ".*" + q + ".*" },
-//         is_Admin: 0,
-//       });
-//     } else {
-//       users = await User.find({ is_varified: 1 });
-//     }
-//     res.render("doctor/dashboard", { users, q });
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// },
 
 dashboard : async (req, res) => {
   const { q } = req.query;
