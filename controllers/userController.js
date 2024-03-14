@@ -13,6 +13,10 @@ const securePassword = async (password) => {
   }
 };
 
+
+
+// register
+
 const loadRegister = async (req, res) => {
   try {
     res.render("users/registration", { error: null, message: null });
@@ -20,36 +24,61 @@ const loadRegister = async (req, res) => {
     console.log(error.message);
   }
 };
+
+
+
 const insertUser = async (req, res) => {
   try {
-    const userExists = await User.findOne({ email: req.body.email });
-    if (userExists)
+    const { name, email, password, mobile, role } = req.body;
+    const userExists = await User.findOne({ email });
+
+    if (userExists) {
       return res.render("users/registration", {
         message: null,
         error: "User already exists.",
       });
-    const secPassword = await securePassword(req.body.password);
+    }
+
+    const secPassword = await securePassword(password);
+
+    // Initialize role fields
+    let is_Lab_Staff = 0;
+    let is_volunteer = 0;
+
+    // Set the appropriate role field based on the role parameter
+    if (role === 'labStaff') {
+      is_Lab_Staff = 1;
+    } else if (role === 'volunteer') {
+      is_volunteer = 1;
+    }
+
     const user = new User({
-      name: req.body.name,
-      email: req.body.email,
-      mobile: req.body.mobile,
+      name,
+      email,
+      mobile,
       password: secPassword,
+      is_Lab_Staff,
+      is_volunteer,
     });
 
     const userData = await user.save();
+    
     if (userData) {
-      
       res.redirect("/login");
     } else {
       res.render("users/registration", {
-        error: "Your registration has been failed",
+        error: "Your registration has failed",
         message: null,
       });
     }
   } catch (error) {
     console.log(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+// login
 
 const loadLogin = async (req, res) => {
   const { error } = req.query;

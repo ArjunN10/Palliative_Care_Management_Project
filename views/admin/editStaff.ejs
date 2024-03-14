@@ -27,7 +27,7 @@
                             <div class="mb-3">
                                 <div class="form-check disabled">
                                     <input class="form-check-input" type="radio" name="is_varified" id="verify"
-                                        <%=user.is_Lab_Staff===1 ? "checked" : "" %> value="1">
+                                        <%=user.is_varified===1 ? "checked" : "" %> value="1">
                                     <label class="form-check-label" for="verify">
                                         Verify
                                     </label>
@@ -36,7 +36,7 @@
                             <div class="mb-3">
                                 <div class="form-check disabled">
                                     <input class="form-check-input" type="radio" name="is_varified"
-                                        <%=user.is_Lab_Staff===0 ? "checked" : "" %> id="not_verify" value="0">
+                                        <%=user.is_varified===0 ? "checked" : "" %> id="not_verify" value="0">
                                     <label class="form-check-label" for="not_verify">
                                         Not Verify
                                     </label>
