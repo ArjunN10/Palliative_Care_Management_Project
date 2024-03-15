@@ -2,7 +2,6 @@ const router = require('express').Router()
 const LaboratoryStaff = require('../controllers/LaboratoryStaffController')
 const { isLaboratoryStaff, loggedOutLaboratoryStaff } = require("../middlewares/auth");
 const trycatch = require("../middlewares/TryCatch")
-const cors = require("cors") ;
 const imageupload = require('../middlewares/image upload/imageUpload')
 
 

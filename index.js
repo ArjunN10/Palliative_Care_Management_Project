@@ -31,9 +31,9 @@ app.use(methodOverride('_method'))
 app.use(flash())
 
 
+
+
 app.use('/', userRoute)
-
-
 app.use('/staff', require('./routes/staffRoute'))
 app.use('/doctor',doctorRoute )
 app.use('/admin',adminRoute)
