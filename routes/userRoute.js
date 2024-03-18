@@ -1,28 +1,44 @@
+
 const user_route = require('express').Router()
 const userController = require('../controllers/userController');
-const { isLogout, isLogged, isStaffVerified } = require('../middlewares/auth')
+const { isLogout, isLogged, isVolunteerVerified } = require('../middlewares/auth')
+const TrycatchMiddleware=require("../middlewares/TryCatch")
 
 
-user_route.get('/register', isLogout, userController.loadRegister);
-user_route.post('/register', isLogout, userController.insertUser);
+user_route
 
-user_route.get('/login', isLogout, userController.loadLogin)
-user_route.post('/login', isLogout, userController.validLogin)
+.get('/register', isLogout,TrycatchMiddleware( userController.loadRegister))
+.post('/register', isLogout,TrycatchMiddleware( userController.insertUser))
 
-user_route.get('/', isLogged, isStaffVerified,  userController.loadIndex)
-user_route.post('/logout', isLogged, userController.logout)
+//login
 
-user_route.post('/searchPatient',isLogged,isStaffVerified,userController.searchPatient)
+.get('/login', isLogout,TrycatchMiddleware( userController.loadLogin))
+.post('/login', isLogout,TrycatchMiddleware( userController.validLogin))
 
-user_route.get('/medicines',isLogged,isStaffVerified,userController.getMedicines)
-user_route.post('/searchMedicine',isLogged,isStaffVerified,userController.searchMedicine)
+//logout
 
-user_route.get('/patientMedicines/:id',isLogged,isStaffVerified,userController.getPatientMedicines)
-user_route.post("/distribute-medicines/:patientId", isLogged,isStaffVerified,userController.distributeMedicines);
-user_route.get("/distributionHistory",isLogged,isStaffVerified, userController.distributioHistory);
-user_route.get('/printList/:id',isLogged,isStaffVerified,userController.printList)
+.post('/logout', isLogged ,isVolunteerVerified,TrycatchMiddleware( userController.logout))
 
 
+.get('/', isLogged ,isVolunteerVerified,TrycatchMiddleware(  userController.loadIndex))
+
+.post('/searchPatient',isLogged ,isVolunteerVerified,TrycatchMiddleware(userController.searchPatient))
+//patient med
+.get('/patientMedicines/:id',isLogged ,isVolunteerVerified,TrycatchMiddleware(userController.getPatientMedicines))
+
+// medicine
+.get('/medicines',isLogged ,isVolunteerVerified,TrycatchMiddleware(userController.getMedicines))
+.post('/searchMedicine',isLogged ,isVolunteerVerified,TrycatchMiddleware(userController.searchMedicine))
+
+.get('/printList/:id',isLogged ,isVolunteerVerified,TrycatchMiddleware(userController.printList)) 
+.post("/distribute-medicines/:patientId", isLogged ,isVolunteerVerified,TrycatchMiddleware(userController.distributeMedicines))
+.get("/distributionHistory",isLogged ,isVolunteerVerified,TrycatchMiddleware( userController.distributioHistory))
+  
+// attentence 
+
+.get("/markAttendence",isLogged,isVolunteerVerified,TrycatchMiddleware(userController.getAttendence)) 
+.post ("/markAttendence",isLogged,isVolunteerVerified,TrycatchMiddleware(userController.MarkAttendence))
+.get("/attendanceDisplay/:id",isLogged,isVolunteerVerified,TrycatchMiddleware(userController.renderAttendenceDisplay))
 
 module.exports = user_route;
 

@@ -4,30 +4,33 @@ const Medicine = require("../models/medicineModel");
 const MedicineDistribution = require("../models/MdcnDstrbtionModel");
 const bcrypt = require("bcrypt");
 
+
+
 const securePassword = async (password) => {
   try {
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, 10)
     return passwordHash;
   } catch (error) {
     console.log(error.message);
   }
-};
+}
 
+module.exports={
 
 
 // register
 
-const loadRegister = async (req, res) => {
+loadRegister : async (req, res) => {
   try {
     res.render("users/registration", { error: null, message: null });
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
 
 
-const insertUser = async (req, res) => {
+insertUser : async (req, res) => {
   try {
     const { name, email, password, mobile, role } = req.body;
     const userExists = await User.findOne({ email });
@@ -40,12 +43,8 @@ const insertUser = async (req, res) => {
     }
 
     const secPassword = await securePassword(password);
-
-    // Initialize role fields
     let is_Lab_Staff = 0;
     let is_volunteer = 0;
-
-    // Set the appropriate role field based on the role parameter
     if (role === 'labStaff') {
       is_Lab_Staff = 1;
     } else if (role === 'volunteer') {
@@ -75,21 +74,22 @@ const insertUser = async (req, res) => {
     console.log(error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-};
+},
 
 
 // login
 
-const loadLogin = async (req, res) => {
+loadLogin : async (req, res) => {
   const { error } = req.query;
   try {
     res.render("users/login", { message: null, error: error ? error : null });
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const validLogin= async (req, res) => {
+
+validLogin: async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -115,11 +115,20 @@ const validLogin= async (req, res) => {
     console.log(error.message);
     return res.status(500).send("Internal Server Error");
   }
-};
+},
 
-const loadIndex = async (req, res) => {
+logout : (req, res) => {
+  req.session.destroy();
+  res.redirect("/login");
+},
+
+
+//dashboard 
+
+loadIndex : async (req, res) => {
   try {
     const user = await User.findById(req.user);
+    console.log("firstttt")
     const patients = await Patient.aggregate([
       {
         $lookup: {
@@ -133,10 +142,12 @@ const loadIndex = async (req, res) => {
     res.render("users/index", { user, patients, message: null, error: null });
   } catch (error) {
     console.log(error.message);
+    res.status(500).send("Internal Server Error");
   }
-};
+},
 
-const searchPatient = async (req, res) => {
+
+searchPatient : async (req, res) => {
   const user = await User.findById(req.user);
   const { q } = req.body;
   try {
@@ -173,17 +184,17 @@ const searchPatient = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
 
 // ===============================< Medicine Management >================================//
 
-const getMedicines = async (req, res) => {
+getMedicines : async (req, res) => {
   try {
     const user = await User.findById(req.user);
     const medicines = await Medicine.find();
     res.render("users/medicines", {
-      user,
+      user,                                               //med stock
       medicines,
       message: null,
       error: null,
@@ -191,15 +202,15 @@ const getMedicines = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const searchMedicine = async (req, res) => {
+searchMedicine : async (req, res) => {
   const user = await User.findById(req.user);
   const { q } = req.body;
   try {
     let medicines;
     if (q) {
-      medicines = await Medicine.find({ name: { $regex: ".*" + q + ".*" } });
+      medicines = await Medicine.find({ name: { $regex: ".*" + q + ".*" } });       // search med
     } else {
       medicines = await Medicine.find();
     }
@@ -212,9 +223,9 @@ const searchMedicine = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const getPatientMedicines = async (req, res) => {
+getPatientMedicines : async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(req.user);
   const Pid = await Patient.findById(id);
@@ -224,7 +235,7 @@ const getPatientMedicines = async (req, res) => {
         $match: {
           _id: Pid._id,
         },
-      },
+      },                                                  //specific patient medicine details
       {
         $lookup: {
           from: "medicines",
@@ -251,9 +262,11 @@ const getPatientMedicines = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const distributeMedicines = async (req, res) => {
+
+
+distributeMedicines : async (req, res) => {
   const staff = await User.findById(req.session.user);
   const { patientId } = req.params;
   const { medicineId, count } = req.body;
@@ -306,7 +319,7 @@ const distributeMedicines = async (req, res) => {
       patientName:patient.name,
       patientRgNo:patient.RegNo
     });
-    const mds = await MedicineDistribution.find();
+    const mds = await MedicineDistribution.find();   
     req.flash(
       "success",
       `${selectedMedicine.name} is disitributed successfully`
@@ -316,44 +329,83 @@ const distributeMedicines = async (req, res) => {
     console.log(error.message);
     return res.status(500).json({ error: "Internal Server Error" });
   }
-};
+},
 
-const distributioHistory = async (req, res) => {
+distributioHistory : async (req, res) => {  
   try {
-    const user = await User.findById(req.session.user);
-    const medicineDistributions = await MedicineDistribution.find().populate(
-      "patient"
-    );
+    console.log("history")                                                                //distribute hist
+    const user = await User.findById(req.session.volunteer);
+    console.log(user,"uuu")
+    const medicineDistributions = await MedicineDistribution.find().populate("patient");
+    // console.log(medicineDistributions,"hhh  ")
     res.render("users/medicineHistory", { medicineDistributions, user });
   } catch (error) {
     console.log(error.message);
   }
-};
+},
 
-const printList = async (req, res) => {
+
+
+
+
+
+printList : async (req, res) => {
   const { id } = req.params;
   const patient = await Patient.findById(id);
   const recievedMedicines = await MedicineDistribution.find({ patient: id });
   res.render("users/printList", { recievedMedicines, patient });
-};
+},
 
-const logout = (req, res) => {
-  req.session.destroy();
-  res.redirect("/login");
-};
 
-module.exports = {
-  loadRegister,
-  insertUser,
-  loadLogin,
-  validLogin,
-  loadIndex,
-  logout,
-  searchPatient,
-  getMedicines,
-  searchMedicine,
-  getPatientMedicines,
-  distributeMedicines,
-  distributioHistory,
-  printList,
-};
+// attentence
+
+
+getAttendence : async (req,res) => {
+  res.render("users/attendanceForm")
+},
+
+
+
+MarkAttendence : async (req,res) => {
+  const { status } = req.body
+  const date = new Date();
+  const userId = req.session.LaboratoryStaff 
+
+  const existingAttendance = await Attendence.findOne({ userId, date });
+  console.log(existingAttendance)
+
+  if (existingAttendance) {
+    return res.status(400).json({ error: "Attendance already marked for today" });
+  }
+
+ else{
+  
+  const attendence = new Attendence ({userId,status,date}) 
+  await attendence.save()
+
+  res.redirect("/users/dashboard")
+}
+},
+
+
+renderAttendenceDisplay : async (req,res) =>{
+  const userId = req.session.doctor
+    // Find the user by ID and populate the attendanceHistory
+    const attendenceRecord = await User.findById(userId).populate('attendanceHistory');
+    console.log(attendenceRecord)
+  res.render("users/attendanceDisplay",{attendenceRecord})
+
+  
+  
+ }
+
+
+
+}
+
+
+
+
+
+
+
