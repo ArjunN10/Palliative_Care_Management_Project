@@ -2,12 +2,16 @@ require("dotenv").config();
 const express = require('express')
 const mongoose = require('mongoose')
 const session = require('express-session')
+const path = require('path')
+
 const userRoute = require('./routes/userRoute')
 const doctorRoute=require('./routes/doctorRoute')
 const adminRoute=require('./routes/adminRoute')
+const staffRoute=require('./routes/staffRoute')
+const visitorRoute=require('./routes/visitorRoute')
+
 const nocache = require('nocache')
 const flash = require('express-flash')
-const path = require('path')
 const methodOverride = require('method-override')
 
 
@@ -31,12 +35,11 @@ app.use(methodOverride('_method'))
 app.use(flash())
 
 
-app.use('/', userRoute)
-
-
-app.use('/staff', require('./routes/staffRoute'))
-app.use('/doctor',doctorRoute )
-app.use('/admin',adminRoute)
+app.use('/', userRoute)                 //volunteer 
+app.use('/staff',staffRoute )           //staff
+app.use('/doctor',doctorRoute )         //doctor
+app.use('/admin',adminRoute)            //admin
+app.use('/visitor',visitorRoute)        //visitor
 
 
 app.listen(4000, () => {

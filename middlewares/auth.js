@@ -1,3 +1,6 @@
+
+
+
 const User = require('../models/userModel')
 
 module.exports = {
@@ -80,7 +83,7 @@ isLogged: (req, res, next) => {
     }
 },
 
-isStaffVerified : async  (req,res,next) => {
+isVolunteerVerified : async  (req,res,next) => {
     const user = await User.findById(req.user)
     if (user.is_varified === 1) {
         next()
@@ -94,7 +97,7 @@ isStaffVerified : async  (req,res,next) => {
 
 
 isLaboratoryStaff :(req,res,next) => {
-    if(req.session.LaboratoryStaff){
+    if(req.session.LaboratoryStaff){ 
         req.LaboratoryStaff = req.session.LaboratoryStaff
         next()
     }else {
@@ -111,7 +114,55 @@ loggedOutLaboratoryStaff :(req,res,next) => {
 },
 
 
+// ===============================< visitor >================================//
 
+
+
+isVisitor :(req,res,next) => {
+    if(req.session.visitor){ 
+        req.visitor = req.session.visitor
+        next()
+    }else {
+        res.redirect('/visitor/login')
+    }
+},
+
+loggedOutVisitor :(req,res,next) => {
+    if(!req.session.visitor){
+        next()
+    }else {
+        res.redirect('/visitor/index')
+    }
+},
+
+// isVisitorVerified : async  (req,res,next) => {
+//     const user = await User.findById(req.user)
+//     if (user.is_visitor === 1) {
+//         next()
+//     } else {
+//         res.redirect('/login')
+//     }
+// },
+
+
+isVisitorVerified: async (req, res, next) => {
+    try {
+        // Check if req.user exists and is populated with user data
+        if (req.user && req.user._id) {
+            const user = await User.findById(req.user._id);
+            if (user && user.is_visitor === 1) {
+                next();
+            } else {
+                res.redirect('/visitor/login'); // Redirect to login if user is not a verified visitor
+            }
+        } else {
+            res.redirect('/visitor/login'); // Redirect to login if req.user is not set
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send('Internal Server Error');
+    }
+}
 
     
 

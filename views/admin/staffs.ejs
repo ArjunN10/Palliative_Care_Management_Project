@@ -23,15 +23,11 @@
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/admin/medicineHistory">Medicine Distributions</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/doctor/markAttendence">Mark Attendence</a></li>
-              <li><hr class="dropdown-divider"></li> 
-              <li><a class="dropdown-item" href="/doctor/attendanceDisplay/65f038139870a351ffc57048">View attendence</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li>
+              <!-- <li>
                 <form action="/admin/logout" method="post" class="dropdown-item">
                   <button type="submit" class="dropdown-item p-0">Logout</button>
                 </form>
-              </li>
+              </li> -->
             </ul>
           </li>
         </ul>
@@ -41,10 +37,13 @@
             <a href="/admin/createStaff" type="button" class="btn btn-outline-primary rounded-pill me-3 ms-3">Add Laboratory Staff</a>
           </div>
         <form action="/admin/staffs" method="GET" class="d-flex flex-grow-1 justify-content-end">
-          <div class="input-group" style="max-width: 390px;">
+          <div class="input-group me-2" style="max-width: 390px;">
             <input type="search" name="q" placeholder="Search Volunteer" class="form-control rounded-pill" value="<%= q ? q : null %>" />
             <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
           </div>
+        </form>
+        <form action="/admin/logout" method="post" >
+          <button type="submit" class="btn btn-outline-danger ms-3">Logout</button>
         </form>
       </div>
     </div>
@@ -57,6 +56,7 @@
             <tr>
                 <th>Reg.No</th>
                 <th>Name</th>
+                <th>Email</th>
                 <th>Mobile</th>
                 <th>Staff Verified</th>
                 <th>Actions</th>
@@ -65,12 +65,13 @@
         <tbody>
             <% users.forEach(user => { %>
             <tr>
+              <td><%= user._id %></td>
               <td><%= user.name %></td>
               <td><%= user.email %></td>
               <td><%= user.mobile %></td>
               <td><%= user.is_varified ? 'Yes' : 'No' %></td>
               <td>
-                <a href="/admin/staffs/<%= user._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
+                <a href="/admin/staffs/<%= user._id %>/edit" class="btn btn-warning m-1 btn-sm rounded-pill">Edit</a>
                 <form action="/admin/staffs/<%= user._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
                   <button type="submit" onclick="return confirm('Are you sure you want to remove this LABORATORY STAFF?')" class="btn btn-sm btn-danger rounded-pill">Delete</button>
                 </form>
