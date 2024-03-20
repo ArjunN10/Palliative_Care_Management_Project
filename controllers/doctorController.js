@@ -530,6 +530,11 @@ DoctorAddUser : async (req, res) => {
   }
 } , 
 
+
+
+
+
+
  getAttendence : async (req,res) => {
   res.render("doctor/attendanceForm")
 },
@@ -539,7 +544,13 @@ MarkAttendence : async (req,res) => {
   const date = new Date();
   const userId = req.session.doctor 
 
-  const existingAttendence = await Attendance.findOne({userId})
+ const existingAttendence = await Attendance.findOne({
+    userId,
+    date: {
+        $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()), // Start of the day
+        $lt: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1) // End of the day
+    }
+});
 
   if(existingAttendence){
   return res.status(400).json({

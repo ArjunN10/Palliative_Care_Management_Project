@@ -41,7 +41,7 @@ router
 .delete("/doctors/:id/destroy", isAdmin, TrycatchMiddleware(adminController.deleteDoctor))
 
 // ===============================< Patient Management >================================//
-
+    
 .get("/patients", isAdmin, TrycatchMiddleware(adminController.ViewPatientsList))
 .post("/searchPatients", isAdmin,TrycatchMiddleware(adminController.searchPatient))
 
@@ -60,15 +60,15 @@ router
 // ===============================< Medicine Management >================================//
 
 .get('/medicines',isAdmin,TrycatchMiddleware(adminController.getMedicines))
-// .post('/searchMedicine',isAdmin,TrycatchMiddleware(adminController.searchMedicine))
-
-// .get('/patientMedicines/:id',isAdmin,TrycatchMiddleware(adminController.getPatientMedicines))
 .post("/distribute-medicines/:patientId", isAdmin,TrycatchMiddleware(adminController.distributeMedicines))
 .get("/distributionHistory",isAdmin,TrycatchMiddleware(adminController.distributioHistory))
-// .get('/printList/:id',isAdmin,TrycatchMiddleware(adminController.printList))
+
+// ===============================< Attendance Management >================================//
 
 
-
+.get('/attendance/doctors',isAdmin,TrycatchMiddleware(adminController.DoctorsList))
+.get('/attendance/doctors/:doctorId', isAdmin, TrycatchMiddleware(adminController.getDoctorAttendanceHistory))
+.get('/attendance/doctors/:doctorId/interval/:interval(week|month|year)', isAdmin, TrycatchMiddleware(adminController.getDoctorAttendanceHistory));
 
 
 module.exports=router

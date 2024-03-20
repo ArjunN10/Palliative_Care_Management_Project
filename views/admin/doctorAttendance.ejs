@@ -1,0 +1,40 @@
+
+<%- include('../layouts/header.ejs') %>
+
+
+    <div class="container" >
+        <h2 style="font-style: oblique;">DOCTORS ATTENDANCE</h2>
+          <table class="table table-bordered">
+              <thead >
+                  <tr>
+                      <!-- <th>Reg.ID</th> -->
+                      <th>Name</th>
+                      <th>Availablity</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <% users.forEach(user => { %>
+                  <tr>
+                    <!-- <td><%= user._id %></td> -->
+
+                    <td> 
+                        <a href="/admin/attendance/doctors/<%= user._id %>">
+                        <B>Dr.
+                        <%= user.name %>
+                    </B>
+                    </td>
+                   
+                    <% if (user.is_varified) { %>
+                        <td style="color: green;"><B>Available</B></td>
+                    <% } else { %>
+                        <td style=" color: red;"><B>Unavailable</B></td>
+                    <% } %>
+                  
+                  </tr>
+                  <% }) %>
+                </tbody>
+          </table>
+      </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
