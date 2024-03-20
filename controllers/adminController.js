@@ -1,6 +1,7 @@
 const Patients=require("../models/patientModel")
 const User=require("../models/userModel")
 const Medicine=require("../models/medicineModel")
+const MedicineDistribution =require('../models/MdcnDstrbtionModel')
 const bcrypt=require("bcrypt")
 
 
