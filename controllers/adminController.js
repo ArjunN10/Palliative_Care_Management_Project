@@ -1,10 +1,11 @@
 const Patients=require("../models/patientModel")
 const User=require("../models/userModel")
-const Medicine=require("../models/medicineModel")
+const Medicine = require("../models/medicineModel");
+const MedicineDistribution=require("../models/MdcnDstrbtionModel")
 const bcrypt=require("bcrypt")
 
 
-
+//pwd hashing 
 
 const securePassword =async (password) => {
   try {
@@ -77,7 +78,6 @@ module.exports={
                   is_varified: { $in:[0, 1] }
                 });
               }
-              console.log(users,"uu")
               res.render("admin/dashboard", { users, q });
             } catch (error) {
               console.log(error.message);
@@ -552,10 +552,8 @@ searchStaff : async (req, res) => {
 
 getMedicines : async (req, res) => {
   try {
-    const user = await User.findById(req.user);
     const medicines = await Medicine.find();
     res.render("admin/medicines", {
-      user,
       medicines,
       message: null,
       error: null,
@@ -565,65 +563,66 @@ getMedicines : async (req, res) => {
   }
 },
 
-searchMedicine : async (req, res) => {
-  const user = await User.findById(req.user);
-  const { q } = req.body;
-  try {
-    let medicines;
-    if (q) {
-      medicines = await Medicine.find({ name: { $regex: ".*" + q + ".*" } });
-    } else {
-      medicines = await Medicine.find();
-    }
-    res.render("admin/medicines", {
-      user,
-      medicines,
-      message: null,
-      error: null,
-    });
-  } catch (error) {
-    console.log(error.message);
-  }
-},
+// searchMedicine : async (req, res) => {
+//   const user = await User.findById(req.user);
+//   const { q } = req.body;
+//   try {
+//     let medicines;
+//     if (q) {
+//       medicines = await Medicine.find({ name: { $regex: ".*" + q + ".*" } });
+//     } else {
+//       medicines = await Medicine.find();
+//     }
+//     res.render("admin/medicines", {
+//       user,
+//       medicines,
+//       message: null,
+//       error: null,
+//     });
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// },
 
-getPatientMedicines : async (req, res) => {
-  const { id } = req.params;
-  const user = await User.findById(req.user);
-  const Pid = await Patients.findById(id);
-  try {
-    const patient = await Patients.aggregate([
-      {
-        $match: {
-          _id: Pid._id,
-        },
-      },
-      {
-        $lookup: {
-          from: "medicines",
-          localField: "Medicines.medicine",
-          foreignField: "_id",
-          as: "Medicines.medicine", 
-        },
-      },
-    ]);
-    const patientsMedicines = patient[0].Medicines;
-    const recievedMedicines = await MedicineDistribution.find({ patient: id });
-    console.log(recievedMedicines);
 
-    res.render("admin/patientMedicine", {
-      message: null,
-      error: null,
-      patient,
-      user,
-      patientsMedicines,
-      error: req.flash("error"),
-      success: req.flash("success"),
-      recievedMedicines,
-    });
-  } catch (error) {
-    console.log(error.message);
-  }
-},
+// getPatientMedicines : async (req, res) => {
+//   const { id } = req.params;
+//   const user = await User.findById(req.user);
+//   const Pid = await Patients.findById(id);
+//   try {
+//     const patient = await Patients.aggregate([
+//       {
+//         $match: {
+//           _id: Pid._id,
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "medicines",
+//           localField: "Medicines.medicine",
+//           foreignField: "_id",
+//           as: "Medicines.medicine", 
+//         },
+//       },
+//     ]);
+//     const patientsMedicines = patient[0].Medicines;
+//     const recievedMedicines = await MedicineDistribution.find({ patient: id });
+//     console.log(recievedMedicines);
+
+//     res.render("admin/patientMedicine", {
+//       message: null,
+//       error: null,
+//       patient,
+//       user,
+//       patientsMedicines,
+//       error: req.flash("error"),
+//       success: req.flash("success"),
+//       recievedMedicines,
+//     });
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// },
 
 distributeMedicines : async (req, res) => {
   const staff = await User.findById(req.session.user);
@@ -690,13 +689,13 @@ distributeMedicines : async (req, res) => {
   }
 },
 
+
 distributioHistory : async (req, res) => {
   try {
-    const user = await User.findById(req.session.user);
-    const medicineDistributions = await MedicineDistribution.find().populate(
-      "patient"
-    );
-    res.render("admin/medicineHistory", { medicineDistributions, user });
+    const medicineDistributions = await MedicineDistribution.find().populate("patient")
+  
+    console.log(medicineDistributions,"medd dist")
+    res.render("admin/medicineHistory", { medicineDistributions });
   } catch (error) {
     console.log(error.message);
   }

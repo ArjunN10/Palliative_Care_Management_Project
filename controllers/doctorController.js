@@ -539,13 +539,12 @@ MarkAttendence : async (req,res) => {
   const date = new Date();
   const userId = req.session.doctor 
 
-  const existingAttendence = await Attendance.findOne({userId,date})
+  const existingAttendence = await Attendance.findOne({userId})
 
   if(existingAttendence){
-  existingAttendence.status = status ;
-  await existingAttendence.save();
-  res.redirect("/doctor/dashboard")
-
+  return res.status(400).json({
+    message:"Attendance alredy marked"
+  })
 } else{
   
   const attendence = new Attendance ({userId,status,date})
