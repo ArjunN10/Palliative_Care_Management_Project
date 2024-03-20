@@ -60,12 +60,12 @@ router
 // ===============================< Medicine Management >================================//
 
 .get('/medicines',isAdmin,TrycatchMiddleware(adminController.getMedicines))
-.post('/searchMedicine',isAdmin,TrycatchMiddleware(adminController.searchMedicine))
+// .post('/searchMedicine',isAdmin,TrycatchMiddleware(adminController.searchMedicine))
 
-.get('/patientMedicines/:id',isAdmin,TrycatchMiddleware(adminController.getPatientMedicines))
+// .get('/patientMedicines/:id',isAdmin,TrycatchMiddleware(adminController.getPatientMedicines))
 .post("/distribute-medicines/:patientId", isAdmin,TrycatchMiddleware(adminController.distributeMedicines))
 .get("/distributionHistory",isAdmin,TrycatchMiddleware(adminController.distributioHistory))
-.get('/printList/:id',isAdmin,TrycatchMiddleware(adminController.printList))
+// .get('/printList/:id',isAdmin,TrycatchMiddleware(adminController.printList))
 
 
 

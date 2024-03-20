@@ -333,11 +333,9 @@ distributeMedicines : async (req, res) => {
 
 distributioHistory : async (req, res) => {  
   try {
-    console.log("history")                                                                //distribute hist
     const user = await User.findById(req.session.volunteer);
     console.log(user,"uuu")
     const medicineDistributions = await MedicineDistribution.find().populate("patient");
-    // console.log(medicineDistributions,"hhh  ")
     res.render("users/medicineHistory", { medicineDistributions, user });
   } catch (error) {
     console.log(error.message);
@@ -353,7 +351,7 @@ printList : async (req, res) => {
   const { id } = req.params;
   const patient = await Patient.findById(id);
   const recievedMedicines = await MedicineDistribution.find({ patient: id });
-  res.render("users/printList", { recievedMedicines, patient });
+  res.render("users/printList", { recievedMedicines, patient });  
 },
 
 

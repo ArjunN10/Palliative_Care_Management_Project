@@ -2,7 +2,8 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">Welcome <%=user.name %></a>
+      <a class="navbar-brand" style="font-style: italic;" >ADMIN DASHBOARD</a>
+
       <button
         class="navbar-toggler"
         type="button"
@@ -37,8 +38,7 @@
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/admin/medicines">Medicines</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/medicineHistory">Medicine Distributions</a></li>
-              <li><hr class="dropdown-divider"></li>
+        
               <li>
                 <form action="/admin/logout" method="post" class="dropdown-item">
                   <button type="submit" class="dropdown-item p-0">Logout</button>
