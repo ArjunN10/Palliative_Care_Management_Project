@@ -42,21 +42,7 @@ const loadLogin = (req, res) => {
     }
   }
 
-const dashboard = async (req, res) => {
-  const { q } = req.query;
-  
-    let users;
-    if (q && q.length > 0) {
-      users = await User.find({
-        name: { $regex: ".*" + q + ".*" },
-        is_Lab_Staff: 1,
-      });
-    } else {
-      users = await User.find({ is_Lab_Staff: 1 });
-    }
-    res.render('staff/dashboard', { users, q });
-  
-};
+
 
 const getAddPatient = async (req, res) => {
   
@@ -150,7 +136,7 @@ const AddPatient = async (req,res) => {
       selectedMedicines.push(medicine)
     }
 
-    const patient = new Patient({
+    const patient = await create.Patient({
       RegNo : generateRandomID(5) ,
       name,
       disease,
@@ -162,8 +148,10 @@ const AddPatient = async (req,res) => {
       addingDate : Date.now()
       
     });
+    console.log(patient)
 
-    await patient.save();
+
+    
     return res.redirect("/staff/dashboard");
 
 }; 
@@ -246,26 +234,33 @@ const deletePatient = async (req,res) => {
 
 
 const getAttendence = async (req,res) => {
-  console.log(req.session.LaboratoryStaff,'jhooo')
 
   res.render("staff/attendanceForm")
 }
 
 const MarkAttendence = async (req,res) => {
-  const { status } = req.body
+  const { status , role } = req.body
+  console.log(role)
+  console.log(status)
   const date = new Date();
-  const userId = req.session.LaboratoryStaff 
+  console.log(date)
+  const userId =  req.session.LaboratoryStaff 
 
-  const existingAttendance = await Attendence.findOne({ userId, date });
-  console.log(existingAttendance)
-
+  const existingAttendance = await Attendence.findOne({
+    userId,
+    date: {
+        $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()), // Start of the day
+        $lt: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1) // End of the day
+    }
+});
+console.log(existingAttendance)
   if (existingAttendance) {
     return res.status(400).json({ error: "Attendance already marked for today" });
   }
 
  else{
   
-  const attendence = new Attendence ({userId,status,date})
+  const attendence = new Attendence ({userId,status,date ,role})
   await attendence.save()
 
   res.redirect("/staff/dashboard")
@@ -273,13 +268,48 @@ const MarkAttendence = async (req,res) => {
   
  } 
 
- const renderAttendenceDisplay = async (req,res) =>{
-   const userId = req.session.LaboratoryStaff
-   const attendenceRecord = await User.findById(userId).populate('attendanceHistory');  // Find the user by ID and populate the attendanceHistory
-    res.render("staff/attendanceDisplay",{attendenceRecord})
+
+
+const renderAttendenceDisplay = async (req, res) => {
+  const userId = req.session.LaboratoryStaff;
+  
+  
+  const currentDate = new Date();
+
+  // Calculate the start and end dates for the week
+  const startOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay()); // Start of the current week (Sunday)
+  const endOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), startOfWeek.getDate() + 6); // End of the current week (Saturday)
+
+  // Calculate the start and end dates for the month
+  const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1); // Start of the current month
+  const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0); // End of the current month
+
+ 
+      // attendanceHistory within the current week
+      const attendanceThisWeek = await User.findById(userId).populate({
+          path: 'attendanceHistory',
+          match: {
+              date: { $gte: startOfWeek, $lte: endOfWeek }
+          }
+      });
+
+      // attendanceHistory within the current month
+      const attendanceThisMonth = await User.findById(userId).populate({
+          path: 'attendanceHistory',
+          match: {
+              date: { $gte: startOfMonth, $lte: endOfMonth }
+          }
+      });
+
+      res.render("staff/attendanceDisplay", {
+          attendanceThisWeek,
+          attendanceThisMonth
+      });
+  
 }
 
- const getTestResult = async (req,res) => {
+
+const getTestResult = async (req,res) => {
   res.render("staff/testUpload")
 }
 
@@ -315,7 +345,6 @@ const uploadImage = async (req,res) => {
 module.exports = {
   loadLogin,
   staffLogin,
-  dashboard ,
   getAddPatient,
   AddPatient,
   getPatientsList,
