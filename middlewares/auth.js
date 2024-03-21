@@ -31,6 +31,7 @@ isAdmin :(req, res, next) => {
 
 
 isDoctor :(req, res, next) => {
+    console.log(req.session.doctor,'........')
     if(req.session.doctor) {
         req.doctor = req.session.doctor   //after logg
         next()
@@ -96,6 +97,7 @@ isStaffVerified : async  (req,res,next) => {
 isLaboratoryStaff :(req,res,next) => {
     if(req.session.LaboratoryStaff){
         req.LaboratoryStaff = req.session.LaboratoryStaff
+        console.log(req.LaboratoryStaff)
         next()
     }else {
         res.redirect('/staff/login')

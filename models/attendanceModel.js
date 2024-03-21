@@ -16,6 +16,11 @@ const attendanceSchema = new mongoose.Schema({
       enum: ['Present', 'Absent', 'HalfDay'],
       required: true
     },
+    role: {
+      type: String,
+      required: true,
+      enum: ['Doctor', 'Staff'] // Define the roles here
+    }
   });
 
   attendanceSchema.pre('save', async function(next) {
