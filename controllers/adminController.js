@@ -747,10 +747,140 @@ getDoctorAttendanceHistory: async (req, res) => {
   } catch (error) {
     console.error("Error fetching attendance history:", error);
     res.status(500).send("Internal Server Error");
-  }}
+  }},
 
 
 
 
+  
+StaffList: async (req, res) => {
+  const { q } = req.query;
+  try {
+    let users;
+    if (q && q.length > 0) {
+      users = await User.find({
+        name: { $regex: ".*" + q + ".*" },
+        is_Lab_Staff:1,
+        is_verified: { $in:[0, 1] }
+      });
+    } else {
+      users = await User.find({
+        is_Lab_Staff:1,
+        is_varified: { $in:['0', '1'] }
+      });
+    }
+    res.render("admin/staffAttendance", { users, q });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+},
+
+
+
+getStaffAttendanceHistory: async (req, res) => {
+  const { staffId } = req.params;
+  const { interval } = req.query;
+
+  try {
+    const staff = await User.findById(staffId).populate('attendanceHistory');
+    if (!staff || !staff.is_Lab_Staff) {
+      return res.status(404).send("Doctor not found");
+    }
+
+    // Calculate attendance percentage
+    const totalRecords = staff.attendanceHistory.length;
+    const presentCount = staff.attendanceHistory.filter(record => record.status === 'Present').length;
+    const percentage = totalRecords > 0 ? (presentCount / totalRecords) * 100 : 0;
+
+    // Get attendance records based on selected interval
+    let currentAttendance = [];
+    if (interval === 'week') {
+      currentAttendance = getAttendanceForTimeInterval(staff.attendanceHistory, 'week');
+    } else if (interval === 'month') {
+      currentAttendance = getAttendanceForTimeInterval(staff.attendanceHistory, 'month');
+    } else if (interval === 'year') {
+      currentAttendance = getAttendanceForTimeInterval(staff.attendanceHistory, 'year');
+    } else {
+      // Default to monthly if interval is not provided or invalid
+      currentAttendance = getAttendanceForTimeInterval(staff.attendanceHistory, 'month');
+    }
+
+    res.render('admin/staffAttendanceHistory', { 
+      staff: staff, 
+      percentage: percentage,
+      currentAttendance: currentAttendance,
+      interval: interval
+    });
+  } catch (error) {
+    console.error("Error fetching attendance history:", error);
+    res.status(500).send("Internal Server Error");
+  }},
+
+
+
+
+VolunteerList: async (req, res) => {
+  const { q } = req.query;
+  try {
+    let users;
+    if (q && q.length > 0) {
+      users = await User.find({
+        name: { $regex: ".*" + q + ".*" },
+        is_volunteer:1,
+        is_verified: { $in:[0, 1] }
+      });
+    } else {
+      users = await User.find({
+        is_volunteer:1,
+        is_varified: { $in:['0', '1'] }
+      });
+    }
+    res.render("admin/volunteerAttendance", { users, q });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+},
+
+
+getVolunteerAttendanceHistory: async (req, res) => {
+  const { volunteerId } = req.params;
+  const { interval } = req.query;
+
+  try {
+    const volunteer = await User.findById(volunteerId).populate('attendanceHistory');
+    if (!volunteer || !volunteer.is_volunteer) {
+      return res.status(404).send("Volunteer not found");
+    }
+
+    // Calculate attendance percentage
+    const totalRecords = volunteer.attendanceHistory.length;
+    const presentCount = volunteer.attendanceHistory.filter(record => record.status === 'Present').length;
+    const percentage = totalRecords > 0 ? (presentCount / totalRecords) * 100 : 0;
+
+    // Get attendance records based on selected interval
+    let currentAttendance = [];
+    if (interval === 'week') {
+      currentAttendance = getAttendanceForTimeInterval(volunteer.attendanceHistory, 'week');
+    } else if (interval === 'month') {
+      currentAttendance = getAttendanceForTimeInterval(volunteer.attendanceHistory, 'month');
+    } else if (interval === 'year') {
+      currentAttendance = getAttendanceForTimeInterval(volunteer.attendanceHistory, 'year');
+    } else {
+      // Default to monthly if interval is not provided or invalid
+      currentAttendance = getAttendanceForTimeInterval(volunteer.attendanceHistory, 'month');
+    }
+
+    res.render('admin/volunteerAttendanceHistory', { 
+      volunteer: volunteer, 
+      percentage: percentage,
+      currentAttendance: currentAttendance,
+      interval: interval
+    });
+  } catch (error) {
+    console.error("Error fetching attendance history:", error);
+    res.status(500).send("Internal Server Error");
+  }},
 
 }

@@ -65,10 +65,19 @@ router
 
 // ===============================< Attendance Management >================================//
 
+// doctor 
 
 .get('/attendance/doctors',isAdmin,TrycatchMiddleware(adminController.DoctorsList))
 .get('/attendance/doctors/:doctorId', isAdmin, TrycatchMiddleware(adminController.getDoctorAttendanceHistory))
-.get('/attendance/doctors/:doctorId/interval/:interval(week|month|year)', isAdmin, TrycatchMiddleware(adminController.getDoctorAttendanceHistory));
+.get('/attendance/doctors/:doctorId/interval/:interval(week|month|year)', isAdmin, TrycatchMiddleware(adminController.getDoctorAttendanceHistory))
+// staff 
 
+.get('/attendance/staffs',isAdmin,TrycatchMiddleware(adminController.StaffList))
+.get('/attendance/staffs/:staffId', isAdmin, TrycatchMiddleware(adminController.getStaffAttendanceHistory))
+.get('/attendance/staffs/:staffId/interval/:interval(week|month|year)', isAdmin, TrycatchMiddleware(adminController.getStaffAttendanceHistory))
+// volunteer 
 
+.get('/attendance/volunteers',isAdmin,TrycatchMiddleware(adminController.VolunteerList))  
+.get('/attendance/volunteers/:volunteerId', isAdmin, TrycatchMiddleware(adminController.getVolunteerAttendanceHistory))
+.get('/attendance/volunteers/:volunteerId/interval/:interval(week|month|year)', isAdmin, TrycatchMiddleware(adminController.getVolunteerAttendanceHistory))
 module.exports=router
