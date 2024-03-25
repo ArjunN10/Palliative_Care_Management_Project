@@ -1,75 +1,133 @@
-<!-- attendanceDisplay.ejs -->
 <%- include('../layouts/header.ejs') %>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attendance Display</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
 
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-    }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-    h1 {
-      color: #333;
-    }
+        h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
+        .toggle-btn {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
 
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
+        .toggle-btn:hover {
+            background-color: #45a049;
+        }
 
-    th {
-      background-color: #f2f2f2;
-    }
+        .attendance-container {
+            display: none;
+            padding-left: 20px;
+            border-left: 2px solid #ccc;
+            margin-bottom: 20px;
+        }
 
-    tbody tr:hover {
-      background-color: #f5f5f5;
-    }
+        .attendance-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
 
-    p {
-      color: #777;
-    }
-  </style>
+        .attendance-container li {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .attendance-container li p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .date {
+            font-weight: bold;
+        }
+
+        .status-present {
+            color: #009688;
+        }
+
+        .status-absent {
+            color: #f44336;
+        }
+    </style>
 </head>
 <body>
 
-  <h1>Attendance Records</h1>
+<div class="container">
+<h2>Monthly Attendance</h2>
+<% Object.keys(MOnthByAttendance).forEach(function(monthKey) { %>
+    <button class="toggle-btn" onclick="toggleAttendance('<%= monthKey %>')"> <%= monthKey %></button>
+    <div id="attendance-<%= monthKey %>" class="attendance-container">
+        <ul>
+          <% MOnthByAttendance[monthKey].forEach(function(item) { %>
+            <li>
+              <p class="date">Date: <%= new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></p>
+              <p class="<%= item.status.toLowerCase() === 'present' ? 'status-present' : 'status-absent' %>">Status: <%= item.status %></p>
+            </li>
+          <% }); %>
+        </ul>
+    </div>
+<% }); %>
 
-  <% if (attendenceRecord && attendenceRecord.attendanceHistory.length > 0) { %>
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% attendenceRecord.attendanceHistory.forEach(record => { %>
-          <tr>
-            <td><%= record.date.toDateString() %></td>
-            <td><%= record.status %></td>
-          </tr>
-        <% }); %>
-      </tbody>
-    </table>
-  <% } else { %>
-    <p>No attendance records available.</p>
-  <% } %>
+<!-- Yearly Attendance Section -->
+<h2>Yearly Attendance</h2>
+<% Object.keys(YearlyAttendance).forEach(function(yearKey) { %>
+    <button class="toggle-btn" onclick="toggleAttendance('year-<%= yearKey %>')"> <%= yearKey %></button>
+    <div id="attendance-year-<%= yearKey %>" class="attendance-container">
+        <ul>
+          <% YearlyAttendance[yearKey].forEach(function(item) { %>
+            <li>
+              <p class="date">Date: <%= new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></p>
+              <p class="<%= item.status.toLowerCase() === 'present' ? 'status-present' : 'status-absent' %>">Status: <%= item.status %></p>
+            </li>
+          <% }); %>
+        </ul>
+    </div>
+<% }); %>
+
+</div>
+
+<script>
+    function toggleAttendance(monthKey) {
+        var attendanceContainer = document.getElementById("attendance-" + monthKey);
+        if (attendanceContainer.style.display === "none") {
+            attendanceContainer.style.display = "block";
+        } else {
+            attendanceContainer.style.display = "none";
+        }
+    }
+</script>
 
 </body>
-</html>
-
-
 </html>

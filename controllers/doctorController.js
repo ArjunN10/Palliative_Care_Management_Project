@@ -521,7 +521,7 @@ DoctorAddUser : async (req, res) => {
 // ===============================<  medicine distribution history >================================//
 
 
- medicineHistory :async (req,res)=>{
+ medicineHistory : async (req,res)=>{
   try {
     const medicineDistributions = await MedicineDistribution.find() .populate('patient')
     res.render('doctor/medicineHistory',{medicineDistributions})
@@ -538,47 +538,91 @@ DoctorAddUser : async (req, res) => {
  getAttendence : async (req,res) => {
   res.render("doctor/attendanceForm")
 },
-
+ 
 MarkAttendence : async (req,res) => {
-  const { status } = req.body
-  const date = new Date();
-  const userId = req.session.doctor 
-
- const existingAttendence = await Attendance.findOne({
-    userId,
-    date: {
-        $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()), // Start of the day
-        $lt: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1) // End of the day
-    }
-});
-
-  if(existingAttendence){
-  return res.status(400).json({
-    message:"Attendance alredy marked"
-  })
-} else{
+  const { status , role } = req.body
   
-  const attendence = new Attendance ({userId,status,date})
+  
+  const sdate = new Date();
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const dates = sdate.toLocaleDateString('en-US', options);
+  const userId =  req.session.doctor 
+
+  const existingAttendance = await Attendance.findOne({
+    userId,
+    date : dates
+});
+console.log(existingAttendance)
+  if (existingAttendance) {
+    return res.status(400).json({ error: "Attendance already marked for today" });
+  }
+  
+  const attendence = new Attendance ({userId,status,date : dates,role})
   await attendence.save()
-  console.log(attendence)
 
   res.redirect("/doctor/dashboard")
-}
-  
- } ,
-
- renderAttendenceDisplay : async (req,res) =>{
-  const userId = req.session.doctor
+},
 
 
-    // Find the user by ID and populate the attendanceHistory
-    const attendenceRecord = await User.findById(userId).populate('attendanceHistory');
-    console.log(attendenceRecord)
-  res.render("doctor/attendanceDisplay",{attendenceRecord})
 
-  
-  
- }
+ renderAttendenceDisplay : async (req, res) => {
+
+  const userId = req.session.doctor;
+  const attendanceThisMonth = await User.findById(userId).populate({path :"attendanceHistory"})
+     console.log(attendanceThisMonth)
+
+      function getAttendenceByMonth(attendanceHistory){
+        const Monthattendence = {}
+
+        attendanceHistory.forEach(element => {
+          //exteact the elements 
+          const date = new Date(element.date)
+          const year = date.getFullYear()
+          const month = date.getMonth()
+          const monthNames = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"];
+          const monthName = monthNames[month];
+
+          const key = `${year}-${monthName}`;
+            if (!Monthattendence[key]) {
+          Monthattendence[key] = [];
+          }
+
+
+        // Add the record to the corresponding month
+        Monthattendence[key].push(element);
+          
+        });
+        return Monthattendence;
+
+      }
+
+      const MOnthByAttendance = getAttendenceByMonth(attendanceThisMonth.attendanceHistory)
+       
+      function getAttendanceByYear (attendanceHistory){
+       const yearAttendance = {} 
+       
+       attendanceHistory.forEach(element =>{
+          const date = new Date(element.date) ;
+          const year = date.getFullYear()
+       
+        if (!yearAttendance[year]){
+          yearAttendance[year] = []
+        }
+
+        yearAttendance[year].push(element);
+
+      })
+
+      return yearAttendance
+   }
+
+      const YearlyAttendance = getAttendanceByYear(attendanceThisMonth.attendanceHistory)
+
+      console.log('year attendanceeeeeee',YearlyAttendance)
+
+      res.render('doctor/attendanceDisplay',{MOnthByAttendance,YearlyAttendance})
+    }
 
 
 

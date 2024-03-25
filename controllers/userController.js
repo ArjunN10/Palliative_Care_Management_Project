@@ -3,6 +3,7 @@ const Patient = require("../models/patientModel");
 const Medicine = require("../models/medicineModel");
 const MedicineDistribution = require("../models/MdcnDstrbtionModel");
 const bcrypt = require("bcrypt");
+const Attendance = require('../models/attendanceModel')
 
 
 
@@ -128,7 +129,6 @@ logout : (req, res) => {
 loadIndex : async (req, res) => {
   try {
     const user = await User.findById(req.user);
-    console.log("firstttt")
     const patients = await Patient.aggregate([
       {
         $lookup: {
@@ -247,7 +247,6 @@ getPatientMedicines : async (req, res) => {
     ]);
     const patientsMedicines = patient[0].Medicines;
     const recievedMedicines = await MedicineDistribution.find({ patient: id });
-    console.log(recievedMedicines);
 
     res.render("users/patientMedicine", {
       message: null,
@@ -334,7 +333,6 @@ distributeMedicines : async (req, res) => {
 distributioHistory : async (req, res) => {  
   try {
     const user = await User.findById(req.session.volunteer);
-    console.log(user,"uuu")
     const medicineDistributions = await MedicineDistribution.find().populate("patient");
     res.render("users/medicineHistory", { medicineDistributions, user });
   } catch (error) {
@@ -365,41 +363,91 @@ getAttendence : async (req,res) => {
 
 
 MarkAttendence : async (req,res) => {
-  const { status } = req.body
-  const date = new Date();
-  const userId = req.session.LaboratoryStaff 
+  const { status , role } = req.body
+  
+  
+  const sdate = new Date();
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const dates = sdate.toLocaleDateString('en-US', options);
+  const userId =  req.session.volunteer 
 
-  const existingAttendance = await Attendence.findOne({ userId, date });
-  console.log(existingAttendance)
-
+  const existingAttendance = await Attendance.findOne({
+    userId,
+    date : dates
+});
+console.log(existingAttendance)
   if (existingAttendance) {
     return res.status(400).json({ error: "Attendance already marked for today" });
   }
-
- else{
   
-  const attendence = new Attendence ({userId,status,date}) 
+  const attendence = new Attendance ({userId,status,date:dates,role})
   await attendence.save()
-
-  res.redirect("/users/dashboard")
-}
+  res.redirect("/")
 },
 
 
-renderAttendenceDisplay : async (req,res) =>{
-  const userId = req.session.doctor
-    // Find the user by ID and populate the attendanceHistory
-    const attendenceRecord = await User.findById(userId).populate('attendanceHistory');
-    console.log(attendenceRecord)
-  res.render("users/attendanceDisplay",{attendenceRecord})
+renderAttendenceDisplay : async (req, res) => {
 
-  
-  
- }
+  const userId = req.session.volunteer;
+  const attendanceThisMonth = await User.findById(userId).populate({path :"attendanceHistory"})
+
+      function getAttendenceByMonth(attendanceHistory){
+        const Monthattendence = {}
+
+        attendanceHistory.forEach(element => {
+          //exteact the elements 
+          const date = new Date(element.date)
+          const year = date.getFullYear()
+          const month = date.getMonth()
+          const monthNames = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"];
+          const monthName = monthNames[month];
+
+          const key = `${year}-${monthName}`;
+            if (!Monthattendence[key]) {
+          Monthattendence[key] = [];
+          }
+
+
+        // Add the record to the corresponding month
+        Monthattendence[key].push(element);
+          
+        });
+        return Monthattendence;
+
+      }
+
+      const MOnthByAttendance = getAttendenceByMonth(attendanceThisMonth.attendanceHistory)
+       
+      function getAttendanceByYear (attendanceHistory){
+       const yearAttendance = {} 
+       
+       attendanceHistory.forEach(element =>{
+          const date = new Date(element.date) ;
+          const year = date.getFullYear()
+       
+        if (!yearAttendance[year]){
+          yearAttendance[year] = []
+        }
+
+        yearAttendance[year].push(element);
+
+      })
+
+      return yearAttendance
+   }
+
+      const YearlyAttendance = getAttendanceByYear(attendanceThisMonth.attendanceHistory)
+       res.render('users/attendanceDisplay',{MOnthByAttendance,YearlyAttendance})
+    }
 
 
 
-}
+};
+
+
+
+
 
 
 

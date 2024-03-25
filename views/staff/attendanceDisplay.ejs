@@ -1,150 +1,133 @@
 <%- include('../layouts/header.ejs') %>
-<!-- staff/attendanceDisplay.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance Display</title>
+    <title>Attendance</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
         }
 
         .container {
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            background-color: #fff;
+            border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
-            text-align: center;
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
             margin-bottom: 20px;
         }
 
-        .section {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        /* Styling for buttons */
         .toggle-btn {
-            padding: 10px 20px;
-            background-color: #072b60; /* Green background */
-            color: white;
+            background-color: #4caf50;
+            color: #fff;
             border: none;
-            border-radius: 5px;
+            padding: 8px 12px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
         }
 
         .toggle-btn:hover {
-            background-color: #45a049; /* Darker green on hover */
+            background-color: #45a049;
         }
 
-        /* Styling for attendance history sections */
-        .attendance-section {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            margin-top: 10px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        .attendance-container {
+            display: none;
+            padding-left: 20px;
+            border-left: 2px solid #ccc;
+            margin-bottom: 20px;
         }
 
-        .attendance-list {
-            list-style: none;
+        .attendance-container ul {
+            list-style-type: none;
             padding: 0;
+        }
+
+        .attendance-container li {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .attendance-container li p {
             margin: 0;
-        }
-
-        .attendance-item {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-        }
-
-        .attendance-item:last-child {
-            border-bottom: none;
+            font-size: 16px;
         }
 
         .date {
             font-weight: bold;
         }
 
-        .status {
-            margin-left: 10px;
-            font-style: italic;
+        .status-present {
+            color: #009688;
+        }
+
+        .status-absent {
+            color: #f44336;
         }
     </style>
 </head>
 <body>
-    <div class="container ">
-        <h2>Attendance Display</h2>
 
-        <!-- Buttons to toggle attendance sections -->
-        <div class="section ">
-            <button class="toggle-btn" onclick="toggleWeeklyAttendance()">Show Weekly Attendance</button>
-        </div>
-
-        <div class="section">
-            <button class="toggle-btn" onclick="toggleMonthlyAttendance()">Show Monthly Attendance</button>
-        </div>
-
-        <!-- Weekly Attendance -->
-        <div class="section" id="weeklyAttendance" style="display: none;">
-            <h3>Weekly Attendance</h3>
-            <div class="attendance-section">
-                <ul class="attendance-list">
-                    <% attendanceThisWeek.attendanceHistory.forEach(attendance => { %>
-                        <li class="attendance-item">
-                            <span class="date"><%= attendance.date.toDateString() %></span>
-                            <span class="status"><%= attendance.status %></span>
-                        </li>
-                    <% }); %>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Monthly Attendance -->
-        <div class="section" id="monthlyAttendance" style="display: none;">
-            <h3>Monthly Attendance</h3>
-            <div class="attendance-section">
-                <ul class="attendance-list">
-                    <% attendanceThisMonth.attendanceHistory.forEach(attendance => { %>
-                        <li class="attendance-item">
-                            <span class="date"><%= attendance.date.toDateString() %></span>
-                            <span class="status"><%= attendance.status %></span>
-                        </li>
-                    <% }); %>
-                </ul>
-            </div>
-        </div>
+<div class="container">
+<h2>Monthly Attendance</h2>
+<% Object.keys(MOnthByAttendance).forEach(function(monthKey) { %>
+    <button class="toggle-btn" onclick="toggleAttendance('<%= monthKey %>')"> <%= monthKey %></button>
+    <div id="attendance-<%= monthKey %>" class="attendance-container">
+        <ul>
+          <% MOnthByAttendance[monthKey].forEach(function(item) { %>
+            <li>
+              <p class="date">Date: <%= new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></p>
+              <p class="<%= item.status.toLowerCase() === 'present' ? 'status-present' : 'status-absent' %>">Status: <%= item.status %></p>
+            </li>
+          <% }); %>
+        </ul>
     </div>
+<% }); %>
 
-    <script>
-        function toggleWeeklyAttendance() {
-            var weeklyAttendanceSection = document.getElementById('weeklyAttendance');
-            var monthlyAttendanceSection = document.getElementById('monthlyAttendance');
-            weeklyAttendanceSection.style.display = 'block';
-            monthlyAttendanceSection.style.display = 'none';
-        }
+<!-- Yearly Attendance Section -->
+<h2>Yearly Attendance</h2>
+<% Object.keys(YearlyAttendance).forEach(function(yearKey) { %>
+    <button class="toggle-btn" onclick="toggleAttendance('year-<%= yearKey %>')"> <%= yearKey %></button>
+    <div id="attendance-year-<%= yearKey %>" class="attendance-container">
+        <ul>
+          <% YearlyAttendance[yearKey].forEach(function(item) { %>
+            <li>
+              <p class="date">Date: <%= new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></p>
+              <p class="<%= item.status.toLowerCase() === 'present' ? 'status-present' : 'status-absent' %>">Status: <%= item.status %></p>
+            </li>
+          <% }); %>
+        </ul>
+    </div>
+<% }); %>
 
-        function toggleMonthlyAttendance() {
-            var weeklyAttendanceSection = document.getElementById('weeklyAttendance');
-            var monthlyAttendanceSection = document.getElementById('monthlyAttendance');
-            weeklyAttendanceSection.style.display = 'none';
-            monthlyAttendanceSection.style.display = 'block';
+</div>
+
+<script>
+    function toggleAttendance(monthKey) {
+        var attendanceContainer = document.getElementById("attendance-" + monthKey);
+        if (attendanceContainer.style.display === "none") {
+            attendanceContainer.style.display = "block";
+        } else {
+            attendanceContainer.style.display = "none";
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
-
-
-

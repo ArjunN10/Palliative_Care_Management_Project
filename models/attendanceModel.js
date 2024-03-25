@@ -19,7 +19,7 @@ const attendanceSchema = new mongoose.Schema({
     role: {
       type: String,
       required: true,
-      enum: ['Doctor', 'Staff'] // Define the roles here
+      enum: ['Doctor', 'Staff' ,'volunteer'] // Define the roles here
     }
   });
 
