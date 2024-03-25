@@ -5,7 +5,7 @@ const MedDistribtion = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Medicine",
     required: true,
-  },
+  },   
   Slno:{type:Number,required:true},
   medicineName: { type: String, required: true },
   count: { type: Number, required: true },

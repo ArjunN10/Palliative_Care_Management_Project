@@ -38,7 +38,7 @@ user_route
 
 .get("/markAttendence",isLogged,isVolunteerVerified,TrycatchMiddleware(userController.getAttendence)) 
 .post ("/markAttendence",isLogged,isVolunteerVerified,TrycatchMiddleware(userController.MarkAttendence))
-.get("/attendanceDisplay/:id",isLogged,isVolunteerVerified,TrycatchMiddleware(userController.renderAttendenceDisplay))
+.get("/attendanceDisplay",isLogged,isVolunteerVerified,TrycatchMiddleware(userController.renderAttendenceDisplay))
 
 module.exports = user_route;
 
