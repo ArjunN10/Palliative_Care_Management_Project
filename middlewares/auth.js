@@ -100,7 +100,6 @@ isVolunteerVerified : async  (req,res,next) => {
 isLaboratoryStaff :(req,res,next) => {
     if(req.session.LaboratoryStaff){ 
         req.LaboratoryStaff = req.session.LaboratoryStaff
-        console.log(req.LaboratoryStaff)
         next()
     }else {
         res.redirect('/staff/login')
