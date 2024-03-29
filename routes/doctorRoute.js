@@ -6,10 +6,10 @@ const TrycatchMiddleware=require("../middlewares/TryCatch")
 const { isDoctorLogged ,isDoctor} = require("../middlewares/auth");
 
 
-
 router
 
-    // ===============================< register >===================================//
+    // ===============================<  register  >===================================//
+
 
 .get('/register', isDoctorLogged, TrycatchMiddleware(doctorController.loadRegister))
 .post('/register', isDoctorLogged,TrycatchMiddleware( doctorController.insertDoctor))  
