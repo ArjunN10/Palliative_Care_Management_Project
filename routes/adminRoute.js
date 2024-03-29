@@ -18,9 +18,14 @@ router
 .post("/logout", isAdmin, TrycatchMiddleware( adminController.logoutAdmin))
 
 
-// ===============================< Volunteer Management >================================//
+// ===============================< Admin Dashboard >================================//
 
 .get("/dashboard",isAdmin,TrycatchMiddleware(adminController.AdminDashboard))
+.get("/landingPage",isAdmin,TrycatchMiddleware(adminController.AdminLanding))
+
+// ===============================< Volunteer Management >================================//
+
+.get("/volunteers",isAdmin,TrycatchMiddleware(adminController.AdminVolunteer))
 
 .post("/createVolunteers",isAdmin,TrycatchMiddleware(adminController.createVolunteer))
 .get("/createVolunteersform", isAdmin,TrycatchMiddleware(adminController.AdminAddedVolunteer))

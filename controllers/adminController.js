@@ -60,10 +60,42 @@ module.exports={
       res.redirect("/admin/login");
     },
 
+
+// ===============================< Admin Dashboard >================================//
+
+
+AdminDashboard : async (req, res) => {
+      const { q } = req.query;
+      try {
+        // let users;
+        //   users = await User.find({
+        //     is_volunteer:1,
+        //     is_varified: { $in:[0, 1] }
+        //   });
+        const title="ADMIN DASHBOARD"
+        res.render("admin/dashboard", { title});   
+      } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal Server Error");
+      } 
+    },
+
+
+AdminLanding : async (req, res) => {
+  const values = "value"
+  try {
+
+    res.render("admin/adminLandingPage",{ values});   
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+},
+
     
     // ===============================< Volunteer Management >================================//
     
-          AdminDashboard : async (req, res) => {
+    AdminVolunteer : async (req, res) => {
             const { q } = req.query;
             try {
               let users;
@@ -79,7 +111,7 @@ module.exports={
                   is_varified: { $in:[0, 1] }
                 });
               }
-              res.render("admin/dashboard", { users, q });
+              res.render("admin/volunteers", { users, q });
             } catch (error) {
               console.log(error.message);
               res.status(500).send("Internal Server Error");
@@ -674,40 +706,6 @@ DoctorsList: async (req, res) => {
 },
 
 
-// getDoctorAttendanceHistory: async (req, res) => {
-//   const { doctorId } = req.params;
-//   try {
-//     const doctor = await User.findById(doctorId).populate('attendanceHistory');
-//     if (!doctor || !doctor.is_doctor) {
-//       return res.status(404).send("Doctor not found");
-//     }
-
-//     // Calculate attendance percentage
-//     const totalRecords = doctor.attendanceHistory.length;
-//     const presentCount = doctor.attendanceHistory.filter(record => record.status === 'Present').length;
-//     const percentage = totalRecords > 0 ? (presentCount / totalRecords) * 100 : 0;
-
-//     // Get attendance records for the current week
-//     const currentWeekAttendance = getAttendanceForTimeInterval(doctor.attendanceHistory, 'week');
-
-//     // Get attendance records for the current month
-//     const currentMonthAttendance = getAttendanceForTimeInterval(doctor.attendanceHistory, 'month');
-
-//     // Get attendance records for the current year
-//     const currentYearAttendance = getAttendanceForTimeInterval(doctor.attendanceHistory, 'year');
-
-//     res.render('admin/attendanceHistory', { 
-//       doctor: doctor, 
-//       percentage: percentage,
-//       currentWeekAttendance: currentWeekAttendance,
-//       currentMonthAttendance: currentMonthAttendance,  
-//       currentYearAttendance: currentYearAttendance
-//     });
-//   } catch (error) {
-//     console.error("Error fetching attendance history:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// },
 
 
 getDoctorAttendanceHistory: async (req, res) => {
