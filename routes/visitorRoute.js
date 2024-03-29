@@ -14,10 +14,10 @@ router
 .post("/login", loggedOutVisitor,TrycatchMiddleware( visitorController.VisitorLogin)) 
 
 
-.get('/index',isVisitor,isVisitorVerified,TrycatchMiddleware(visitorController.visitorDashboard))
+.get('/index',isVisitor,TrycatchMiddleware(visitorController.visitorDashboard))
+  
 
-
-
+  
 module.exports=router
 
 

@@ -135,7 +135,6 @@ dashboard : async (req, res) => {
         is_varified: { $in:[0, 1] }
       });
     }
-    console.log(users,"uu")
     res.render("doctor/dashboard", { users, q });
   } catch (error) {
     console.log(error.message);

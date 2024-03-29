@@ -94,10 +94,10 @@ loadLogin:(req, res) => {
   },
 
 
-   visitorDashboard : async (req, res) => {
+   visitorDashboard : async (req, res) => {  
     try {
       console.log("ooofirst")
-        res.render('visitor/index', { user: req.user }); // Assuming you pass the authenticated visitor object to the dashboard view
+        res.render('visitor/index', { user: req.user }); 
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
