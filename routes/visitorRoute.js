@@ -6,16 +6,21 @@ const {isVisitor,loggedOutVisitor,isVisitorVerified}=require("../middlewares/aut
 
 router
 
-.get("/register",loggedOutVisitor,TrycatchMiddleware(visitorController.loadRegister))
-.post("/register",loggedOutVisitor,TrycatchMiddleware(visitorController.VisitorRegister))
+    // ===============================< Register >======================================//
 
+.get("/register",loggedOutVisitor,TrycatchMiddleware(visitorController.loadRegister))
+.post("/register",loggedOutVisitor,TrycatchMiddleware(visitorController.VisitorRegister))   
+
+    // ===============================< Login >======================================//
 
 .get("/login",loggedOutVisitor,TrycatchMiddleware(visitorController.loadLogin))
 .post("/login", loggedOutVisitor,TrycatchMiddleware( visitorController.VisitorLogin)) 
 
+    // ===============================< Home >======================================//
 
 .get('/index',isVisitor,TrycatchMiddleware(visitorController.visitorDashboard))
   
+    // ===============================< Appoinment >======================================//
 
   
 module.exports=router
