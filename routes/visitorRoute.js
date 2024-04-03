@@ -21,6 +21,10 @@ router
 .get('/index',isVisitor,TrycatchMiddleware(visitorController.visitorDashboard))
   
     // ===============================< Appoinment >======================================//
+    .post('/appointment',isVisitor,TrycatchMiddleware(visitorController.VisitorAppointment))
+    
+    // ===============================< Feedback >======================================//
+.post('/feedback',isVisitor,TrycatchMiddleware(visitorController.feedbackData))
 
   
 module.exports=router

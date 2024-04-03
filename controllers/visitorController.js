@@ -1,7 +1,7 @@
 
 const visitors=require("../models/visitorModel")
 const bcrypt = require("bcrypt");
-
+const Appointment=require('../models/appointmentModel')
 
 
 module.exports={
@@ -104,11 +104,53 @@ loadLogin:(req, res) => {
     }
 },
 
+// ===============================< Appointment >================================//
+
+VisitorAppointment:async (req, res) => {
+  try {
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'parirakshacontroller@gmail.com',
+        pass: 'ParirakshaControlller2007', 
+      },
+    });
 
 
+    const newAppointment = new Appointment({
+      name: req.body.name,
+      email: req.body.email,
+      date: req.body.date,
+      phone: req.body.phone,
+      message: req.body.message,
+    });
 
+    await newAppointment.save();
 
+    await transporter.sendMail({
+      from: req.body.email, 
+      to: 'parirakshacontroller@gmail.com', //recepient email here
+      subject: 'New Appointment Request',
+      text: `You have a new appointment request from ${newAppointment.name} (${newAppointment.email}) on ${newAppointment.date}.`,
+    });
 
+    res.status(200).json({ message: 'Appointment booked successfully' });
+  } catch (error) {
+    console.error('Error booking appointment:', error);
+    res.status(500).json({ error: 'An error occurred while booking appointment' });
+  }
+
+},
+
+feedbackData:async(req,res)=>{
+  try {
+    const {feedbackData} = req.body;
+    
+  } catch (error) {
+    
+  }
+}
 
 
 }
