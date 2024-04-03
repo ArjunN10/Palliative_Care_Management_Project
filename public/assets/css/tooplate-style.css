@@ -202,7 +202,17 @@ http://www.tooplate.com/view/2098-health
     margin: 0;
     padding: 0;
   }
+.nav-logo{
+  position: absolute;
+  margin-left: 50px;
+  top:0px;
 
+}
+
+.logo-image{
+  
+ z-index: 1;
+}
 
   /*---------------------------------------
        PRE LOADER              

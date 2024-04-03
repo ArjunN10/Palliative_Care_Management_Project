@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-
 const visitorSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -7,7 +6,7 @@ const visitorSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
+        required: true, 
         unique: true
     },
     password: {
@@ -22,6 +21,15 @@ const visitorSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    appointments:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Appointment'
+    }],
+    feedback:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Feedback'
+    }]
+
  
 });
 
