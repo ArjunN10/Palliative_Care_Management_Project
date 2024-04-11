@@ -235,13 +235,13 @@ getPatientMedicines : async (req, res) => {
         $match: {
           _id: Pid._id,
         },
-      },                                                  //specific patient medicine details
+      },                                                  
       {
         $lookup: {
           from: "medicines",
           localField: "Medicines.medicine",
           foreignField: "_id",
-          as: "Medicines.medicine", // Store the medicine details in an array
+          as: "Medicines.medicine", 
         },
       },
     ]);

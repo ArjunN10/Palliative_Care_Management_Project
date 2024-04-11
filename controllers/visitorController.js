@@ -2,6 +2,8 @@
 const visitors=require("../models/visitorModel")
 const bcrypt = require("bcrypt");
 const Appointment=require('../models/appointmentModel')
+const nodemailer=require("nodemailer")
+const feedbackSchema=require("../models/feedbackModel")
 
 
 module.exports={
@@ -48,7 +50,7 @@ VisitorRegister: async (req, res) => {
         is_visitor: 1,
       });
       await user.save();
-      return res.redirect("/visitor/index");
+      return res.redirect("/");
     } catch (error) {
       console.log(error.message);
       return res.status(500).send("Internal Server Error");
@@ -83,9 +85,9 @@ loadLogin:(req, res) => {
         });
       if (user.is_visitor === 1 ) { 
         req.session.visitor = user._id;
-        return res.redirect("/visitor/index")
+        return res.redirect("/")
       } else {
-        return res.redirect("/visitor/login?error=" + encodeURIComponent("Your Account not found"));
+        return res.redirect("/login?error=" + encodeURIComponent("Your Account not found"));
       }
     } catch (error) {
       console.log(error.message);
@@ -93,11 +95,21 @@ loadLogin:(req, res) => {
     }
   },
 
+// ===============================< LogOut>================================//
 
-   visitorDashboard : async (req, res) => {  
+  Visitorlogout : (req, res) => {
+    req.session.destroy();
+    res.redirect("/login");
+  },
+
+
+   visitorDashboard : async (req, res) => {   
     try {
-      console.log("ooofirst")
-        res.render('visitor/index', { user: req.user }); 
+    const userId = req.session.visitor
+
+      const visior = await visitors.findById(req.visitor);
+        res.render('visitor/index', { user:visior,userAvailable:userId });
+
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
@@ -107,6 +119,7 @@ loadLogin:(req, res) => {
 // ===============================< Appointment >================================//
 
 VisitorAppointment:async (req, res) => {
+
   try {
 
     const transporter = nodemailer.createTransport({
@@ -143,12 +156,20 @@ VisitorAppointment:async (req, res) => {
 
 },
 
+
+
 feedbackData:async(req,res)=>{
-  try {
-    const {feedbackData} = req.body;
+  try { 
+    // const userId = req.session.visitor
+    const {feedbackData,userId} = req.body
+    const newFeedback=new feedbackSchema({
+      userId:userId,
+      message:feedbackData
+      })
+
     
   } catch (error) {
-    
+    console.log(error)
   }
 }
 

@@ -124,40 +124,32 @@ isVisitor :(req,res,next) => {
         req.visitor = req.session.visitor
         next()
     }else {
-        res.redirect('/visitor/login')
+        res.redirect('/login')
     }
 },
 
-loggedOutVisitor :(req,res,next) => {
+loggedOutVisitor :(req,res,next) => { 
     if(!req.session.visitor){
         next()
     }else {
-        res.redirect('/visitor/index')
+        res.redirect('/')
     }
 },
 
-// isVisitorVerified : async  (req,res,next) => {
-//     const user = await User.findById(req.user)
-//     if (user.is_visitor === 1) {
-//         next()
-//     } else {
-//         res.redirect('/login')
-//     }
-// },
+
 
 
 isVisitorVerified: async (req, res, next) => {
     try {
-        // Check if req.user exists and is populated with user data
         if (req.user && req.user._id) {
             const user = await User.findById(req.user._id);
             if (user && user.is_visitor === 1) {
                 next();
             } else {
-                res.redirect('/visitor/login'); // Redirect to login if user is not a verified visitor
+                res.redirect('/login'); // Redirect to login if user is not a verified visitor
             }
         } else {
-            res.redirect('/visitor/login'); // Redirect to login if req.user is not set
+            res.redirect('/login'); // Redirect to login if req.user is not set
         }
     } catch (error) {
         console.log(error.message);

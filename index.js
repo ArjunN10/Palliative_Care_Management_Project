@@ -39,11 +39,11 @@ app.use(methodOverride('_method'))
 app.use(flash())
 
 
-app.use('/', userRoute)                 //volunteer 
+app.use('/volunteer', userRoute)         //volunteer 
 app.use('/staff',staffRoute )           //staff
 app.use('/doctor',doctorRoute )         //doctor
 app.use('/admin',adminRoute)            //admin
-app.use('/visitor',visitorRoute)        //visitor
+app.use('/',visitorRoute)        //visitor
 
 
 app.listen(4000, () => {
