@@ -1,26 +1,26 @@
 
 const user_route = require('express').Router()
-const userController = require('../controllers/userController');
+const userController = require('../controllers/volunteerController');
 const { isLogout, isLogged, isVolunteerVerified } = require('../middlewares/auth')
 const TrycatchMiddleware=require("../middlewares/TryCatch")
 
 
 user_route
 
-.get('/register', isLogout,TrycatchMiddleware( userController.loadRegister))
-.post('/register', isLogout,TrycatchMiddleware( userController.insertUser))
+.get('/register',isLogout,TrycatchMiddleware( userController.loadRegister))
+.post('/register',isLogout,TrycatchMiddleware( userController.insertUser))
 
 //login
 
-.get('/login', isLogout,TrycatchMiddleware( userController.loadLogin))
-.post('/login', isLogout,TrycatchMiddleware( userController.validLogin))
+.get('/login',isLogout,TrycatchMiddleware( userController.loadLogin))
+.post('/login',isLogout,TrycatchMiddleware( userController.validLogin))
 
 //logout
 
-.post('/logout', isLogged ,isVolunteerVerified,TrycatchMiddleware( userController.logout))
+.post('/logout',isLogged ,isVolunteerVerified,TrycatchMiddleware( userController.logout))
 
 
-.get('/', isLogged ,isVolunteerVerified,TrycatchMiddleware(  userController.loadIndex))
+.get('/',isLogged,isVolunteerVerified,TrycatchMiddleware(  userController.loadIndex))
 
 .post('/searchPatient',isLogged ,isVolunteerVerified,TrycatchMiddleware(userController.searchPatient))
 //patient med
@@ -34,6 +34,7 @@ user_route
 .post("/distribute-medicines/:patientId", isLogged ,isVolunteerVerified,TrycatchMiddleware(userController.distributeMedicines))
 .get("/distributionHistory",isLogged ,isVolunteerVerified,TrycatchMiddleware( userController.distributioHistory))
   
+.get("/staffslogin",TrycatchMiddleware(userController.staffsLogin))
 // attentence 
 
 .get("/markAttendence",isLogged,isVolunteerVerified,TrycatchMiddleware(userController.getAttendence)) 

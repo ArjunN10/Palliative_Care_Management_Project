@@ -50,7 +50,7 @@ VisitorRegister: async (req, res) => {
         is_visitor: 1,
       });
       await user.save();
-      return res.redirect("/");
+      return res.redirect("/"); 
     } catch (error) {
       console.log(error.message);
       return res.status(500).send("Internal Server Error");
@@ -97,18 +97,20 @@ loadLogin:(req, res) => {
 
 // ===============================< LogOut>================================//
 
-  Visitorlogout : (req, res) => {
-    req.session.destroy();
-    res.redirect("/login");
-  },
+VisitorLogout: (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
+},
+
+
+// ===============================< Index>================================//
 
 
    visitorDashboard : async (req, res) => {   
     try {
-    const userId = req.session.visitor
-
-      const visior = await visitors.findById(req.visitor);
-        res.render('visitor/index', { user:visior,userAvailable:userId });
+  
+      const visior = await visitors.findById(req.session.visitor);
+        res.render('visitor/index', { user:visior, });
 
     } catch (error) {
         console.log(error.message);
@@ -159,17 +161,20 @@ VisitorAppointment:async (req, res) => {
 
 
 feedbackData:async(req,res)=>{
-  try { 
-    // const userId = req.session.visitor
-    const {feedbackData,userId} = req.body
-    const newFeedback=new feedbackSchema({
-      userId:userId,
-      message:feedbackData
-      })
+  try {
+    const visitorId = req.session.visitor; 
+    const { message } = req.body; 
+console.log(req.body,"bodyyy");
+    const newFeedback = new feedbackSchema({
+      userId: visitorId, 
+      message: message 
+    });
 
-    
+    const savedFeedback = await newFeedback.save();
+    res.redirect('/');
   } catch (error) {
-    console.log(error)
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Failed to submit feedback. Please try again.' });
   }
 }
 

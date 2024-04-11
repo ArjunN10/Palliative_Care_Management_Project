@@ -929,6 +929,24 @@ http://www.tooplate.com/view/2098-health
   }
 
 
+  
+
+/*---------------------------------------
+   Logout              
+  -----------------------------------------*/
+
+  #logout-btn{
+    background: #a5c422;
+    color: #ffffff;
+    font-weight: 600;
+    height: 44px;
+  }
+  #logout-btn:hover{
+    background: #d1382a;
+
+  }
+
+
   /*---------------------------------------
      FOOTER              
   -----------------------------------------*/
