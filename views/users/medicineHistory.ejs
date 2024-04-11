@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">Welcome <%=user.name %></a>
+      <a class="navbar-brand" href="/volunteer">Welcome <%=user.name %></a>
       <button
         class="navbar-toggler"
         type="button"
@@ -27,25 +27,25 @@
               More
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/">Patients</a></li>
+              <li><a class="dropdown-item" href="/volunteer">Patients</a></li>
               <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="/medicines">Medicines</a></li>
+              <li><a class="dropdown-item" href="/volunteer/medicines">Medicines</a></li>
               <li><hr class="dropdown-divider" /></li>
               <li>
-                <a class="dropdown-item" href="/distributionHistory"
+                <a class="dropdown-item" href="/volunteer/distributionHistory"
                   >Medicines Distributions</a
                 >
               </li>
               <li><hr class="dropdown-divider" /></li>
               <li>
-                <form action="/logout" method="post" class="dropdown-item">
+                <form action="/volunteer/logout" method="post" class="dropdown-item">
                   <button type="submit" class="dropdown-item p-0">Logout</button>
                 </form>
               </li>
             </ul>
           </li>
         </ul>
-        <form action="/searchPatient" method="post">
+        <form action="/volunteer/searchPatient" method="post">
           <div class="d-flex">
             <input
               type="search"

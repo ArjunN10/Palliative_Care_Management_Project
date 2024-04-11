@@ -34,7 +34,7 @@ const loadLogin = (req, res) => {
         req.session.LaboratoryStaff = user._id;
         return res.redirect("/staff/dashboard")
       } else {
-        return res.redirect("/staff/login?error=" + encodeURIComponent("You are not a verified Doctor"));
+        return res.redirect("/staff/login?error=" + encodeURIComponent("You are not an Laboratory Staff"));
       }
     } catch (error) {
       console.log(error.message);

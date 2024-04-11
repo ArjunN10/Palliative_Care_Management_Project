@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">Welcome <%=user.name %></a>
+    <a class="navbar-brand" href="/volunteer">Welcome <%=user.name %></a>
     <button
       class="navbar-toggler"
       type="button"
@@ -17,21 +17,21 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="/">Patients</a>
+          <a class="nav-link" href="/volunteer">Patients</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/medicines">Medicines</a>
+          <a class="nav-link" href="/volunteer/medicines">Medicines</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/distributionHistory">Medicines Distributions</a>
+          <a class="nav-link" href="/volunteer/distributionHistory">Medicines Distributions</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/markAttendence">Mark attendance</a>
+          <a class="nav-link" href="/volunteer/markAttendence">Mark attendance</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/attendanceDisplay">View Attendance</a>
+          <a class="nav-link" href="/volunteer/attendanceDisplay">View Attendance</a>
         </li>
-      <form action="/searchPatient" method="post">
+      <form action="/volunteer/searchPatient" method="post">
         <div class="d-flex">
           <input
             type="search"
@@ -44,7 +44,7 @@
           </button>
         </div>
       </form>
-      <form action="/logout" method="post">
+      <form action="/volunteer/logout" method="post">
         <button type="submit" class="btn btn-link">Logout</button>
       </form>
     </div>
@@ -87,7 +87,7 @@
         <td><%= patient.addingDate.toDateString() %></td>
         <td>
           <a
-            href="/patientMedicines/<%=patient._id  %>"
+            href="/volunteer/patientMedicines/<%=patient._id  %>"
             class="btn btn-warning btn-sm rounded-pill"
             >Distribute Medicine</a
           >

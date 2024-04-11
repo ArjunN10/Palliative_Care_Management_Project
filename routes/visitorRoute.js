@@ -16,15 +16,16 @@ router
 .get("/login",loggedOutVisitor,TrycatchMiddleware(visitorController.loadLogin))
 .post("/login", loggedOutVisitor,TrycatchMiddleware( visitorController.VisitorLogin)) 
 
+.post("/logout",TrycatchMiddleware( visitorController.Visitorlogout)) 
     // ===============================< Home >======================================//
 
-.get('/index',isVisitor,TrycatchMiddleware(visitorController.visitorDashboard))
+.get('/',TrycatchMiddleware(visitorController.visitorDashboard))
   
     // ===============================< Appoinment >======================================//
-    .post('/appointment',isVisitor,TrycatchMiddleware(visitorController.VisitorAppointment))
+.post('/appointment',isVisitor,TrycatchMiddleware(visitorController.VisitorAppointment))
     
     // ===============================< Feedback >======================================//
-.post('/feedback',isVisitor,TrycatchMiddleware(visitorController.feedbackData))
+.post('/feedback',TrycatchMiddleware(visitorController.feedbackData))
 
   
 module.exports=router
