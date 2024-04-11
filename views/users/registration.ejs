@@ -15,7 +15,7 @@
             <div class="card">
                 <div class="text-center py-2">
                     <img src="/images/newPal.png" alt="" class="mb-0" style="width: 180px; height: 120px;" />
-                    <h4 class="mb-0 text-secondary" style="font-family:'Times New Roman', Times, serif;text-shadow: 10px;">STAFF/VOLUNTEER <br/>SIGN UP</h4>
+                    <h4 class="mb-0 text-secondary" style="font-family:'Times New Roman', Times, serif;text-shadow: 10px;"> Register Form</h4>
                 </div>
                 <div class="card-body">
                     <form method="post" id="register-form" action="/volunteer/register" novalidate>
@@ -47,15 +47,22 @@
                                 Please enter valid mobile number
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Role</label>
-                            <div>
-                                <input type="radio" id="is_Lab_Staff" name="role" value="labStaff" required>
-                                <label for="is_Lab_Staff">Laboratory Staff</label>
-                            </div>
-                            <div>
-                                <input type="radio" id="is_volunteer" name="role" value="volunteer" required>
-                                <label for="is_volunteer">Volunteer</label>
+                        <div class="mb-3" >
+                            <label class="form-label">Job Position</label>
+                            <div style="display: flex;">
+
+                                <div style="margin-left: 20px;">
+                                    <input type="radio" id="is_Lab_Staff" name="role" value="labStaff" required>
+                                    <label for="is_Lab_Staff">Laboratory Staff</label>
+                                </div>
+                                <div style="margin-left: 20px;">
+                                    <input type="radio" id="is_volunteer" name="role" value="volunteer" required>
+                                    <label for="is_volunteer">Volunteer</label>
+                                </div>
+                                <div style="margin-left: 20px;">
+                                    <input type="radio" id="is_doctor" name="role" value="doctor" required>
+                                    <label for="is_doctor">Doctor</label>
+                                </div>
                             </div>
                             <div class="invalid-feedback">
                                 Please select a role
@@ -64,12 +71,11 @@
                         <div class="d-grid mb-3">
                             <button type="submit" class="btn btn-primary rounded-pill">Register</button>
                         </div>
-                        <div class="mb-1">
-                            <p>Already have an account? <a href="/volunteer/login">Log in</a></p>
-                        </div>
-                        <div class="mb-1">
-                            <p>Doctor Register? <a href="/doctor/register">Register</a></p>
-                        </div>
+                        <div class="d-grid mb-3 mt-2">
+                            <a href="/volunteer/staffslogin" class="btn btn-primary rounded-pill"
+                            >Back</a>
+                            </div>
+                    
                     </form>
                 </div>
             </div>

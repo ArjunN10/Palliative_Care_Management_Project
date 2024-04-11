@@ -16,7 +16,7 @@ router
 .get("/login",loggedOutVisitor,TrycatchMiddleware(visitorController.loadLogin))
 .post("/login", loggedOutVisitor,TrycatchMiddleware( visitorController.VisitorLogin)) 
 
-.post("/logout",TrycatchMiddleware( visitorController.Visitorlogout)) 
+.post("/logout",TrycatchMiddleware( visitorController.VisitorLogout)) 
     // ===============================< Home >======================================//
 
 .get('/',TrycatchMiddleware(visitorController.visitorDashboard))
@@ -25,7 +25,7 @@ router
 .post('/appointment',isVisitor,TrycatchMiddleware(visitorController.VisitorAppointment))
     
     // ===============================< Feedback >======================================//
-.post('/feedback',TrycatchMiddleware(visitorController.feedbackData))
+.post('/feedback',isVisitor,TrycatchMiddleware(visitorController.feedbackData))
 
   
 module.exports=router

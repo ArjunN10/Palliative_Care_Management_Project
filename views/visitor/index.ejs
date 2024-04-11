@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Medicare Palliative Centre</title>
+    <title> Pariraksha Palliative Society</title>
     <!--
 
 Template 2098 Health
@@ -18,6 +18,10 @@ http://www.tooplate.com/view/2098-health
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1"
     />
+
+     <!-- FAVICON -->
+     <link rel="icon" type="image/png" href="/images/parirakshalogo.png">
+
 
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/css/font-awesome.min.css" />
@@ -93,7 +97,7 @@ http://www.tooplate.com/view/2098-health
             <img clss="" src="/images/parirakshalogo.png" alt="logo" width="60px" height="60px" >
           </div>
         
-          <a href="/visitor/index" class="navbar-brand ">
+          <a href="/" class="navbar-brand ">
               <b>
                 <span class="navbar-tittle">
                   Pariraksha Palliative Society
@@ -112,17 +116,41 @@ http://www.tooplate.com/view/2098-health
             <li><a href="#team">Doctors</a></li>
             <li><a href="#news">News</a></li>
             <li><a href="#google-map">Contact</a></li>
+            <!-- <li >
+              <a href="#feedback">Feedback</a>
+            </li> -->
             <li class="appointment-btn">
               <a href="#appointment">Make an appointment</a>
             </li>
-            <div class="dropdown">
+            
+          </li>
+          <% if (user) { %>
+            <li class="appointment-btn" >
+            <form action="/logout" method="post">
+              <button type="submit" id="logout-btn" class="btn " >Logout</button>
+            </form>
+          </li >
+          <% } else { %>
+            <li class="appointment-btn">
+              <a href="/login">Login</a>
+            </li>
+          <% } %>
+
+            <div class="dropdown" style="margin-left: 30px;">
               <div class="profile-icon">
                 <img src="/images/visitot-profile.jpg" alt="Profile Image">
+                
               </div>
-              
+              <% if (user) { %>
+                <p><%= user.name %></p>
+              <% } %>
+
+              <!-- add dropdown content here-->
               <div class="dropdown-content">
-                <p>Login</p>
+              
+             
               </div>
+
             </div>
           </ul>
         </div>
@@ -550,7 +578,7 @@ http://www.tooplate.com/view/2098-health
 
           <div class="col-md-4 col-sm-4">
                <div class="footer-thumb">
-                    <form id="feedback-form" role="form" method="post" action="#">
+                    <form id="feedback-form" role="form" method="post" action="/feedback">
                          <h4 for="feedback" class="wow fadeInUp" data-wow-delay="0.4s">Feedback</h4>
                          <textarea class="form-control" rows="5" id="feedback" name="message" placeholder="Write your Message"></textarea>
                          <button type="submit" class="form-control btn btn-primary mt-2" id="cf-submit" name="submit">
@@ -593,17 +621,15 @@ http://www.tooplate.com/view/2098-health
     <!-- SCRIPTS -->
 
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script>
      document.addEventListener('DOMContentLoaded', function () {
-       // Add event listener to the form submission
        document.getElementById('appointment-form').addEventListener('submit', function (event) {
-         // Prevent the default form submission
          event.preventDefault();
      
-         // Collect form data
          const formData = new FormData(this);
      
-         // Send form data to the server using Axios
          axios.post('/appointment', formData)
            .then(response => {
              if (response.status === 200) {
@@ -619,38 +645,6 @@ http://www.tooplate.com/view/2098-health
        });
      });
      </script>
-
-
-<script>
-     document.addEventListener('DOMContentLoaded', function () {
-       // Add event listener to the form submission
-       document.getElementById('feedback-form').addEventListener('submit', function (event) {
-         // Prevent the default form submission
-         event.preventDefault();
-   
-         // Collect form data
-         const formData = new FormData(this);
-   
-         // Send form data to the server using Axios
-         axios.post('/feedback', formData)
-           .then(response => {
-             if (response.status === 200) {
-               alert('Feedback submitted successfully!');
-             } else {
-               alert('Failed to submit feedback. Please try again.');
-             }
-           })
-           .catch(error => {
-             console.error('Error:', error);
-             alert('An error occurred. Please try again later.');
-           });
-       });
-     });
-   </script>
-
-
-
-
 
 
     <script src="/assets/js/jquery.js"></script>

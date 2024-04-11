@@ -1,8 +1,4 @@
 
-
-
-
-
 const router = require('express').Router()
 const LaboratoryStaff = require('../controllers/LaboratoryStaffController')
 const { isLaboratoryStaff, loggedOutLaboratoryStaff } = require("../middlewares/auth");

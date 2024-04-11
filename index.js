@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 const path = require('path')
 
-const userRoute = require('./routes/userRoute')
+const volunteerRoute = require('./routes/volunteerRoute')
 const doctorRoute=require('./routes/doctorRoute')
 const adminRoute=require('./routes/adminRoute')
 const staffRoute=require('./routes/staffRoute')
@@ -39,11 +39,11 @@ app.use(methodOverride('_method'))
 app.use(flash())
 
 
-app.use('/volunteer', userRoute)         //volunteer 
+app.use('/volunteer', volunteerRoute)         //volunteer 
 app.use('/staff',staffRoute )           //staff
 app.use('/doctor',doctorRoute )         //doctor
 app.use('/admin',adminRoute)            //admin
-app.use('/',visitorRoute)        //visitor
+app.use('/',visitorRoute)        //visitor  
 
 
 app.listen(4000, () => {

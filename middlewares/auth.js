@@ -1,7 +1,7 @@
 
 
 
-const User = require('../models/userModel')
+const User = require('../models/volunteerModel')
 
 module.exports = {
 
@@ -51,17 +51,6 @@ isDoctorLogged : (req, res, next) => {
         res.redirect('/doctor/dashboard')
     }
 },
-
-
-// isDoctorVerified: async (req, res, next) => {
-//     const user = await User.findById(req.user); 
-//     if (user.is_doctor === 1) {
-//         next();
-//     } else {
-//         res.redirect('/doctor/login');
-//     }
-// },
-
 
 
 

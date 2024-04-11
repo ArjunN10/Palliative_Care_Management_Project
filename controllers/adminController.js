@@ -1,5 +1,5 @@
 const Patients=require("../models/patientModel")
-const User=require("../models/userModel")
+const User=require("../models/volunteerModel")
 const Medicine = require("../models/medicineModel");
 const MedicineDistribution=require("../models/MdcnDstrbtionModel")
 const bcrypt=require("bcrypt")

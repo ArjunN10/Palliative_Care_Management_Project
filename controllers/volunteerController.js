@@ -1,4 +1,4 @@
-const User = require("../models/userModel");
+const User = require("../models/volunteerModel");
 const Patient = require("../models/patientModel");
 const Medicine = require("../models/medicineModel");
 const MedicineDistribution = require("../models/MdcnDstrbtionModel");
@@ -50,6 +50,8 @@ insertUser : async (req, res) => {
       is_Lab_Staff = 1;
     } else if (role === 'volunteer') {
       is_volunteer = 1;
+    } else if (role === 'doctor') {
+      is_doctor = 1;
     }
 
     const user = new User({
@@ -59,6 +61,7 @@ insertUser : async (req, res) => {
       password: secPassword,
       is_Lab_Staff,
       is_volunteer,
+      is_doctor
     });
 
     const userData = await user.save();
@@ -439,7 +442,11 @@ renderAttendenceDisplay : async (req, res) => {
 
       const YearlyAttendance = getAttendanceByYear(attendanceThisMonth.attendanceHistory)
        res.render('users/attendanceDisplay',{MOnthByAttendance,YearlyAttendance})
-    }
+    },
+
+    staffsLogin : async (req,res) => {
+      res.render("users/staffslog")
+    },
 
 
 

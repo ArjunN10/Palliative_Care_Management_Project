@@ -11,10 +11,10 @@ router
     // ===============================<  register  >===================================//
 
 
-.get('/register', isDoctorLogged, TrycatchMiddleware(doctorController.loadRegister))
-.post('/register', isDoctorLogged,TrycatchMiddleware( doctorController.insertDoctor))  
+// .get('/register', isDoctorLogged, TrycatchMiddleware(doctorController.loadRegister))        
+// .post('/register', isDoctorLogged,TrycatchMiddleware( doctorController.insertDoctor))    
 
-    // ===============================< Login >======================================//
+    // ===============================< Login >======================================//  
 
 .get("/login",isDoctorLogged,TrycatchMiddleware(doctorController.loadLogin))
 .post("/login", isDoctorLogged,TrycatchMiddleware( doctorController.DoctorLogin)) 
