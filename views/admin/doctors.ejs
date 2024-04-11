@@ -12,7 +12,30 @@
             <a class="nav-link dropdown-toggle ms-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 More
             </a>
-            <ul class="dropdown-menu " style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
+            <ul class="dropdown-menu" style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
+              <li><a class="dropdown-item" href="/admin/patients">Patient's</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/admin/doctors">Doctor's</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/admin/staffs">Laboratory Staffs</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/admin/medicines">Medicines</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/admin/distributionHistory">Medicine Distributions</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/admin/attendance/doctors">Doctor Attendance </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/admin/attendance/staffs">Staff Attendance </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/admin/attendance/volunteers">Volunteer Attendance </a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <form action="/admin/logout" method="post" class="dropdown-item">
+                  <button type="submit" class="dropdown-item p-0">Logout</button>
+                </form>
+              </li>
+            </ul>
+            <!-- <ul class="dropdown-menu " style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
               <li><a class="dropdown-item" href="/admin/dashboard">Volunteers</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/admin/patients">Patient's</a></li>
@@ -28,7 +51,7 @@
                   <button type="submit" class="dropdown-item p-0">Logout</button>
                 </form>
               </li>
-            </ul>
+            </ul> -->
           </li>
         </ul>
           </li>
