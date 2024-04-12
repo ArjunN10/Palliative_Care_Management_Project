@@ -67,20 +67,7 @@
               />
               <div class="invalid-feedback">Please enter Doctor's name</div>
             </div>
-            <div class="mb-3">
-              <label for="medicines" class="form-label">Medicines</label>
-              <div class="custom-dropdown">
-                <div class="dropdown-content">
-                  <% medicines.forEach(function(medicine) { %>
-                    <label for="<%= medicine.id %>">
-                      <input type="checkbox" name="selectedMedicines" value="<%= medicine.id %>" id="<%= medicine.id %>">
-                      <%= medicine.name %>
-                    </label>
-                  <% }); %>
-                </div>
-              </div>
-              <div class="invalid-feedback">Please select the medicines</div>
-            </div>
+            
 
             <div class="d-grid mb-3">
               <button type="submit" class="btn btn-primary rounded-pill">

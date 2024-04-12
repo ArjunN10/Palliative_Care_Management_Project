@@ -2,7 +2,12 @@ const mongoose = require("mongoose");
 
 const testingSchema = new mongoose.Schema ({
 
-    patient: {
+  userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", // Reference to the Patient model
+        required: true,
+      },
+        patient: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Patient", // Reference to the Patient model
         required: true,
