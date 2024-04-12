@@ -685,12 +685,10 @@ getDoctorAttendanceHistory: async (req, res) => {
       return res.status(404).send("Doctor not found");
     }
 
-    // Calculate attendance percentage
     const totalRecords = doctor.attendanceHistory.length;
     const presentCount = doctor.attendanceHistory.filter(record => record.status === 'Present').length;
     const percentage = totalRecords > 0 ? (presentCount / totalRecords) * 100 : 0;
 
-    // Get attendance records based on selected interval
     let currentAttendance = [];
     if (interval === 'week') {
       currentAttendance = getAttendanceForTimeInterval(doctor.attendanceHistory, 'week');
@@ -699,7 +697,6 @@ getDoctorAttendanceHistory: async (req, res) => {
     } else if (interval === 'year') {
       currentAttendance = getAttendanceForTimeInterval(doctor.attendanceHistory, 'year');
     } else {
-      // Default to monthly if interval is not provided or invalid
       currentAttendance = getAttendanceForTimeInterval(doctor.attendanceHistory, 'month');
     }
 
@@ -753,12 +750,10 @@ getStaffAttendanceHistory: async (req, res) => {
       return res.status(404).send("Doctor not found");
     }
 
-    // Calculate attendance percentage
     const totalRecords = staff.attendanceHistory.length;
     const presentCount = staff.attendanceHistory.filter(record => record.status === 'Present').length;
     const percentage = totalRecords > 0 ? (presentCount / totalRecords) * 100 : 0;
 
-    // Get attendance records based on selected interval
     let currentAttendance = [];
     if (interval === 'week') {
       currentAttendance = getAttendanceForTimeInterval(staff.attendanceHistory, 'week');
@@ -767,7 +762,6 @@ getStaffAttendanceHistory: async (req, res) => {
     } else if (interval === 'year') {
       currentAttendance = getAttendanceForTimeInterval(staff.attendanceHistory, 'year');
     } else {
-      // Default to monthly if interval is not provided or invalid
       currentAttendance = getAttendanceForTimeInterval(staff.attendanceHistory, 'month');
     }
 
@@ -819,12 +813,10 @@ getVolunteerAttendanceHistory: async (req, res) => {
       return res.status(404).send("Volunteer not found");
     }
 
-    // Calculate attendance percentage
     const totalRecords = volunteer.attendanceHistory.length;
     const presentCount = volunteer.attendanceHistory.filter(record => record.status === 'Present').length;
     const percentage = totalRecords > 0 ? (presentCount / totalRecords) * 100 : 0;
 
-    // Get attendance records based on selected interval
     let currentAttendance = [];
     if (interval === 'week') {
       currentAttendance = getAttendanceForTimeInterval(volunteer.attendanceHistory, 'week');
@@ -833,7 +825,6 @@ getVolunteerAttendanceHistory: async (req, res) => {
     } else if (interval === 'year') {
       currentAttendance = getAttendanceForTimeInterval(volunteer.attendanceHistory, 'year');
     } else {
-      // Default to monthly if interval is not provided or invalid
       currentAttendance = getAttendanceForTimeInterval(volunteer.attendanceHistory, 'month');
     }
 
@@ -849,6 +840,7 @@ getVolunteerAttendanceHistory: async (req, res) => {
   }},
 
 
+// ===============================<Visitor Management >================================//
 
 
   ViewVisitors: async (req, res) => {
@@ -884,7 +876,7 @@ getVolunteerAttendanceHistory: async (req, res) => {
             return res.status(404).json({ message: 'Visitor not found' });     
         }   
 
-        const latestFeedback = await Feedback.findOne({ userId: visitorId })
+        const latestFeedback = await Feedback.findOne({ userId: visitorId })  
             .sort({ createdAt: -1 }) 
             .populate('userId', 'name'); 
 
