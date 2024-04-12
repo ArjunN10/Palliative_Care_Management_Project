@@ -113,7 +113,7 @@ validLogin: async (req, res) => {
       req.session.volunteer = user._id;
       return res.redirect("/volunteer")
     } else {
-      return res.redirect("/users/login?error=" + encodeURIComponent("You are not a verified Doctor"));
+      return res.redirect("/volunteer/login?error=" + encodeURIComponent("You are not a verified Doctor"));
     }
   } catch (error) {
     console.log(error.message);
@@ -123,7 +123,7 @@ validLogin: async (req, res) => {
 
 logout : (req, res) => {
   req.session.destroy();
-  res.redirect("/login");
+  res.redirect("/volunteer/login");
 },
 
 
@@ -278,7 +278,7 @@ distributeMedicines : async (req, res) => {
 
     if (!patient) {
       req.flash("error", "patient not found");
-      res.redirect("/patientMedicines");
+      res.redirect("/volunteer/patientMedicines");
     }
 
     const countNumber = parseInt(count, 10);
@@ -289,11 +289,11 @@ distributeMedicines : async (req, res) => {
     }
     if (countNumber > selectedMedicine.stock) {
       req.flash("error", "please enter a count less than stock");
-      return res.redirect(`/patientMedicines/${patientId}`);
+      return res.redirect(`/volunteer/patientMedicines/${patientId}`);
     }
     if (countNumber < 1) {
       req.flash("error", "Invalid medicine count");
-      return res.redirect(`/patientMedicines/${patientId}`);
+      return res.redirect(`/volunteer/patientMedicines/${patientId}`);
     }
     const medicineDetails = {
       medicine: medicineId,
@@ -326,12 +326,14 @@ distributeMedicines : async (req, res) => {
       "success",
       `${selectedMedicine.name} is disitributed successfully`
     );
-    res.redirect(`/patientMedicines/${patientId}`);
+    res.redirect(`/volunteer/patientMedicines/${patientId}`);
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 },
+
+
 
 distributioHistory : async (req, res) => {  
   try {
@@ -385,7 +387,7 @@ console.log(existingAttendance)
   
   const attendence = new Attendance ({userId,status,date:dates,role})
   await attendence.save()
-  res.redirect("/")
+  res.redirect("/volunteer")
 },
 
 
