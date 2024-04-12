@@ -4,6 +4,7 @@ const Medicine = require("../models/medicineModel");
 const Patient = require("../models/patientModel");
 const Attendence = require("../models/attendanceModel")
 const Test = require("../models/TestResultModel")
+const LPatient = require('../models/LabPatientModel')
 
 
 
@@ -115,7 +116,7 @@ const searchPatient = async (req, res) => {
 };
 
 const AddPatient = async (req,res) => {
-  let {name, mobile, disease, DoctorName, selectedMedicines} = req.body
+  let {name, mobile, disease, DoctorName} = req.body
   
     function generateRandomID(length) {
       const charset = "0123456789";
@@ -130,21 +131,12 @@ const AddPatient = async (req,res) => {
       return randomID;
     } 
 
-    if(typeof selectedMedicines === "string"){
-      let medicine = selectedMedicines
-      selectedMedicines = []
-      selectedMedicines.push(medicine)
-    }
-
-    const patient = await create.Patient({
+    const patient = await LPatient.create({
       RegNo : generateRandomID(5) ,
       name,
       disease,
       mobile,
       DoctorName,
-      Medicine : selectedMedicines ? selectedMedicines.map((medId) => ({
-       medicine : medId
-      })):null ,
       addingDate : Date.now()
       
     });
@@ -158,22 +150,8 @@ const AddPatient = async (req,res) => {
 const editPatient  = async (req, res) => {
   const { id } = req.params;
   
-    const Pid = await Patient.findById(id);
-    const patient = await Patient.aggregate([
-      {
-        $match: {
-          _id: Pid._id,
-        },
-      },
-      {
-        $lookup: {
-          from: "medicines",
-          localField: "Medicines.medicine",
-          foreignField: "_id",
-          as: "Medicines.medicine", // Store the medicine details in an array
-        },
-      },
-    ]);
+    const Pid = await LPatient.findById(id);
+    const patient = await LPatient
 
     const currentMedicines = patient[0].Medicines;
 
@@ -330,22 +308,36 @@ const getTestResult = async (req,res) => {
 
 const uploadImage = async (req,res) => {
   const { patientId, name, disease, test_result } = req.body;
+  const userId = req.session.LaboratoryStaff;
+
   const patient = await Patient.findById(patientId)
   if (!patient) {
     return res.status(404).json({ error: "Patient not found" });
   }
   const newTest = new Test({
-    patient: patientId,
+    userId ,
+    patient : patientId,
     name,
     disease,
     test_result,
-  });
+  })
   await newTest.save()
   patient.test_result.push(newTest._id);
   await patient.save();
   res.render("staff/DisplaytestResult",{newTest})
   
 }
+
+const getAllResult = async (req,res) => {
+  const UserId = req.session.LaboratoryStaff;
+
+  const result = await Test.find()
+  console.log(result)
+  console.log(result)
+  res.render("staff/TestResult",{result})
+}
+
+
 
 
 
@@ -369,7 +361,10 @@ module.exports = {
   MarkAttendence,
   renderAttendenceDisplay,
   uploadImage,
-  getTestResult
+  getTestResult,
+  getAllResult
+  
+
 
 }
 

@@ -36,6 +36,10 @@ router.get("/attendanceDisplay",isLaboratoryStaff,trycatch(LaboratoryStaff.rende
 
 
   router.get("/testresult",isLaboratoryStaff,trycatch(LaboratoryStaff.getTestResult))
+  router.get("/result",isLaboratoryStaff,trycatch(LaboratoryStaff.getAllResult))
+
+  
+
 
   router.post('/upload-pdf', imageupload,trycatch(LaboratoryStaff.uploadImage) )
 
