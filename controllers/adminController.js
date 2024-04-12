@@ -1,12 +1,14 @@
 const Patients=require("../models/patientModel")
-const User=require("../models/volunteerModel")
+const User=require("../models/userModel")
 const Medicine = require("../models/medicineModel");
 const MedicineDistribution=require("../models/MdcnDstrbtionModel")
+const visitors=require("../models/visitorModel")
+const Feedback=require("../models/feedbackModel")
 const bcrypt=require("bcrypt")
 const {getAttendanceForTimeInterval}=require("../config/attendanceUtils")
 
 
-//pwd hashing 
+//pwd hashing here
 
 const securePassword =async (password) => {
   try {
@@ -634,7 +636,6 @@ distributioHistory : async (req, res) => {
   try {
     const medicineDistributions = await MedicineDistribution.find().populate("patient")
   
-    console.log(medicineDistributions,"medd dist")
     res.render("admin/medicineHistory", { medicineDistributions });
   } catch (error) {
     console.log(error.message);
@@ -672,42 +673,6 @@ DoctorsList: async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 },
-
-
-// getDoctorAttendanceHistory: async (req, res) => {
-//   const { doctorId } = req.params;
-//   try {
-//     const doctor = await User.findById(doctorId).populate('attendanceHistory');
-//     if (!doctor || !doctor.is_doctor) {
-//       return res.status(404).send("Doctor not found");
-//     }
-
-//     // Calculate attendance percentage
-//     const totalRecords = doctor.attendanceHistory.length;
-//     const presentCount = doctor.attendanceHistory.filter(record => record.status === 'Present').length;
-//     const percentage = totalRecords > 0 ? (presentCount / totalRecords) * 100 : 0;
-
-//     // Get attendance records for the current week
-//     const currentWeekAttendance = getAttendanceForTimeInterval(doctor.attendanceHistory, 'week');
-
-//     // Get attendance records for the current month
-//     const currentMonthAttendance = getAttendanceForTimeInterval(doctor.attendanceHistory, 'month');
-
-//     // Get attendance records for the current year
-//     const currentYearAttendance = getAttendanceForTimeInterval(doctor.attendanceHistory, 'year');
-
-//     res.render('admin/attendanceHistory', { 
-//       doctor: doctor, 
-//       percentage: percentage,
-//       currentWeekAttendance: currentWeekAttendance,
-//       currentMonthAttendance: currentMonthAttendance,  
-//       currentYearAttendance: currentYearAttendance
-//     });
-//   } catch (error) {
-//     console.error("Error fetching attendance history:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// },
 
 
 getDoctorAttendanceHistory: async (req, res) => {
@@ -882,5 +847,52 @@ getVolunteerAttendanceHistory: async (req, res) => {
     console.error("Error fetching attendance history:", error);
     res.status(500).send("Internal Server Error");
   }},
+
+
+
+
+  ViewVisitors: async (req, res) => {
+    const { q } = req.query;
+    try {
+      let users;
+      if (q && q.length > 0) {
+        users = await visitors.find({
+          name: { $regex: ".*" + q + ".*" },
+          is_visitor:1
+        });
+      } else {
+        users = await visitors.find({
+          is_visitor:1
+        });
+      }
+      res.render("admin/visitors", { users, q });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).send("Internal Server Error");
+    }
+  },
+
+  
+  getVisitorFeedback:async (req, res) => {
+    try {
+        const visitorId = req.params.id;
+
+        const visitor = await visitors.findById(visitorId);
+     
+
+        if (!visitor) {
+            return res.status(404).json({ message: 'Visitor not found' });     
+        }   
+
+        const latestFeedback = await Feedback.findOne({ userId: visitorId })
+            .sort({ createdAt: -1 }) 
+            .populate('userId', 'name'); 
+
+        res.render("admin/feedbackDisplay",{ userFeedback:latestFeedback,user:visitor });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+}
 
 }
