@@ -57,6 +57,12 @@ router
 .put("/staffs/:id", isAdmin,TrycatchMiddleware( adminController.updateStaff))
 .delete("/staffs/:id/destroy", isAdmin, TrycatchMiddleware(adminController.deleteStaff))
 
+// ===============================< Visitor Management >================================//
+
+.get("/visitors", isAdmin,TrycatchMiddleware(adminController.ViewVisitors))
+
+.get('/visitors/:id', isAdmin, TrycatchMiddleware(adminController.getVisitorFeedback))
+
 // ===============================< Medicine Management >================================//
 
 .get('/medicines',isAdmin,TrycatchMiddleware(adminController.getMedicines))
