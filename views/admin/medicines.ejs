@@ -60,14 +60,7 @@
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="/admin/attendance/volunteers">Volunteer Attendance </a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="/admin/visitors">Visitor's </a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-              <form action="/admin/logout" method="post" class="dropdown-item">
-                <button type="submit" class="dropdown-item p-0">Logout</button>
-              </form>
-            </li>
           </ul>
         </li>
       </ul>
@@ -86,11 +79,14 @@
       </form>
     </div>
   </div>
+  <form action="/admin/logout" method="post" >
+    <button type="submit" class="btn btn-danger rounded-pill me-5 ms-3">Logout</button>
+  </form>
 </nav>
 
 <div class="container mt-4">
-    <table class="table table-bordered">
-        <thead>
+  <table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark">
             <tr>
                 <th>Slno.</th>
                 <th>Name</th>

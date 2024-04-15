@@ -39,15 +39,6 @@
               <form action="/doctor/logout" method="post">
                   <button type="submit" class="btn btn-danger rounded-pill ms-2">Logout</button>
               </form>
-      <!-- <div class="d-flex">
-        <a href="/doctor/createUser" type="button"  class="btn btn-outline-primary rounded-pill  ms-2">Add Volunteer</a>
-    </div>
-      <form action="/doctor/dashboard" method="GET">
-          <div class="d-flex">
-              <input type="search" name="q" placeholder="Search Staff" class="form-control rounded-pill" value="<%= q ? q : null %>" />
-              <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
-          </div>
-      </form> -->
     </div>
   </div>
 </nav>
@@ -57,6 +48,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
+                <th style="text-align: center;">SL.No</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Mobile</th>
@@ -65,18 +57,14 @@
             </tr>
         </thead>
         <tbody>
-            <% users.forEach(user => { %>
+            <% users.forEach((user,index) => { %>
                 <tr>
+                    <td style="text-align: center;"><%= index+1 %></td>
                     <td><%= user.name %></td>
                     <td><%= user.email %></td>
                     <td><%= user.mobile %></td>
                     <td><%= user.is_varified ? 'Yes' : 'No' %></td>
-                    <!-- <td>
-                        <a href="/doctor/users/<%= user._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
-                        <form action="/doctor/users/<%= user._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
-                            <button type="submit" onclick="return alert('Are you sure to remove this Staff?')" class="btn btn-sm btn-danger rounded-pill">Delete</a>
-                          </form>
-                    </td> -->
+             
                 </tr>
             <% }) %>
         </tbody>

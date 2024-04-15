@@ -180,14 +180,14 @@ searchPatient : async (req, res) => {
             foreignField: "_id",
             as: "Medicines.medicine",
           },
-        },
+        },  
       ]);
     }
     res.render("users/index", { user, patients, message: null, error: null });
   } catch (error) {
     console.log(error.message);
   }
-},
+}, 
 
 
 // ===============================< Medicine Management >================================//
