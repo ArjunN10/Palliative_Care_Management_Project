@@ -48,14 +48,8 @@
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/admin/attendance/volunteers">Volunteer Attendance </a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/admin/visitors">Visitor's </a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li>
-                <form action="/admin/logout" method="post" class="dropdown-item">
-                  <button type="submit" class="dropdown-item p-0">Logout</button>
-                </form>
-              </li>
+            
             </ul>
           </li>
         </ul>
@@ -69,12 +63,15 @@
         </form>
       </div>
     </div>
+    <form action="/admin/logout" method="post" class="btn btn-danger rounded-pill me-5 ms-1">
+      <button type="submit" class="dropdown-item p-0">Logout</button>
+    </form>
   </nav>
 
 <div class="container mt-4">
   <h2 style="font-style: oblique;">PATIENTS LIST</h2>
-    <table class="table table-bordered">
-        <thead>
+  <table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark">
             <tr>
                 <th>Reg.No</th>
                 <th>Name</th>

@@ -1,40 +1,83 @@
 
+
 <%- include('../layouts/header.ejs') %>
 
-
-    <div class="container" >
-        <h2 style="font-style: oblique;">DOCTORS ATTENDANCE</h2>
-          <table class="table table-bordered">
-              <thead >
-                  <tr>
-                      <!-- <th>Reg.ID</th> -->
-                      <th>Name</th>
-                      <th>Availablity</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <% users.forEach(user => { %>
-                  <tr>
-                    <!-- <td><%= user._id %></td> -->
-
-                    <td> 
-                        <a href="/admin/attendance/doctors/<%= user._id %>">
-                        <B>Dr.
-                        <%= user.name %>
-                    </B>
-                    </td>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" style="font-style: italic;" href="/admin/doctors">ADMIN DASHBOARD</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse d-flex navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle ms-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                More
+            </a>
+            <ul class="dropdown-menu" style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
+                    <li><a class="dropdown-item" href="/admin/patients">Patient's</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/admin/doctors">Doctor's</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/admin/staffs">Laboratory Staffs</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/admin/medicines">Medicines</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/admin/distributionHistory">Medicine Distributions</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/admin/attendance/doctors">Doctor Attendance </a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/admin/attendance/staffs">Staff Attendance </a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/admin/attendance/volunteers">Volunteer Attendance </a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/admin/visitors">Visitor's </a></li>
                    
-                    <% if (user.is_varified) { %>
-                        <td style="color: green;"><B>Available</B></td>
-                    <% } else { %>
-                        <td style=" color: red;"><B>Unavailable</B></td>
-                    <% } %>
-                  
-                  </tr>
-                  <% }) %>
-                </tbody>
-          </table>
+            </ul>
+          </li>
+        </ul>
       </div>
+    </div>
+    <form action="/admin/logout" method="post" >
+        <button type="submit" class="btn btn-danger rounded-pill me-5 ms-3">Logout</button>
+      </form>
+  </nav>
+
+<div class="container mt-4">
+  <h2 style="font-style: oblique;">DOCTOR'S LIST</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-dark">
+                <tr style="text-align: center;">
+                    <th>Reg.ID</th>
+                    <th>Name</th>
+                    <th>Availablity</th>
+                </tr>
+            </thead>
+            <tbody style="text-align: center;">
+                <% users.forEach((user,index) => { %>
+                <tr>
+                  <td><%= index+1 %></td>
+
+                  <td> 
+                    <a href="/admin/attendance/doctors/<%= user._id %>">
+                    <B style="color: black;">Dr.
+                    <%= user.name %>
+                </B>
+                </td>
+                 
+                  <% if (user.is_varified) { %>
+                      <td style="color: green;"><B>Available</B></td>
+                  <% } else { %>
+                      <td style=" color: red;"><B>Unavailable</B></td>
+                  <% } %>
+                
+                </tr>
+                <% }) %>
+              </tbody>
+        </table>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-
+<%- include('../layouts/footer.ejs') %>

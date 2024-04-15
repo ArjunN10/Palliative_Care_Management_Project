@@ -15,7 +15,7 @@ user_route
 .get('/login',isLogout,TrycatchMiddleware( userController.loadLogin))
 .post('/login',isLogout,TrycatchMiddleware( userController.validLogin))
 
-//logout
+//logout   
 
 .post('/logout',isLogged ,isVolunteerVerified,TrycatchMiddleware( userController.logout))
 
