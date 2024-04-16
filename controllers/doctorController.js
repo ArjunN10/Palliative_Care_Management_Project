@@ -384,7 +384,7 @@ DoctorAddUser : async (req, res) => {
 
 
  AddPatient : async (req, res) => {
-  let { name, mobile, disease, DoctorName, selectedMedicines } = req.body;
+  let { name, mobile, disease,is_Active, DoctorName, selectedMedicines } = req.body;
   try {
     function generateRandomID(length) {
       const charset = "0123456789";
@@ -407,6 +407,7 @@ DoctorAddUser : async (req, res) => {
       RegNo: generateRandomID(5),
       name,
       disease,
+      is_Active,
       mobile,
       DoctorName,
       Medicines: selectedMedicines?selectedMedicines.map((medId) => ({
@@ -506,13 +507,34 @@ DoctorAddUser : async (req, res) => {
   }
 },
 
- deletePatient : async (req, res) => {
-  const { id } = req.params;
+//  deletePatient : async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     await Patient.findByIdAndDelete(id);
+//     res.redirect("/doctor/patients");
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// },
+
+
+patienttoggleVerification : async (req, res) => {
+  const userId = req.params.id;
+  const { is_Active } = req.body;
+
   try {
-    await Patient.findByIdAndDelete(id);
-    res.redirect("/doctor/patients");
+    const patient = await Patient.findById(userId);
+    if (!patient) {
+      return res.status(404).json({ message: 'patient not found' });
+    }
+
+    patient.is_Active = is_Active === '0' ? false : true;
+    await patient.save();
+
+    res.redirect('/doctor/patients'); 
   } catch (error) {
-    console.log(error.message);
+    console.error('Error toggling verification:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 },
 
@@ -531,6 +553,7 @@ DoctorAddUser : async (req, res) => {
 
 
 
+// ===============================< Attendance >================================//
 
 
 

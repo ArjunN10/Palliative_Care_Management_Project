@@ -169,16 +169,37 @@ createVolunteer : async (req, res) => {
         }
       },
 
-      deleteVolunteer: async (req, res) => {
-        const { id } = req.params;
+      // deleteVolunteer: async (req, res) => {
+      //   const { id } = req.params;
+      //   try {
+      //     const user = await User.findOneAndDelete({ _id: id });
+      //     if (req.session.user_session === user._id) {
+      //       req.session.destroy();
+      //     }
+      //     return res.redirect("/admin/dashboard");
+      //   } catch (error) {
+      //     console.log(error.message);
+      //   }
+      // },
+
+
+      volunteertoggleVerification : async (req, res) => {
+        const userId = req.params.id;
+        const { is_verified } = req.body;
+      
         try {
-          const user = await User.findOneAndDelete({ _id: id });
-          if (req.session.user_session === user._id) {
-            req.session.destroy();
+          const volunteer = await User.findById(userId);
+          if (!volunteer) {
+            return res.status(404).json({ message: 'Volunteer not found' });
           }
-          return res.redirect("/admin/dashboard");
+      
+          volunteer.is_varified = is_verified === '0' ? false : true;
+          await volunteer.save();
+      
+          res.redirect('/admin/dashboard'); 
         } catch (error) {
-          console.log(error.message);
+          console.error('Error toggling verification:', error);
+          res.status(500).json({ message: 'Internal server error' });
         }
       },
 
@@ -249,20 +270,6 @@ loadEditDoctor : async (req, res) => {
   }
 },
 
-
- deleteDoctor : async (req, res) => {
-  const { id } = req.params
-  try {
-    const user = await User.findOneAndDelete({ _id: id });
-    if (req.session.doctor_session === user._id) {
-      req.session.destroy();
-    }
-    return res.redirect("/admin/doctors");
-  } catch (error) {
-    console.log(error.message);
-  }
-},
-
 AdminAddedDoctor : async (req, res) => {
   try {
     res.render("admin/createDoctor", { error: null, message: null });
@@ -270,9 +277,6 @@ AdminAddedDoctor : async (req, res) => {
     console.log(error.message);
   }
 },
-
-
-
 
 
 createDoctor : async (req, res) => {
@@ -313,8 +317,39 @@ createDoctor : async (req, res) => {
   }
 },
 
+//  deleteDoctor : async (req, res) => {
+//   const { id } = req.params
+//   try {
+//     const user = await User.findOneAndDelete({ _id: id });
+//     if (req.session.doctor_session === user._id) {
+//       req.session.destroy();
+//     }
+//     return res.redirect("/admin/doctors");
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// },
 
 
+doctortoggleVerification : async (req, res) => {
+  const userId = req.params.id;
+  const { is_verified } = req.body;
+
+  try {
+    const doctor = await User.findById(userId);
+    if (!doctor) {
+      return res.status(404).json({ message: 'doctor not found' });
+    }
+
+    doctor.is_varified = is_verified === '0' ? false : true;
+    await doctor.save();
+
+    res.redirect('/admin/doctors'); 
+  } catch (error) {
+    console.error('Error toggling verification:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+},
 
 // ===============================< Patient Management >================================//
 
@@ -547,6 +582,26 @@ searchStaff : async (req, res) => {
   }
 },
 
+
+stafftoggleVerification : async (req, res) => {
+  const userId = req.params.id;
+  const { is_verified } = req.body;
+
+  try {
+    const staff = await User.findById(userId);
+    if (!staff) {
+      return res.status(404).json({ message: 'Volunteer not found' });
+    }
+
+    staff.is_varified = is_verified === '0' ? false : true;
+    await staff.save();
+
+    res.redirect('/admin/staffs'); 
+  } catch (error) {
+    console.error('Error toggling verification:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+},
 
 
 // ===============================< medicine Management >================================//
@@ -885,6 +940,9 @@ getVolunteerAttendanceHistory: async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });
     }
-}
+},
+
+
+
 
 }

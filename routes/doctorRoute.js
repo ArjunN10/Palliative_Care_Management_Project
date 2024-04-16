@@ -37,7 +37,9 @@ router
 .post("/searchPatients", isDoctor,TrycatchMiddleware(doctorController.searchPatient) )
 .get("/patients/:id/edit", isDoctor,TrycatchMiddleware(doctorController.editPatient) )
 .post("/updatePatient", isDoctor,TrycatchMiddleware(doctorController.updatePatient))
-.delete("/patients/:id/destroy", isDoctor, TrycatchMiddleware(doctorController.deletePatient))
+// .delete("/patients/:id/destroy", isDoctor, TrycatchMiddleware(doctorController.deletePatient))
+.post('/patients/:id/toggle_verification',isDoctor,TrycatchMiddleware(doctorController.patienttoggleVerification))
+
 
     // ===============================< medicine >================================//
 
