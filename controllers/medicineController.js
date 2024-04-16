@@ -4,7 +4,7 @@ const randomString = require("randomstring");
 exports.showMedicines = async (req,res)=>{
   try {
     const medicines = await Medicine.find()
-    return res.render('admin/medicines/Medicines',{medicines})
+    return res.render('doctor/medicines/Medicines',{medicines})
   } catch (error) {
     console.log(error.message);
     res.send("internal Server error");
@@ -13,7 +13,7 @@ exports.showMedicines = async (req,res)=>{
 
 exports.ShowAddMedicine = async (req, res) => {
   try {
-    res.render("admin/medicines/AddMedicine", { error: null, message: null });
+    res.render("doctor/medicines/AddMedicine", { error: null, message: null });
   } catch (error) {
     console.log(error.message);
     res.send("internal Server error");
@@ -46,7 +46,7 @@ exports.addMedicine = async (req, res) => {
       stock,
     });
     await medicine.save();
-    return res.redirect("/admin/medicines");
+    return res.redirect("/doctor/medicines");
   } catch (error) {
     console.log(error.message);
     res.send("internal Server error");
@@ -58,7 +58,7 @@ exports.showEditMed = async (req,res)=>{
   try {
      const id = req.params.id
      const medicine = await Medicine.findById(id)
-     return res.render('admin/medicines/EditMedicine',{medicine,message:null,error:null})
+     return res.render('doctor/medicines/EditMedicine',{medicine,message:null,error:null})
   } catch (error) {
     console.log(error.message);
     res.send("internal Server error");
@@ -78,7 +78,7 @@ exports.updateMedicine = async (req,res)=>{
        expiry,
        stock
      }},{new:true})
-     return res.redirect('/admin/medicines')
+     return res.redirect('/doctor/medicines')
 
   } catch (error) {
     console.log(error.message);
@@ -90,7 +90,7 @@ exports.deleteMedicine = async (req,res)=>{
   const id = req.params.id
   try {
     await Medicine.findByIdAndDelete(id)
-    res.redirect('/admin/medicines')
+    res.redirect('/doctor/medicines')
   } catch (error) {
     console.log(error.message);
     res.send("internal Server error");
@@ -107,7 +107,7 @@ exports.searchMedicine=async (req,res)=>{
       }else{
         medicines = await Medicine.find()
       }
-      res.render('admin/medicines/Medicines',{medicines, message:null, error:null})
+      res.render('doctor/medicines/Medicines',{medicines, message:null, error:null})
   } catch (error) {
       console.log(error.message)
   }

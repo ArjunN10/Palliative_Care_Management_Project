@@ -18,6 +18,10 @@ const patientSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  is_Active:{
+    type: Number,
+    default:1
+  },
   addingDate: {
     type: Date,
     required: true,

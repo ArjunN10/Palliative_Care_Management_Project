@@ -37,7 +37,7 @@
         </li>
         </ul>
               <form action="/doctor/logout" method="post">
-                  <button type="submit" class="btn btn-danger rounded-pill ms-2">Logout</button>
+                  <button type="submit" class="btn btn-danger rounded-pill ms-2 me-3">Logout</button>
               </form>
     </div>
   </div>
@@ -45,25 +45,25 @@
 
 <div class="container mt-4">
   <h2>Volunteers List</h2>
-    <table class="table table-bordered">
+    <table class="table table-bordered table-hover">
         <thead>
-            <tr>
-                <th style="text-align: center;">SL.No</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Mobile</th>
-                <th>Verified</th>
+            <tr style="text-align: center;">
+                <th style="background-color: #c6cdd3;">SL.No</th>
+                <th style="background-color: #c6cdd3;">Name</th>
+                <th style="background-color: #c6cdd3;">Email</th>
+                <th style="background-color: #c6cdd3;">Mobile</th>
+                <th style=" background-color: #c6cdd3;">Service </th>
                 <!-- <th>Actions</th> -->
             </tr>
         </thead>
         <tbody>
             <% users.forEach((user,index) => { %>
-                <tr>
+                <tr style="text-align: center;">
                     <td style="text-align: center;"><%= index+1 %></td>
                     <td><%= user.name %></td>
                     <td><%= user.email %></td>
                     <td><%= user.mobile %></td>
-                    <td><%= user.is_varified ? 'Yes' : 'No' %></td>
+                    <td><%= user.is_varified ? 'Available' : 'Not-Available' %></td>
              
                 </tr>
             <% }) %>

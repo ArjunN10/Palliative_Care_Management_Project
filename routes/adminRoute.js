@@ -27,7 +27,8 @@ router
 
 .get("/volunteers/:id/edit",isAdmin,TrycatchMiddleware(adminController.loadEditVolunteer))
 .put("/volunteers/:id",isAdmin,TrycatchMiddleware( adminController.updateVolunteer))
-.delete("/volunteers/:id/destroy",isAdmin,TrycatchMiddleware(adminController.deleteVolunteer))
+// .delete("/volunteers/:id/destroy",isAdmin,TrycatchMiddleware(adminController.deleteVolunteer))
+.post('/volunteers/:id/toggle_verification',isAdmin,TrycatchMiddleware(adminController.volunteertoggleVerification))
 
 // ===============================< Doctor Management >================================//
 
@@ -38,7 +39,9 @@ router
 
 .get("/doctors/:id/edit", isAdmin,TrycatchMiddleware(adminController.loadEditDoctor))
 .put("/doctors/:id", isAdmin,TrycatchMiddleware( adminController.updateDoctor))
-.delete("/doctors/:id/destroy", isAdmin, TrycatchMiddleware(adminController.deleteDoctor))
+// .delete("/doctors/:id/destroy", isAdmin, TrycatchMiddleware(adminController.deleteDoctor))
+.post('/doctors/:id/toggle_verification',isAdmin,TrycatchMiddleware(adminController.doctortoggleVerification))
+
 
 // ===============================< Patient Management >================================//
     
@@ -55,7 +58,9 @@ router
 
 .get("/staffs/:id/edit", isAdmin,TrycatchMiddleware(adminController.loadEditStaff))
 .put("/staffs/:id", isAdmin,TrycatchMiddleware( adminController.updateStaff))
-.delete("/staffs/:id/destroy", isAdmin, TrycatchMiddleware(adminController.deleteStaff))
+// .delete("/staffs/:id/destroy", isAdmin, TrycatchMiddleware(adminController.deleteStaff))
+.post('/staffs/:id/toggle_verification',isAdmin,TrycatchMiddleware(adminController.stafftoggleVerification))
+
 
 // ===============================< Visitor Management >================================//
 

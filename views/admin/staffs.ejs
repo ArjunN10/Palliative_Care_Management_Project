@@ -75,27 +75,43 @@
   <table class="table table-bordered table-striped table-hover">
     <thead class="table-dark">
             <tr>
+                <th>SL.No</th>
                 <th>Reg.No</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Mobile</th>
                 <th>Staff Verified</th>
-                <th>Actions</th>
+                <th style="text-align: center;">Actions</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
-            <% users.forEach(user => { %>
+            <% users.forEach((user,index) => { %>
             <tr>
+              <td style="text-align: center;"><%= index+1 %></td>
               <td><%= user._id %></td>
               <td><%= user.name %></td>
               <td><%= user.email %></td>
               <td><%= user.mobile %></td>
               <td><%= user.is_varified ? 'Yes' : 'No' %></td>
+              <td style="text-align: center;">
+                <form id="toggleForm<%= user._id %>" action="/admin/staffs/<%= user._id %>/toggle_verification" method="POST" class="d-inline-block">
+                  <input type="hidden" id="isVerified<%= user._id %>" name="is_verified" value="<%= user.is_verified ? '0' : '1' %>">
+                  <button type="submit" onclick="toggleVerification('<%= user._id %>')" class="btn btn-sm btn-success rounded-pill">
+                    <%= user.is_verified ? 'Unverify' : 'Verify' %> 
+                  </button>
+                </form>
+                <form id="toggleForm<%= user._id %>" action="/admin/staffs/<%= user._id %>/toggle_verification" method="POST" class="d-inline-block">
+                  <input type="hidden" id="isVerified<%= user._id %>" name="is_verified" value="<%= user.is_verified ? '1' : '0' %>">
+                  <button type="submit" onclick="toggleVerification('<%= user._id %>')" class="btn btn-sm btn-danger rounded-pill">
+                    <%= user.is_verified ? 'verify' :'Unverify' %> 
+                  </button>
+                </form>
+                
+              </td>
               <td>
                 <a href="/admin/staffs/<%= user._id %>/edit" class="btn btn-warning m-1 btn-sm rounded-pill">Edit</a>
-                <form action="/admin/staffs/<%= user._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
-                  <button type="submit" onclick="return confirm('Are you sure you want to remove this LABORATORY STAFF?')" class="btn btn-sm btn-danger rounded-pill">Delete</button>
-                </form>
+                
               </td>
               
             </tr>
