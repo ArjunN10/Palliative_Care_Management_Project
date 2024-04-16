@@ -64,19 +64,19 @@ isDoctorLogged : (req, res, next) => {
 
 isLogged: (req, res, next) => {
     if (req.session.volunteer) {               //after logg
-        req.user = req.session.volunteer
+        req.volunteer = req.session.volunteer
         next()
     } else {
-        res.redirect('/login')
+        res.redirect('/volunteer/login')
     }
 },
 
 isVolunteerVerified : async  (req,res,next) => {
-    const user = await User.findById(req.user)
+    const user = await User.findById(req.volunteer)
     if (user.is_varified === 1) {
         next()
     } else {
-        res.redirect('/login')
+        res.redirect('/volunteer/login')
     }
 },
 

@@ -46,7 +46,7 @@ router
 .get("/medicines", isDoctor, TrycatchMiddleware(medicineController.showMedicines))
 .get("/addMedicine", isDoctor,TrycatchMiddleware(medicineController.ShowAddMedicine) )
 .post("/createMedicine", isDoctor,TrycatchMiddleware(medicineController.addMedicine))
-.get("/medicines/:id/edit", isDoctor,TrycatchMiddleware( medicineController.showEditMed))
+.get("/medicines/:id/edit", isDoctor,TrycatchMiddleware( medicineController.showEditMed))  
 .post("/editMedicine", isDoctor,TrycatchMiddleware(medicineController.updateMedicine) )
 .delete("/medicines/:id/destroy",isDoctor,TrycatchMiddleware(medicineController.deleteMedicine))
 .post("/medicines/search", isDoctor,TrycatchMiddleware(medicineController.searchMedicine))

@@ -131,7 +131,7 @@ logout : (req, res) => {
 
 loadIndex : async (req, res) => {
   try {
-    const user = await User.findById(req.user);
+    const user = await User.findById(req.volunteer);
     const patients = await Patient.aggregate([
       {
         $lookup: {
@@ -151,7 +151,7 @@ loadIndex : async (req, res) => {
 
 
 searchPatient : async (req, res) => {
-  const user = await User.findById(req.user);
+  const user = await User.findById(req.volunteer);
   const { q } = req.body;
   try {
     let patients;
@@ -194,10 +194,10 @@ searchPatient : async (req, res) => {
 
 getMedicines : async (req, res) => {
   try {
-    const user = await User.findById(req.user);
+    const user = await User.findById(req.volunteer);
     const medicines = await Medicine.find();
     res.render("users/medicines", {
-      user,                                               //med stock
+      user,
       medicines,
       message: null,
       error: null,
@@ -207,13 +207,14 @@ getMedicines : async (req, res) => {
   }
 },
 
+
 searchMedicine : async (req, res) => {
-  const user = await User.findById(req.user);
+  const user = await User.findById(req.volunteer);
   const { q } = req.body;
   try {
     let medicines;
     if (q) {
-      medicines = await Medicine.find({ name: { $regex: ".*" + q + ".*" } });       // search med
+      medicines = await Medicine.find({ name: { $regex: ".*" + q + ".*" } });
     } else {
       medicines = await Medicine.find();
     }
@@ -228,9 +229,10 @@ searchMedicine : async (req, res) => {
   }
 },
 
+
 getPatientMedicines : async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(req.user);
+  const user = await User.findById(req.volunteer);
   const Pid = await Patient.findById(id);
   try {
     const patient = await Patient.aggregate([
@@ -238,18 +240,19 @@ getPatientMedicines : async (req, res) => {
         $match: {
           _id: Pid._id,
         },
-      },                                                  
+      },
       {
         $lookup: {
           from: "medicines",
           localField: "Medicines.medicine",
           foreignField: "_id",
-          as: "Medicines.medicine", 
+          as: "Medicines.medicine", // Store the medicine details in an array
         },
       },
     ]);
     const patientsMedicines = patient[0].Medicines;
     const recievedMedicines = await MedicineDistribution.find({ patient: id });
+    console.log(recievedMedicines);
 
     res.render("users/patientMedicine", {
       message: null,
@@ -269,7 +272,7 @@ getPatientMedicines : async (req, res) => {
 
 
 distributeMedicines : async (req, res) => {
-  const staff = await User.findById(req.session.user);
+  const staff = await User.findById(req.session.volunteer);
   const { patientId } = req.params;
   const { medicineId, count } = req.body;
   try {
@@ -321,7 +324,7 @@ distributeMedicines : async (req, res) => {
       patientName:patient.name,
       patientRgNo:patient.RegNo
     });
-    const mds = await MedicineDistribution.find();   
+    const mds = await MedicineDistribution.find();
     req.flash(
       "success",
       `${selectedMedicine.name} is disitributed successfully`
@@ -338,7 +341,9 @@ distributeMedicines : async (req, res) => {
 distributioHistory : async (req, res) => {  
   try {
     const user = await User.findById(req.session.volunteer);
-    const medicineDistributions = await MedicineDistribution.find().populate("patient");
+    const medicineDistributions = await MedicineDistribution.find().populate(
+      "patient"
+    );
     res.render("users/medicineHistory", { medicineDistributions, user });
   } catch (error) {
     console.log(error.message);
@@ -351,10 +356,11 @@ distributioHistory : async (req, res) => {
 
 
 printList : async (req, res) => {
+  console.log("printlistt");
   const { id } = req.params;
   const patient = await Patient.findById(id);
   const recievedMedicines = await MedicineDistribution.find({ patient: id });
-  res.render("users/printList", { recievedMedicines, patient });  
+  res.render("users/printList", { recievedMedicines, patient });
 },
 
 

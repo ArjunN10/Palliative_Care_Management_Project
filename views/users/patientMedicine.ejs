@@ -1,22 +1,5 @@
 <%- include('../layouts/header.ejs') %>
 
-<style>
-  #success-message {
-    position: fixed;
-    top: 20%;
-    right: 10px;
-    transform: translateY(-80%);
-    z-index: 1000;
-  }
-  #error-message {
-    position: fixed;
-    top: 20%;
-    right: 10px;
-    transform: translateY(-80%);
-    z-index: 1000;
-  }
-</style>
-
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="/volunteer">Welcome <%=user.name %></a>
@@ -196,6 +179,21 @@
   crossorigin="anonymous"
 ></script>
 
-
+<style>
+  #success-message {
+    position: fixed;
+    top: 20%;
+    right: 10px;
+    transform: translateY(-80%);
+    z-index: 1000;
+  }
+  #error-message {
+    position: fixed;
+    top: 20%;
+    right: 10px;
+    transform: translateY(-80%);
+    z-index: 1000;
+  }
+</style>
 
 <%- include('../layouts/footer') %>
