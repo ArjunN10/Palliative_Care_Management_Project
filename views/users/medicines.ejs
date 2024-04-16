@@ -33,7 +33,7 @@
         </li>
         </ul>
       <form action="/volunteer/logout" method="post">
-        <button type="submit" class="btn btn-danger rounded-pill ms-2">Logout</button>
+        <button type="submit" class="btn btn-danger rounded-pill ms-2 me-5">Logout</button>
       </form>
     </div>
   </div>
@@ -42,23 +42,23 @@
 <div class="d-flex justify-content-end mt-2 align-items-center">
   <form action="/volunteer/searchMedicine" method="post" class="d-flex">
     <input type="search" name="q" placeholder="Search Medicine" class="form-control rounded-pill me-2" style="min-width: 200px;" />
-    <button type="submit"  class="btn btn-outline-success rounded-pill ms-2">Search</button>
+    <button type="submit"  class="btn btn-success rounded-pill ms-1 me-5">Search</button>
   </form>
   </div>
 
 <div class="container mt-4">
     <table class="table table-bordered">
         <thead>
-            <tr>
-                <th>Slno.</th>
-                <th>Name</th>
-                <th>Brand</th>
-                <th>batch</th>
-                <th>stock</th>
-                <th>expiry</th>
+            <tr style="text-align: center;">
+                <th style="background-color: #c6cdd3;">Slno.</th>
+                <th style="background-color: #c6cdd3;">Name</th>
+                <th style="background-color: #c6cdd3;">Brand</th>
+                <th style="background-color: #c6cdd3;">batch</th>
+                <th style="background-color: #c6cdd3;">stock</th>
+                <th style="background-color: #c6cdd3;">expiry</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="text-align: center;">
             <% medicines.forEach(medicine => { %>
               <% if(medicine.stock<10 || medicine.expiry <= new Date()){ %>
                 <tr>

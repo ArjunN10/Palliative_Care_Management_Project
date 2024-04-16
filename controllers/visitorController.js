@@ -164,7 +164,6 @@ feedbackData:async(req,res)=>{
   try {
     const visitorId = req.session.visitor; 
     const { message } = req.body; 
-console.log(req.body,"bodyyy");
     const newFeedback = new feedbackSchema({
       userId: visitorId, 
       message: message 
