@@ -91,4 +91,7 @@ router
 .get('/attendance/volunteers',isAdmin,TrycatchMiddleware(adminController.VolunteerList))  
 .get('/attendance/volunteers/:volunteerId', isAdmin, TrycatchMiddleware(adminController.getVolunteerAttendanceHistory))
 .get('/attendance/volunteers/:volunteerId/interval/:interval(week|month|year)', isAdmin, TrycatchMiddleware(adminController.getVolunteerAttendanceHistory))
+
+.get('/latest-appointments',isAdmin,TrycatchMiddleware( adminController.displayLatestAppointments))
+
 module.exports=router

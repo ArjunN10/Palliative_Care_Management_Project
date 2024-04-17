@@ -4,6 +4,7 @@ const Medicine = require("../models/medicineModel");
 const MedicineDistribution=require("../models/MdcnDstrbtionModel")
 const visitors=require("../models/visitorModel")
 const Feedback=require("../models/feedbackModel")
+const Appointments=require("../models/appointmentModel")
 const bcrypt=require("bcrypt")
 const {getAttendanceForTimeInterval}=require("../config/attendanceUtils")
 
@@ -940,6 +941,40 @@ getVolunteerAttendanceHistory: async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });
     }
+},
+
+displayLatestAppointments :async (req, res) => {
+  try {
+      const page = req.query.page || 1; 
+      const limit = 4; // Number of appointments per page
+
+      // Calculate the skip value based on the page number and limit
+      const skip = (page - 1) * limit;
+
+      // Fetch latest appointments with pagination from the database
+      const appointments = await Appointments.find()
+          .sort({ date: -1 })
+          .skip(skip)
+          .limit(limit);
+
+      // Count total number of appointments
+      const totalAppointments = await Appointments.countDocuments();
+
+      // Calculate total number of pages
+      const totalPages = Math.ceil(totalAppointments / limit);
+
+      // Render the view with appointments and pagination data
+      res.render('admin/latestAppointments', {
+          appointments: appointments,
+          totalAppointments:totalAppointments,
+          currentPage: parseInt(page),
+          totalPages: totalPages
+      });
+  } catch (error) {
+      console.error('Error fetching latest appointments:', error);
+      // Render an error page or return an error response
+      res.status(500).send('An error occurred while fetching latest appointments');
+  }
 },
 
 
