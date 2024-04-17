@@ -1,8 +1,10 @@
 require("dotenv").config();
 const express = require('express')
+const app = express()
 const mongoose = require('mongoose')
 const session = require('express-session')
 const path = require('path')
+const cors=require("cors")
 
 const volunteerRoute = require('./routes/volunteerRoute')
 const doctorRoute=require('./routes/doctorRoute')
@@ -10,14 +12,18 @@ const adminRoute=require('./routes/adminRoute')
 const staffRoute=require('./routes/staffRoute')
 const visitorRoute=require('./routes/visitorRoute')
 
+
 const nocache = require('nocache')
 const flash = require('express-flash')
 const methodOverride = require('method-override')
   
 
-mongoose.connect('mongodb+srv://arjunrameshh12:rA7sBc8wywxspAeV@cluster3.xyqbca7.mongodb.net/Paliative_Care_Management').then(() => console.log('DB Connected')).catch(err => console.log(err))
+mongoose.connect('mongodb+srv://arjunrameshh12:rA7sBc8wywxspAeV@cluster3.xyqbca7.mongodb.net/Paliative_Care_Management')
+.then(() => console.log('DB Connected'))
+.catch(err => console.log(err))
 
-const app = express()
+app.use(cors());
+app.use(express.json());
 
 app.set('view engine','ejs')
 
