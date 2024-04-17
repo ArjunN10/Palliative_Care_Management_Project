@@ -103,7 +103,7 @@ VisitorLogout: (req, res) => {
 },
 
 
-// ===============================< Index>================================//
+// ===============================< Dashboard>================================//
 
 
    visitorDashboard : async (req, res) => {   
@@ -121,33 +121,39 @@ VisitorLogout: (req, res) => {
 // ===============================< Appointment >================================//
 
 VisitorAppointment:async (req, res) => {
+  console.log("Appointment request received");
+  const { name, email, date, mobile, message, gender } = req.body;
+  
+  console.log(req.body,"bodyyy");
+  if (!name || !email || !date || !mobile || !message || !gender) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
 
   try {
-
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'parirakshacontroller@gmail.com',
-        pass: 'ParirakshaControlller2007', 
+        user: 'parirakshapalliative.official@gmail.com',
+        pass: 'test123', 
       },
     });
 
-
     const newAppointment = new Appointment({
-      name: req.body.name,
-      email: req.body.email,
-      date: req.body.date,
-      phone: req.body.phone,
-      message: req.body.message,
+      name,
+      email,
+      date,
+      mobile,
+      gender,
+      message,
     });
 
     await newAppointment.save();
 
     await transporter.sendMail({
-      from: req.body.email, 
-      to: 'parirakshacontroller@gmail.com', //recepient email here
+      from: email, 
+      to: 'parirakshapalliative.official@gmail.com',
       subject: 'New Appointment Request',
-      text: `You have a new appointment request from ${newAppointment.name} (${newAppointment.email}) on ${newAppointment.date}.`,
+      text: `You have a new appointment request from ${name} (${email}) on ${date}.`,
     });
 
     res.status(200).json({ message: 'Appointment booked successfully' });
@@ -158,6 +164,7 @@ VisitorAppointment:async (req, res) => {
 
 },
 
+// ===============================< Feedback >================================//
 
 
 feedbackData:async(req,res)=>{
@@ -175,7 +182,7 @@ feedbackData:async(req,res)=>{
     console.error('Error:', error);
     res.status(500).json({ message: 'Failed to submit feedback. Please try again.' });
   }
-}
+},
 
 
 }

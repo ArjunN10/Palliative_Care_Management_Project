@@ -12,7 +12,11 @@ const appointmentSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  phone: {
+  gender:{
+    type:String,
+    required:true
+  },
+  mobile: {
     type: String,
     required: true
   },
