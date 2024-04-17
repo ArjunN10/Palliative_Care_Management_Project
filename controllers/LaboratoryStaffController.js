@@ -316,6 +316,11 @@ const getAllResult = async (req,res) => {
 }
 }
 
+const logoutStaff = async (req, res) => {
+  req.session.destroy();
+  res.redirect("/staff/login");
+}
+
 
 
 
@@ -341,7 +346,8 @@ module.exports = {
   renderAttendenceDisplay,
   uploadImage,
   getTestResult,
-  getAllResult
+  getAllResult,
+  logoutStaff
   
 
 
