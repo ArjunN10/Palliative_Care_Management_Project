@@ -300,18 +300,22 @@ const uploadImage = async (req,res) => {
   await newTest.save()
   patient.test_result.push(newTest._id);
   await patient.save();
-  res.render("staff/DisplaytestResult",{newTest})
+  res.redirect("/staff/result")
   
 }
 
 const getAllResult = async (req,res) => {
   const UserId = req.session.LaboratoryStaff;
 
-  const result = await Test.find()
+  if(UserId == req.session.LaboratoryStaff){
+
+  const result = await LPatient.find().populate('test_result')
   console.log(result)
   console.log(result)
   res.render("staff/TestResult",{result})
 }
+}
+
 
 
 
