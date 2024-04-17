@@ -9,6 +9,8 @@ const imageupload = require('../middlewares/image upload/imageUpload')
 
 router.get("/login", loggedOutLaboratoryStaff,trycatch(LaboratoryStaff.loadLogin))
 router.post("/login",loggedOutLaboratoryStaff,trycatch(LaboratoryStaff.staffLogin))
+router.post("/logout", isLaboratoryStaff,trycatch( LaboratoryStaff.logoutStaff))
+
 
 // patients 
 
