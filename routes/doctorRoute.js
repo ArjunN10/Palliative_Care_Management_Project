@@ -2,7 +2,6 @@ const router = require("express").Router();
 const doctorController = require("../controllers/doctorController");
 const medicineController = require("../controllers/medicineController");
 const TrycatchMiddleware=require("../middlewares/TryCatch")
-
 const { isDoctorLogged ,isDoctor} = require("../middlewares/auth");
 
 
@@ -63,10 +62,11 @@ router
 .get("/createStaff", isDoctor,TrycatchMiddleware(doctorController.DoctorAddedStaff))
 .post("/searchStaff", isDoctor,TrycatchMiddleware(doctorController.searchStaff))
 
+    // ===============================< Attendance>=========================//
 
-router.get("/markAttendence",isDoctor,TrycatchMiddleware(doctorController.getAttendence))
-router.post ("/markAttendence",isDoctor,TrycatchMiddleware(doctorController.MarkAttendence))
-router.get("/attendanceDisplay",isDoctor,TrycatchMiddleware(doctorController.renderAttendenceDisplay))
+.get("/markAttendence",isDoctor,TrycatchMiddleware(doctorController.getAttendence))
+.post ("/markAttendence",isDoctor,TrycatchMiddleware(doctorController.MarkAttendence))
+.get("/attendanceDisplay",isDoctor,TrycatchMiddleware(doctorController.renderAttendenceDisplay))
 
 
 

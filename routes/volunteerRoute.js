@@ -9,7 +9,7 @@ user_route
 
 
     // ===============================< Register >================================//
-
+  
 .get('/register',isLogout,TrycatchMiddleware( userController.loadRegister))
 .post('/register',isLogout,TrycatchMiddleware( userController.insertUser))
 
@@ -31,9 +31,6 @@ user_route
 
 .post('/searchPatient',isLogged ,isVolunteerVerified,TrycatchMiddleware(userController.searchPatient))
 .get('/patientMedicines/:id',isLogged ,isVolunteerVerified,TrycatchMiddleware(userController.getPatientMedicines))
-
-    // ===============================< Loggs >================================//
-    .get("/staffslogin",TrycatchMiddleware(userController.staffsLogin))
 
     // ===============================< medicine >================================//
 
