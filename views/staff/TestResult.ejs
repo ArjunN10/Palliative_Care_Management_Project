@@ -46,14 +46,26 @@
 </head>
 <body>
     <h1>Test Result Details</h1>
-    
-    <% result.forEach(result => { %>
+
+    <% result.forEach(patient => { %>
+    <div>
+        <p><strong>Name:</strong> <%= patient.name %></p>
+        <p><strong>Mobile:</strong> <%= patient.mobile %></p>
+        <p><strong>Disease:</strong> <%= patient.disease %></p>
+        <p><strong>Doctor Name:</strong> <%= patient.DoctorName %></p>
+        
+        <h2>Test Results:</h2>
+        <% patient.test_result.forEach(test => { %>
         <div>
-            <p><strong>Patient ID:</strong> <%= result.patient %></p>
-            <p><strong>Test Name:</strong> <%= result.name %></p>
-            <p><strong>Disease:</strong> <%= result.disease %></p>
+            <p><strong>Test Name:</strong> <%= test.name %></p>
+            <!-- Add more details about the test result as needed -->
+            <a href="<%= test.test_result %>" target="_blank">View PDF</a>
         </div>
-        <a href="<%= result.test_result %>" target="_blank">View PDF</a>
-    <% }); %>
+        <% }) %>
+    </div>
+    <% }) %>
+    
 </body>
 </html>
+
+<%- include('../layouts/footer.ejs') %>
