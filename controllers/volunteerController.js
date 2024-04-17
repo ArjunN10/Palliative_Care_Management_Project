@@ -46,6 +46,7 @@ insertUser : async (req, res) => {
     const secPassword = await securePassword(password);
     let is_Lab_Staff = 0;
     let is_volunteer = 0;
+    let is_doctor=0;
     if (role === 'labStaff') {
       is_Lab_Staff = 1;
     } else if (role === 'volunteer') {
@@ -452,9 +453,6 @@ renderAttendenceDisplay : async (req, res) => {
        res.render('users/attendanceDisplay',{MOnthByAttendance,YearlyAttendance})
     },
 
-    staffsLogin : async (req,res) => {
-      res.render("users/staffslog")
-    },
 
 
 

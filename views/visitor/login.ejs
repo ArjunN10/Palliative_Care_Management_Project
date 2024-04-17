@@ -1,4 +1,8 @@
 <%- include('../layouts/header.ejs') %>
+<head>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
     <div class="container pt-5">
         <div class="row justify-content-center">
             <div class="col-4">
@@ -14,15 +18,38 @@
                             </div>
                             <% } %>
                             
+                                <!-- staff's Login here -->
+
                             <div style="position: fixed; top: 5px; right: 0; margin: 50px;">
                                 <div style="float: left;">
                                     <img src="/images/stafflogin1.jpg" alt="Profile Image" style="width: 100px; height: 100px;margin-left: 20px; margin-right: auto;">
                                 </div>
-                                <div style="margin-top:10px ; margin-left: 20px; margin-right: auto;">   
-                                    <a href="/volunteer/staffslogin" class="btn btn-primary ">Staff Login</a>
+                            <div style="margin-top:10px ; margin-left: 20px; margin-right: auto;">   
+                                <div class="btn-group" >
+                                    <button type="button" style="font-size:10px;" class="btn btn-dark dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        STAFF'S LOGIN
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                      <button class="dropdown-item " style="text-decoration: none;color: black;" hr type="button">
+                                    <a href="/doctor/login" style="color: black;text-decoration: none;padding-left: 20%;" >
+                                     Doctor
+                                    </a></button>
+                                      <button class="dropdown-item"  hr type="button">
+                                    <a href="/volunteer/login"  style="color: black;text-decoration: none;padding-left: 20%;">
+                                       Volunteer
+                                    </a></button>
+                                      <button class="dropdown-item" hr type="button">
+                                    <a href="/staff/login" style="color: black;text-decoration: none;padding-left: 20%;">
+                                       Lab-Staff
+                                    </a></button>
+                            
+                                    </div>
+                                  </div>
                                 </div>
                             </div>
                             
+                            <!-- Staff's Login End -->
+
                                 <div class="card">
                                     <div class="text-center py-2">
                                         <img
@@ -86,6 +113,9 @@
 
         }, false)
     </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 
     <%- include('../layouts/footer.ejs') %>
