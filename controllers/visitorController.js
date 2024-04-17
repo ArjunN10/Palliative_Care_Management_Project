@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const Appointment=require('../models/appointmentModel')
 const nodemailer=require("nodemailer")
 const feedbackSchema=require("../models/feedbackModel")
+const { generateAppointmentEmail } = require('../utils/generateAppointmentEmail');
 
 
 module.exports={
@@ -121,47 +122,56 @@ VisitorLogout: (req, res) => {
 // ===============================< Appointment >================================//
 
 VisitorAppointment:async (req, res) => {
-  console.log("Appointment request received");
   const { name, email, date, mobile, message, gender } = req.body;
-  
-  console.log(req.body,"bodyyy");
   if (!name || !email || !date || !mobile || !message || !gender) {
-    return res.status(400).json({ error: 'Missing required fields' });
+      return res.status(400).json({ error: 'Missing required fields' });
   }
 
   try {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'parirakshapalliative.official@gmail.com',
-        pass: 'test123', 
-      },
-    });
+      const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+              user: process.env.RECIPIENT_EMAIL,
+              pass: process.env.RECIPIENT_PASS,
+          },
+      });
 
-    const newAppointment = new Appointment({
-      name,
-      email,
-      date,
-      mobile,
-      gender,
-      message,
-    });
+      const newAppointment = new Appointment({
+          name:name,
+          email:email,
+          date:date,
+          mobile:mobile,
+          gender:gender,
+          message:message,
+      });
 
-    await newAppointment.save();
+      await newAppointment.save()
 
-    await transporter.sendMail({
-      from: email, 
+      // provide email condent dynamic
+
+    const emailContent = generateAppointmentEmail({
+      recipientName: 'parirakshapalliative.official@gmail.com', 
+      name: name,
+      email: email,
+      date: date,
+      phone: mobile,
+      message: message
+  });
+
+  // Send email notification
+  await transporter.sendMail({
+      from: email,
       to: 'parirakshapalliative.official@gmail.com',
-      subject: 'New Appointment Request',
-      text: `You have a new appointment request from ${name} (${email}) on ${date}.`,
-    });
+      subject: 'Appointment Request with Pariraksha Palliative Society',
+      text: emailContent
+  });
 
-    res.status(200).json({ message: 'Appointment booked successfully' });
+      // res.status(200).json({ message: 'Appointment booked successfully' });
+      res.redirect('/');
   } catch (error) {
-    console.error('Error booking appointment:', error);
-    res.status(500).json({ error: 'An error occurred while booking appointment' });
+      console.error('Error booking appointment:', error);
+      res.status(500).json({ error: 'An error occurred while booking appointment' });
   }
-
 },
 
 // ===============================< Feedback >================================//

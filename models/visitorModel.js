@@ -21,13 +21,13 @@ const visitorSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    appointments:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Appointment'
+    appointments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Appointment' // Reference to the Appointment model
     }],
-    feedback:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Feedback'
+    feedback: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Feedback'
     }]
 
  
