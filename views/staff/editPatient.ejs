@@ -15,7 +15,7 @@
           <form
             method="post"
             id="register-form"
-            action="/staff/updatePatient"
+            action="/doctor/updatePatient"
             novalidate
           >
             <div class="mb-3">
@@ -68,27 +68,9 @@
               <div class="invalid-feedback">Please enter Doctor's name</div>
             </div>
 
-              <div class="mb-3">
-                <label for="currentMedicines" style="color: green;"><b>Current Medicines:</b></label>
-                <% currentMedicines.medicine.forEach((med)=>{ %>
-                <small><%=med.name  %><br/></small>
-                <% }) %>
-              </div>
+              
 
-            <div class="mb-3">
-              <label for="medicines" class="form-label"><b>Add Medicines:</b><small class="text-warning">(select the current medicines if they are needed..otherwise medicines become blank on updating)</small></label>
-              <div class="custom-dropdown">
-                <div class="dropdown-content">
-                  <% medicines.forEach(function(medicine) { %>
-                    <label for="<%= medicine.id %>">
-                      <input type="checkbox" name="selectedMedicines" value="<%= medicine.id %>" id="<%= medicine.id %>">
-                      <%= medicine.name %>
-                    </label>
-                  <% }); %>
-                </div>
-              </div>
-              <div class="invalid-feedback">Please select the medicines</div>
-            </div>
+            
             
 
             <div class="d-grid mb-3">
@@ -98,7 +80,7 @@
               </button>
             </div>
             <div class="d-grid mb-3">
-              <a href="/staff/dashboard" class="btn btn-warning rounded-pill"
+              <a href="/doctor/patients" class="btn btn-warning rounded-pill"
                 >Back</a
               >
             </div>
