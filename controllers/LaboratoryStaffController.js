@@ -58,16 +58,7 @@ const getAddPatient = async (req, res) => {
 
 const getPatientsList = async (req, res) => {
   
-    const patients = await Patient.aggregate([
-      {
-        $lookup: {
-          from: "medicines",
-          localField: "Medicines.medicine",
-          foreignField: "_id",
-          as: "Medicines.medicine",
-        },
-      },
-    ]);
+    const patients = await LPatient.find()
 
     res.render("staff/dashboard", {
       patients,
@@ -150,42 +141,33 @@ const AddPatient = async (req,res) => {
 const editPatient  = async (req, res) => {
   const { id } = req.params;
   
-    const Pid = await LPatient.findById(id);
-    const patient = await LPatient
+    const patient = await LPatient.findById(id);
+    console.log(patient,'lllll')
 
-    const currentMedicines = patient[0].Medicines;
 
-    if (patient.length === 0) {
-      return res.status(404).send("Patient not found");
-    }
+    
 
-    const medicines = await Medicine.find();
-    res.render("staff/editPatient", {
-      currentMedicines,
+   res.render("staff/editPatient", {
       patient,
-      medicines,
       error: null,
       message: null,
-    });
- 
-};
+    })
+    
+       
+}; 
 
 const updatePatient = async (req,res) => {
   
-  let { id,name, disease, mobile, DoctorName, selectedMedicines } = req.body;
+  let { id,name, disease, mobile, DoctorName} = req.body
      if(name.length < 3) {
       return res.render ("staff/addPatient", {
         error : "name should contain atleast 3 letters" ,
       })
     }
 
-     if(typeof selectedMedicines === "string"){
-      let medicine = selectedMedicines
-      selectedMedicines = [] 
-      selectedMedicines.push(medicine)
-    }
+   
 
-    await Patient.findByIdAndUpdate (
+    await LPatient.findByIdAndUpdate (
       id ,
       {
         $set : {
@@ -193,9 +175,7 @@ const updatePatient = async (req,res) => {
           disease,
           mobile,
           DoctorName,
-          Medicines: selectedMedicines?selectedMedicines.map((medId) => ({
-            medicine: medId,
-          })):null,
+
         },
       },
       {new : true}
@@ -203,11 +183,7 @@ const updatePatient = async (req,res) => {
      res.redirect("/staff/dashboard")
   };
 
-const deletePatient = async (req,res) => {
-  const {id} = req.params 
-    await Patient.findByIdAndDelete(id)
-    res.redirect("/staff/dashboard")
-  };
+
 
 
 const getAttendence = async (req,res) => {
@@ -310,7 +286,7 @@ const uploadImage = async (req,res) => {
   const { patientId, name, disease, test_result } = req.body;
   const userId = req.session.LaboratoryStaff;
 
-  const patient = await Patient.findById(patientId)
+  const patient = await LPatient.findById(patientId)
   if (!patient) {
     return res.status(404).json({ error: "Patient not found" });
   }
@@ -356,7 +332,6 @@ module.exports = {
   searchPatient,
   editPatient,
   updatePatient,
-  deletePatient,
   getAttendence,
   MarkAttendence,
   renderAttendenceDisplay,

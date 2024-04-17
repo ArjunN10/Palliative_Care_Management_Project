@@ -61,7 +61,6 @@
                   <th>Doctor</th>
                   <th>Medicines</th>
                   <th>Added Date</th>
-                  <th>Actions</th>
               </tr>
           </thead>
           <tbody>
@@ -72,19 +71,11 @@
                       <td><%= patient.mobile %></td>
                       <td><%= patient.disease %></td>
                       <td><%= patient.DoctorName %></td>
-                      <td>
-                        <% patient.Medicines.medicine.forEach((med)=>{ %>
-                          <small><%= med.name %><br></small>
-                        <% }) %>  
-                      </td>
-                       
+                     
                       
                       <td><%= patient.addingDate.toDateString() %></td>
                       <td>
                           <a href="/staff/dashboard/<%= patient._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
-                          <form action="/staff/dashboard/<%= patient._id %>/destroy?_method=DELETE" method="POST" class="d-inline-block">
-                              <button type="submit" onclick="return alert('Are you sure to remove this patient?')" class="btn btn-sm btn-danger rounded-pill">Delete</a>
-                            </form>
                       </td>
                   </tr>
               <% }) %>

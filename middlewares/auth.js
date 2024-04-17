@@ -32,7 +32,6 @@ isAdmin :(req, res, next) => {
 
 
 isDoctor :(req, res, next) => {
-    console.log(req.session.doctor,'........')
     if(req.session.doctor) {
         req.doctor = req.session.doctor   //after logg
         next()
