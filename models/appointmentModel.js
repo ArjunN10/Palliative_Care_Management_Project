@@ -28,6 +28,10 @@ const appointmentSchema = new mongoose.Schema({
     message: {
         type: String,
         required: true
+    },
+    is_Approved:{
+        type: Number,
+        default: 0
     }
 });
 

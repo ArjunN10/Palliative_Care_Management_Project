@@ -7,7 +7,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Latest Appointments</title>
+    <title>Visitor Appointments</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -86,21 +86,7 @@
         .pagination li a:hover {
             background-color: #0056b3;
         }
-        .tick-icon {
-            display: inline-block;
-            cursor: pointer;
-            width: 24px; /* Adjust size as needed */
-            height: 24px; /* Adjust size as needed */
-            padding-top: 2px; /* Space between circle and tick */
-            padding-left: 3px;
-            padding-bottom: 3px;
-            border: 2px solid black; /* Outline color */
-            border-radius: 50%; /* Rounded corners for circle */
-        }
-
-        .green-bg {
-            background-color: rgb(15, 163, 15);
-        }
+       
 
     </style>
 </head>
@@ -108,32 +94,22 @@
 <body>
     <div class="container">
         <div style="display: flex;">
-            <a href="/admin/dashboard" class=" btn " style="text-decoration: none;color: #333;margin-top: 20px;">&#9664; Back</a>
-            <h1 style="margin-left: 100px;">Latest Appointments</h1>
+            <a href="/doctor/dashboard" class=" btn " style="text-decoration: none;color: #333;margin-top: 20px;">&#9664; Back</a>
+            <h1 style="margin-left: 100px;">Visitor's List</h1>
         </div>
         <br />
-        <div class="total-appointments">
-            <b>Total Appointments: <%= totalAppointments %></b>
-        </div>
+     
         <% appointments.forEach((appointment, index) => { %>
-        <%
-            const isApproved = appointment.is_approve === 1;
-        %>
-        <div class="appointment-card <%= isApproved ? 'approved' : '' %>">
+       
+        <div class="appointment-card ">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div class="appointment-number">Appointment <%= index + 1 %></div>
-                <div style="display: flex; align-items: center;">
-                    <h6 class="approve-text">Approved</h6>
-                    <div class="tick-icon <%= isApproved ? 'green-bg' : '' %>" onclick="toggleTickColor(this, '<%= appointment._id %>')">
-                        &#10004; <!-- Tick symbol -->
-                    </div>
-                </div>
+            
             </div>
             <hr>
             <div class="appointment-details">
                 <strong>Name:</strong> <%= appointment.name %><br>
-                <strong>Email:</strong> <%= appointment.email %><br>
-                <strong>Date:</strong> <%= appointment.date %><br>
+                <strong>Date&Time:</strong> <%= appointment.date %><br>
                 <strong>Purpose of visit:</strong> <%= appointment.message %><br>
             </div>
         </div>
@@ -144,7 +120,7 @@
             <ul>
                 <% for (let i = 1; i <= totalPages; i++) { %>
                 <li>
-                    <a href="/admin/latest-appointments?page=<%= i %>"><%= i %></a>
+                    <a href="/doctor/latestAppointments?page=<%= i %>"><%= i %></a>
                 </li>
                 <% } %>
             </ul>
@@ -153,12 +129,7 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function toggleTickColor(element, appointmentId) {
-            element.classList.toggle('green-bg');
-            $.post(`/admin/approve-appointment/${appointmentId}`);
-        }
-    </script>
+  
 </body>
 
 </html>

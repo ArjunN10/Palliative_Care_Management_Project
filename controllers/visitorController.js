@@ -51,7 +51,7 @@ VisitorRegister: async (req, res) => {
         is_visitor: 1,
       });
       await user.save();
-      return res.redirect("/"); 
+      return res.redirect("/login"); 
     } catch (error) {
       console.log(error.message);
       return res.status(500).send("Internal Server Error");
