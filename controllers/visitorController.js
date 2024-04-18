@@ -161,12 +161,11 @@ VisitorAppointment:async (req, res) => {
   // Send email notification
   await transporter.sendMail({
       from: email,
-      to: 'parirakshapalliative.official@gmail.com',
-      subject: 'Appointment Request with Pariraksha Palliative Society',
+      to: process.env.RECIPIENT_EMAIL,
+      subject: process.env.EMAIL_SUBJECT,
       text: emailContent
   });
 
-      // res.status(200).json({ message: 'Appointment booked successfully' });
       res.redirect('/');
   } catch (error) {
       console.error('Error booking appointment:', error);
