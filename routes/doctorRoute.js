@@ -54,7 +54,7 @@ router
 .get("/medicineHistory", isDoctor, TrycatchMiddleware(doctorController.medicineHistory))
 .post("/logout", isDoctor,TrycatchMiddleware( doctorController.logoutDoctor))
 
-    // ===============================< staff management>=========================//
+    // ============================< staff management>=========================//
 
 .get("/staffs", isDoctor,TrycatchMiddleware(doctorController.ViewLabStaff))
 
@@ -67,6 +67,10 @@ router
 .get("/markAttendence",isDoctor,TrycatchMiddleware(doctorController.getAttendence))
 .post ("/markAttendence",isDoctor,TrycatchMiddleware(doctorController.MarkAttendence))
 .get("/attendanceDisplay",isDoctor,TrycatchMiddleware(doctorController.renderAttendenceDisplay))
+
+// ===============================< Visitor Management >================================//
+
+.get("/latestAppointments", isDoctor, TrycatchMiddleware(doctorController.ViewVisitors))
 
 
 

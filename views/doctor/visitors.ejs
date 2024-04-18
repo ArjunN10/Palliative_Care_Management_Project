@@ -26,50 +26,47 @@
         <li class="=nav-item">
           <a class="nav-link" href="/doctor/medicineHistory">Medicine Distributions</a>
         </li>
-
         <li class="=nav-item">
           <a class="nav-link" href="/doctor/markAttendence">Mark Attendence</a>
         </li>
-
         <li class="=nav-item">
           <a class="nav-link" href="/doctor/attendanceDisplay">View attendence</a>
         </li>
         <li class="=nav-item">
-          <a class="nav-link" href="/doctor/latestAppointments">Visitor's </a>
+          <a class="nav-link" href="/doctor/latestAppointments'">Visitor's </a>
         </li>
         </ul>
-              <form action="/doctor/logout" method="post">
-                  <button type="submit" class="btn btn-danger rounded-pill ms-2 me-3">Logout</button>
-              </form>
+          <form action="/doctor/logout" method="post">
+              <button type="submit" class="btn btn-danger rounded-pill ms-2 me-3">Logout</button>
+          </form>
     </div>
   </div>
 </nav>
 
-<div class="container mt-5">
-  <h2>Volunteers List</h2>
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr style="text-align: center;">
-                <th style="background-color: #c6cdd3;">SL.No</th>
-                <th style="background-color: #c6cdd3;">Name</th>
-                <th style="background-color: #c6cdd3;">Email</th>
-                <th style="background-color: #c6cdd3;">Mobile</th>
-                <th style=" background-color: #c6cdd3;">Service </th>
-            </tr>
-        </thead>
-        <tbody>
-            <% users.forEach((user,index) => { %>
-                <tr style="text-align: center;">
-                    <td style="text-align: center;"><%= index+1 %></td>
-                    <td><%= user.name %></td>
-                    <td><%= user.email %></td>
-                    <td><%= user.mobile %></td>
-                    <td><%= user.is_varified ? 'Available' : 'Not-Available' %></td>
-             
+<div class="container mt-4">
+  <h2 style="font-style: oblique;">VISITOR'S LIST</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th style="text-align: center;">SL.No</th>
+                    <th style="text-align: center;">Name</th>
+                    <th style="text-align: center;">Visitor Details</th>
                 </tr>
-            <% }) %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <% users.forEach((user,index) => { %>
+                <tr>
+                    <td style="text-align: center;"><%= index+1 %></td>
+                    <td style="text-align: center;"><%= user.name %></td>
+                    <td style="text-align: center;">
+                        <a href="/doctor/visitors/<%= user._id %>">View Visitor Details</a>
+                    </td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>

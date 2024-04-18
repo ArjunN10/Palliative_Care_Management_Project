@@ -4,6 +4,10 @@ const Medicine = require("../models/medicineModel");
 const bcrypt = require("bcrypt");
 const MedicineDistribution =require('../models/MdcnDstrbtionModel')
 const Attendance = require('../models/attendanceModel')
+const visitors=require("../models/visitorModel")
+const Appointments=require("../models/appointmentModel")
+
+
 
 
 const securePassword =async (password) => {
@@ -644,7 +648,70 @@ console.log(existingAttendance)
       console.log('year attendanceeeeeee',YearlyAttendance)
 
       res.render('doctor/attendanceDisplay',{MOnthByAttendance,YearlyAttendance})
-    }
+    },
+
+
+// ===============================< Visitor >================================//
+
+
+
+    // ViewVisitors: async (req, res) => {
+    //   const { q } = req.query;
+    //   try {
+    //     let users;
+    //     if (q && q.length > 0) {
+    //       users = await visitors.find({
+    //         name: { $regex: ".*" + q + ".*" },
+    //         is_Approved:1
+    //       });
+    //     } else {
+    //       users = await visitors.find({
+    //         is_Approved:1
+    //       });
+    //     }
+    //     res.render("doctor/visitors", { users, q });
+    //   } catch (error) {
+    //     console.log(error.message);
+    //     res.status(500).send("Internal Server Error");
+    //   }
+    // },
+  
+    ViewVisitors : async (req, res) => {
+      try {
+          const page = req.query.page || 1; 
+          const limit = 4; // Number of appointments per page
+  
+          // Calculate the skip value based on the page number and limit
+          const skip = (page - 1) * limit;
+  
+          // Fetch approved appointments with pagination from the database
+          const appointments = await Appointments.find({ is_Approved: 1 })
+              .sort({ date: -1 })
+              .skip(skip)
+              .limit(limit);
+  
+          // Count total number of approved appointments
+          const totalAppointments = await Appointments.countDocuments({ is_Approved: 1 });
+  
+          // Calculate total number of pages
+          const totalPages = Math.ceil(totalAppointments / limit);
+  
+          // Render the view with approved appointments and pagination data
+          res.render('doctor/latestAppointments', {
+              appointments: appointments,
+              totalAppointments: totalAppointments,
+              currentPage: parseInt(page),
+              totalPages: totalPages
+          });
+      } catch (error) {
+          console.error('Error fetching latest appointments:', error);
+          // Render an error page or return an error response
+          res.status(500).send('An error occurred while fetching latest appointments');
+      }
+  },
+  
+ 
+  
 
 
 

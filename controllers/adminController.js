@@ -943,6 +943,7 @@ getVolunteerAttendanceHistory: async (req, res) => {
     }
 },
 
+
 displayLatestAppointments :async (req, res) => {
   try {
       const page = req.query.page || 1; 
@@ -977,6 +978,29 @@ displayLatestAppointments :async (req, res) => {
   }
 },
 
+
+updateAppointmentApproval: async (req, res) => {
+  const appointmentId = req.params.id;
+  try {
+      // Find the appointment by ID
+      const appointment = await Appointments.findById(appointmentId);
+      if (!appointment) {
+          return res.status(404).json({ message: 'Appointment not found' });
+      }
+
+      // Toggle the is_Approved value
+      appointment.is_Approved = appointment.is_Approved === 1 ? 0 : 1;
+
+      // Save the updated appointment
+      await appointment.save();
+
+      // Send a success response
+      res.status(200).json({ message: 'Appointment approval status updated successfully' });
+  } catch (error) {
+      console.error('Error updating appointment approval status:', error);
+      res.status(500).json({ message: 'An error occurred while updating appointment approval status' });
+  }
+},
 
 
 

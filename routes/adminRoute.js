@@ -66,7 +66,7 @@ router
 
 .get("/visitors", isAdmin,TrycatchMiddleware(adminController.ViewVisitors))
 
-.get('/visitors/:id', isAdmin, TrycatchMiddleware(adminController.getVisitorFeedback))
+.get('/visitors/:id', isAdmin, TrycatchMiddleware(adminController.getVisitorFeedback)) 
 
 // ===============================< Medicine Management >================================//
 
@@ -92,6 +92,9 @@ router
 .get('/attendance/volunteers/:volunteerId', isAdmin, TrycatchMiddleware(adminController.getVolunteerAttendanceHistory))
 .get('/attendance/volunteers/:volunteerId/interval/:interval(week|month|year)', isAdmin, TrycatchMiddleware(adminController.getVolunteerAttendanceHistory))
 
+// ===============================< Appointment >================================//
+
 .get('/latest-appointments',isAdmin,TrycatchMiddleware( adminController.displayLatestAppointments))
+.post('/approve-appointment/:id',isAdmin,TrycatchMiddleware( adminController.updateAppointmentApproval))
 
 module.exports=router
