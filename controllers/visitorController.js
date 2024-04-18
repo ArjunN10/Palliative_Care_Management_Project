@@ -150,7 +150,7 @@ VisitorAppointment:async (req, res) => {
       // provide email condent dynamic
 
     const emailContent = generateAppointmentEmail({
-      recipientName: 'parirakshapalliative.official@gmail.com', 
+      recipientName: process.env.RECIPIENT_EMAIL, 
       name: name,
       email: email,
       date: date,
