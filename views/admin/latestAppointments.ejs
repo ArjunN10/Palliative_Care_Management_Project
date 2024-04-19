@@ -130,12 +130,17 @@
                 </div>
             </div>
             <hr>
+            <a href="mailto:<%= appointment.email %>?subject=Appointment
+                Request&body=Dear%20Recipient,%0A%0AI%20would%20like%20to%20schedule%20an%20appointment%20with%20you.
+                %20Please%20let%20me%20know%20your%20availability.%0A%0ARegards,%0A<Your%20Name>"
+                style="text-decoration: none;color: #333;"     class="appointment-link">
             <div class="appointment-details">
                 <strong>Name:</strong> <%= appointment.name %><br>
                 <strong>Email:</strong> <%= appointment.email %><br>
                 <strong>Date:</strong> <%= appointment.date %><br>
                 <strong>Purpose of visit:</strong> <%= appointment.message %><br>
             </div>
+            </a>
         </div>
         <% }); %>
 
