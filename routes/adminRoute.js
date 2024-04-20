@@ -10,10 +10,12 @@ const {isAdmin,loggedInAdmin}=require("../middlewares/auth")
 
 router
 
-// ===============================< Login/Logout >================================//
+// ===============================< Login >================================//
 
 .get("/login", loggedInAdmin,TrycatchMiddleware(adminController.loadLogin))
 .post("/login", loggedInAdmin, TrycatchMiddleware(adminController.AdminLogin))
+
+// ===============================< Logout >================================//
 
 .post("/logout", isAdmin, TrycatchMiddleware( adminController.logoutAdmin))
 
