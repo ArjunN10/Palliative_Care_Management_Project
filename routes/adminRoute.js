@@ -97,4 +97,10 @@ router
 .get('/latest-appointments',isAdmin,TrycatchMiddleware( adminController.displayLatestAppointments))
 .post('/approve-appointment/:id',isAdmin,TrycatchMiddleware( adminController.updateAppointmentApproval))
 
+// ===============================< Manager >================================//
+.get("/manager", isAdmin,TrycatchMiddleware(adminController.Viewmanager))  
+
+.post("/createManager", isAdmin,TrycatchMiddleware(adminController.createManager))
+.get("/createManager", isAdmin,TrycatchMiddleware(adminController.AddManager))
+
 module.exports=router

@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" style="font-style: italic;" href="/admin/staffs">ADMIN DASHBOARD</a>
+      <a class="navbar-brand" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;color: #353434;" href="/manager/dashboard">MANAGER DASHBOARD</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -12,45 +12,26 @@
             <a class="nav-link dropdown-toggle ms-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 More
             </a>
-            <!-- <ul class="dropdown-menu " style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
-              <li><a class="dropdown-item" href="/admin/dashboard">Volunteers</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/patients">Patient's</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/doctors">Doctor's</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/medicines">Medicines</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/distributionHistory">Medicine Distributions</a></li>
-              <li><hr class="dropdown-divider"></li>
-               <li>
-                <form action="/admin/logout" method="post" class="dropdown-item">
-                  <button type="submit" class="dropdown-item p-0">Logout</button>
-                </form>
-              </li> -->
-
               <ul class="dropdown-menu" style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
-                <li><a class="dropdown-item" href="/admin/patients">Patient's</a></li>
+                <li><a class="dropdown-item" href="/manager/patients">Patient's</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/admin/doctors">Doctor's</a></li>
+                <li><a class="dropdown-item" href="/manager/doctors">Doctor's</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/admin/staffs">Laboratory Staffs</a></li>
+                <li><a class="dropdown-item" href="/manager/staffs">Laboratory Staffs</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/admin/medicines">Medicines</a></li>
+                <li><a class="dropdown-item" href="/manager/medicines">Medicines</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/admin/distributionHistory">Medicine Distributions</a></li>
+                <li><a class="dropdown-item" href="/manager/distributionHistory">Medicine Distributions</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/admin/attendance/doctors">Doctor Attendance </a></li>
+                <li><a class="dropdown-item" href="/manager/attendance/doctors">Doctor Attendance </a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/admin/attendance/staffs">Staff Attendance </a></li>
+                <li><a class="dropdown-item" href="/manager/attendance/staffs">Staff Attendance </a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/admin/attendance/volunteers">Volunteer Attendance </a></li>
+                <li><a class="dropdown-item" href="/manager/attendance/volunteers">Volunteer Attendance </a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/admin/visitors">Visitor's </a></li>
+                <li><a class="dropdown-item" href="/manager/visitors">Visitor's </a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/admin/latest-appointments">Appointments </a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/admin/manager">Manager </a></li>
+                <li><a class="dropdown-item" href="/manager/latest-appointments">Appointments </a></li>
           
               </ul>
             </ul> 
@@ -59,15 +40,15 @@
           </li>
         </ul>
           <div class="d-flex">
-            <a href="/admin/createStaff" type="button" class="btn btn-outline-primary rounded-pill me-3 ms-3">Add Laboratory Staff</a>
+            <a href="/manager/createStaff" type="button" class="btn btn-outline-primary rounded-pill me-3 ms-3">Add Lab-Staff</a>
           </div>
-        <form action="/admin/staffs" method="GET" class="d-flex flex-grow-1 justify-content-end">
+        <form action="/manager/staffs" method="GET" class="d-flex flex-grow-1 justify-content-end">
           <div class="input-group me-2" style="max-width: 390px;">
             <input type="search" name="q" placeholder="Search Volunteer" class="form-control rounded-pill" value="<%= q ? q : null %>" />
             <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
           </div>
         </form>
-        <form action="/admin/logout" method="post" >
+        <form action="/manager/logout" method="post" >
           <button type="submit" class="btn btn-danger rounded-pill ms-3 me-5">Logout</button>
         </form>
       </div>
@@ -99,13 +80,13 @@
               <td><%= user.mobile %></td>
               <td><%= user.is_varified ? 'Yes' : 'No' %></td>
               <td style="text-align: center;">
-                <form id="toggleForm<%= user._id %>" action="/admin/staffs/<%= user._id %>/toggle_verification" method="POST" class="d-inline-block">
+                <form id="toggleForm<%= user._id %>" action="/manager/staffs/<%= user._id %>/toggle_verification" method="POST" class="d-inline-block">
                   <input type="hidden" id="isVerified<%= user._id %>" name="is_verified" value="<%= user.is_verified ? '0' : '1' %>">
                   <button type="submit" onclick="toggleVerification('<%= user._id %>')" class="btn btn-sm btn-success rounded-pill">
                     <%= user.is_verified ? 'Unverify' : 'Verify' %> 
                   </button>
                 </form>
-                <form id="toggleForm<%= user._id %>" action="/admin/staffs/<%= user._id %>/toggle_verification" method="POST" class="d-inline-block">
+                <form id="toggleForm<%= user._id %>" action="/manager/staffs/<%= user._id %>/toggle_verification" method="POST" class="d-inline-block">
                   <input type="hidden" id="isVerified<%= user._id %>" name="is_verified" value="<%= user.is_verified ? '1' : '0' %>">
                   <button type="submit" onclick="toggleVerification('<%= user._id %>')" class="btn btn-sm btn-danger rounded-pill">
                     <%= user.is_verified ? 'verify' :'Unverify' %> 
@@ -114,7 +95,7 @@
                 
               </td>
               <td>
-                <a href="/admin/staffs/<%= user._id %>/edit" class="btn btn-warning m-1 btn-sm rounded-pill">Edit</a>
+                <a href="/manager/staffs/<%= user._id %>/edit" class="btn btn-warning m-1 btn-sm rounded-pill">Edit</a>
                 
               </td>
               

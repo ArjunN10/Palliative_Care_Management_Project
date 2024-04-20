@@ -24,54 +24,7 @@ module.exports = {
 
 securePassword,
 
-// loadRegister :async (req, res) => {
-//   try {
-//     res.render("doctor/registration", { error: null, message: null });
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// },
 
-
-  
-// insertDoctor: async (req, res) => {
-//   const { name, email, password, mobile } = req.body;
-//   const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-//   try {
-//     if (!email)
-//       return res.render("doctor/registration", { error: "Email is required" });
-//     if (!emailRegex.test(email))
-//       return res.render("doctor/registration", {
-//         error: "Email must be a valid email address!",
-//       });
-
-//     if (password.length < 6) {
-//       return res.render("doctor/registration", {
-//         error: "Password must be at least 6 characters long",
-//       });
-//     }
-//     const isExists = await User.findOne({ email });
-//     if (isExists)
-//       return res.render("doctor/registration", {
-//         error: "User with this email already exists",
-//       });
-
-//     // Hash the password
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     const user = new User({
-//       name,
-//       email,
-//       mobile,
-//       password: hashedPassword, // Save hashed password
-//       is_doctor: 1,
-//     });
-//     await user.save();
-//     return res.redirect("/doctor/dashboard");
-//   } catch (error) {
-//     console.log(error.message);
-//     return res.status(500).send("Internal Server Error");
-//   }
-// },
 
 
 

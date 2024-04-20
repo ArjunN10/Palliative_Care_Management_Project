@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" style="font-style: italic;" >ADMIN DASHBOARD</a>
+    <a class="navbar-brand" style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;color: #353434;" href="/manager/dashboard">MANAGER DASHBOARD</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -26,49 +26,31 @@
           >
             More
           </a>
-          <!-- <ul class="dropdown-menu " style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
-            <li><a class="dropdown-item" href="/admin/dashboard">Volunteers</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/patients">Patient's</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/doctors">Doctor's</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/staffs">Laboratory Staffs</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/distributionHistory">Medicine Distributions</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-              <form action="/admin/logout" method="post" class="dropdown-item">
-                <button type="submit" class="dropdown-item p-0">Logout</button>
-              </form>
-            </li>
-          </ul> -->
+        
           <ul class="dropdown-menu" style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
-            <li><a class="dropdown-item" href="/admin/patients">Patient's</a></li>
+            <li><a class="dropdown-item" href="/manager/patients">Patient's</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/doctors">Doctor's</a></li>
+            <li><a class="dropdown-item" href="/manager/doctors">Doctor's</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/staffs">Laboratory Staffs</a></li>
+            <li><a class="dropdown-item" href="/manager/staffs">Laboratory Staffs</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/medicines">Medicines</a></li>
+            <li><a class="dropdown-item" href="/manager/medicines">Medicines</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/distributionHistory">Medicine Distributions</a></li>
+            <li><a class="dropdown-item" href="/manager/distributionHistory">Medicine Distributions</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/attendance/doctors">Doctor Attendance </a></li>
+            <li><a class="dropdown-item" href="/manager/attendance/doctors">Doctor Attendance </a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/attendance/staffs">Staff Attendance </a></li>
+            <li><a class="dropdown-item" href="/manager/attendance/staffs">Staff Attendance </a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/attendance/volunteers">Volunteer Attendance </a></li>
+            <li><a class="dropdown-item" href="/manager/attendance/volunteers">Volunteer Attendance </a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/visitors">Visitor's </a></li>
+            <li><a class="dropdown-item" href="/manager/visitors">Visitor's </a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/latest-appointments">Appointments </a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/admin/manager">Manager </a></li>
+            <li><a class="dropdown-item" href="/manager/latest-appointments">Appointments </a></li>
           </ul>
         </li>
       </ul>
-      <form action="/searchMedicine" method="post">
+      <!-- <form action="/manager/searchMedicine" method="post">
         <div class="d-flex">
           <input
             type="search"
@@ -80,10 +62,10 @@
             Search
           </button>
         </div>
-      </form>
+      </form> -->
     </div>
   </div>
-  <form action="/admin/logout" method="post" >
+  <form action="/manager/logout" method="post" >
     <button type="submit" class="btn btn-danger rounded-pill me-5 ms-3">Logout</button>
   </form>
 </nav>
@@ -91,7 +73,7 @@
 <div class="container mt-4">
   <table class="table table-bordered table-striped table-hover">
     <thead class="table-dark">
-            <tr>
+            <tr style="text-align: center;">
                 <th>Slno.</th>
                 <th>Name</th>
                 <th>Brand</th>
@@ -100,10 +82,10 @@
                 <th>expiry</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="text-align: center;">
             <% medicines.forEach(medicine => { %>
               <% if(medicine.stock<10 || medicine.expiry <= new Date()){ %>
-                <tr>
+                <tr >
                     <td style="background-color: red;"><%= medicine.Slno %></td>
                     <td style="background-color: red;"><%= medicine.name %></td>
                     <td style="background-color: red;"><%= medicine.brand %></td>

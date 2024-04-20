@@ -11,6 +11,7 @@ const doctorRoute=require('./routes/doctorRoute')
 const adminRoute=require('./routes/adminRoute')
 const staffRoute=require('./routes/staffRoute')
 const visitorRoute=require('./routes/visitorRoute')
+const managerRoute=require('./routes/managerRoute')
 
 
 const nocache = require('nocache')
@@ -44,12 +45,12 @@ app.use(nocache())
 app.use(methodOverride('_method'))
 app.use(flash())
 
-
-app.use('/volunteer', volunteerRoute)         //volunteer 
+app.use('/manager',managerRoute)        //manager
+app.use('/volunteer', volunteerRoute)   //volunteer 
 app.use('/staff',staffRoute )           //staff
 app.use('/doctor',doctorRoute )         //doctor
 app.use('/admin',adminRoute)            //admin
-app.use('/',visitorRoute)        //visitor  
+app.use('/',visitorRoute)               //visitor  
 
 
 app.listen(4000, () => {

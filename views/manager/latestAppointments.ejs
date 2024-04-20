@@ -1,0 +1,172 @@
+
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Latest Appointments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("/images/hero-bg.png");
+           background-repeat: no-repeat;
+           background-size: cover;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #333;
+            text-align: center;
+        }
+
+        .total-appointments {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .appointment-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        .appointment-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .appointment-details {
+            margin-bottom: 10px;
+            
+        }
+
+        .appointment-number {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        strong {
+            color: #555;
+        }
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination ul {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .pagination li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        .pagination li a {
+            text-decoration: none;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 3px;
+        }
+
+        .pagination li a:hover {
+            background-color: #0056b3;
+          
+        }
+        .tick-icon {
+            display: inline-block;
+            cursor: pointer;
+            width: 20px; 
+            height: 20px; 
+            /* padding-top: 0px;  */
+            padding-left: 3px;
+            padding-bottom: 3px;
+            border: 2px solid black;
+            border-radius: 50%; 
+        }
+
+        .green-bg {
+            background-color: rgb(15, 163, 15);
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div style="display: flex;">
+            <a href="/manager/dashboard" class=" btn " style="text-decoration: none;color: #333;margin-top: 20px;">&#9664; Back</a>
+        </div>
+        <h1 style="margin-left: 50px;">Latest Appointments</h1>
+        <br />
+        <div class="total-appointments">
+            <b>Total Appointments: <%= totalAppointments %></b>
+        </div>
+        <% appointments.forEach((appointment, index) => { %>
+        <%
+            const isApproved = appointment.is_approve === 1;
+        %>
+        <div class="appointment-card <%= isApproved ? 'approved' : '' %>">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="appointment-number">Appointment <%= index + 1 %></div>
+                <div style="display: flex; align-items: center;">
+                    <h5 class="approve-text" style="padding-right: 5px;">Approved</h5>
+                    <div class="tick-icon <%= isApproved ? 'green-bg' : '' %>" onclick="toggleTickColor(this, '<%= appointment._id %>')">
+                        &#10004; <!-- Tick symbol -->
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <a href="mailto:<%= appointment.email %>?subject=Appointment
+                Request&body=Dear%20Recipient,%0A%0AI%20would%20like%20to%20schedule%20an%20appointment%20with%20you.
+                %20Please%20let%20me%20know%20your%20availability.%0A%0ARegards,%0A<Your%20Name>"
+                style="text-decoration: none;color: #333;"     class="appointment-link">
+            <div class="appointment-details">
+                <strong>Name:</strong> <%= appointment.name %><br>
+                <strong>Email:</strong> <%= appointment.email %><br>
+                <strong>Date:</strong> <%= appointment.date %><br>
+                <strong>Purpose of visit:</strong> <%= appointment.message %><br>
+            </div>
+            </a>
+        </div>
+        <% }); %>
+
+        <% if (totalPages > 1) { %>
+        <div class="pagination" style="justify-content: center;">
+            <ul>
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                <li>
+                    <a href="/manager/latest-appointments?page=<%= i %>"><%= i %></a>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+        <% } %>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function toggleTickColor(element, appointmentId) {
+            element.classList.toggle('green-bg');
+            $.post(`/manager/approve-appointment/${appointmentId}`);
+        }
+    </script>
+
