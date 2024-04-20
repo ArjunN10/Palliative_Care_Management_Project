@@ -8,9 +8,14 @@ const { loggedOutManager ,isManager} = require("../middlewares/auth");
 
 router
 
+// ===============================< Login >================================//
 
 .get("/login",loggedOutManager,TrycatchMiddleware(ManagerController.loadLogin))
 .post("/login", loggedOutManager,TrycatchMiddleware( ManagerController.ManagerLogin)) 
+
+// ===============================< Logout >================================//
+
+.post("/logout", isManager, TrycatchMiddleware( ManagerController.logoutManager))
 
 // ===============================< Volunteer Management >================================//
 
