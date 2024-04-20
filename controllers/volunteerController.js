@@ -454,9 +454,20 @@ renderAttendenceDisplay : async (req, res) => {
     },
 
 
-
+    MultiStaffLogg: async (req, res) => {
+      try {
+          await res.render('users/multiStaffLogg')
+      } catch (err) {
+          console.error(err);
+          res.status(500).send('Internal Server Error')
+      }
+  }
+  
 
 };
+
+
+ 
 
 
 
