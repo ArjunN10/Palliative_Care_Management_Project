@@ -5,6 +5,9 @@ const Patient = require("../models/patientModel");
 const Attendence = require("../models/attendanceModel")
 const Test = require("../models/TestResultModel")
 const LPatient = require('../models/LabPatientModel')
+const nodemailer=require("nodemailer")
+const {generateTestResult} = require('../utils/generateTestResultEmail')
+
 
 
 
@@ -283,21 +286,50 @@ const getTestResult = async (req,res) => {
 }
 
 const uploadImage = async (req,res) => {
-  const { patientId, name, disease, test_result } = req.body;
+  const { patientId, name,email, disease, test_result } = req.body;
   const userId = req.session.LaboratoryStaff;
 
   const patient = await LPatient.findById(patientId)
   if (!patient) {
     return res.status(404).json({ error: "Patient not found" });
   }
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.RECIPIENT_EMAIL,
+        pass: process.env.RECIPIENT_PASS,
+    },
+});
+console.log(transporter)
   const newTest = new Test({
     userId ,
     patient : patientId,
     name,
+    email,
     disease,
     test_result,
   })
+  console.log(newTest)
   await newTest.save()
+
+  
+  // provide email condent dynamic
+
+ const emailContent = generateTestResult({
+        recipientName: process.env.RECIPIENT_EMAIL, 
+        name: name,
+        email: email,
+        test_result:test_result
+  });
+  console.log(emailContent)
+    // Send email notification
+  const mailler = await transporter.sendMail({
+      from: email,
+      to: process.env.RECIPIENT_EMAIL,
+      subject: process.env.EMAIL_SUBJECT,
+      text: emailContent
+  });
+  console.log(mailler,'lllllllllllllllllllllllllll')
   patient.test_result.push(newTest._id);
   await patient.save();
   res.redirect("/staff/result")
