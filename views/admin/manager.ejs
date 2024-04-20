@@ -1,5 +1,3 @@
-
-
 <%- include('../layouts/header.ejs') %>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -36,49 +34,41 @@
                     <li><a class="dropdown-item" href="/admin/latest-appointments">Appointments </a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="/admin/manager">Manager </a></li>
-            
             </ul>
           </li>
         </ul>
+        <div class="d-flex">
+            <a href="/admin/createManager" type="button" class="btn btn-outline-primary rounded-pill me-3 ms-3">Add Manager</a>
+          </div>
       </div>
     </div>
     <form action="/admin/logout" method="post" >
-        <button type="submit" class="btn btn-danger rounded-pill me-5 ms-3">Logout</button>
-      </form>
+      <button type="submit" class="btn btn-danger rounded-pill me-5 ms-3">Logout</button>
+    </form>
   </nav>
 
 <div class="container mt-4">
-  <h2 style="font-style: oblique;">LAB-STAFF'S LIST</h2>
+  <h2 style="font-style: oblique;">MANAGER LIST</h2>
     <div class="table-responsive">
         <table class="table table-bordered table-striped table-hover">
             <thead class="table-dark">
-                <tr style="text-align: center;">
-                    <th>Reg.ID</th>
-                    <th>Name</th>
-                    <th>Availablity</th>
+                <tr>
+                    <th style="text-align: center;">SL.No</th>
+                    <th style="text-align: center;">Name</th>
+                    <!-- <th style="text-align: center;">Visitor Details</th> -->
                 </tr>
             </thead>
-            <tbody style="text-align: center;">
+            <tbody>
                 <% users.forEach((user,index) => { %>
                 <tr>
-                  <td><%= index+1 %></td>
-
-                  <td> 
-                      <a href="/admin/attendance/staffs/<%= user._id %>">
-                      <B style="text-decoration: none;color: black;">
-                      <%= user.name %>
-                  </B>
-                  </td>
-                 
-                  <% if (user.is_varified) { %>
-                      <td style="color: green;"><B>Available</B></td>
-                  <% } else { %>
-                      <td style=" color: red;"><B>Unavailable</B></td>
-                  <% } %>
-                
+                    <td style="text-align: center;"><%= index+1 %></td>
+                    <td style="text-align: center;"><%= user.name %></td>
+                    <!-- <td style="text-align: center;">
+                        <a href="/admin/manager/<%= user._id %>">View Visitor Details</a>
+                    </td> -->
                 </tr>
                 <% }) %>
-              </tbody>
+            </tbody>
         </table>
     </div>
 </div>

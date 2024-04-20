@@ -7,11 +7,7 @@ const { isDoctorLogged ,isDoctor} = require("../middlewares/auth");
 
 router
 
-    // ===============================<  register  >===================================//
-
-
-// .get('/register', isDoctorLogged, TrycatchMiddleware(doctorController.loadRegister))        
-// .post('/register', isDoctorLogged,TrycatchMiddleware( doctorController.insertDoctor))    
+   
 
     // ===============================< Login >======================================//  
 
@@ -20,13 +16,13 @@ router
 
     // ===============================< volunteers >================================//
 
-.get("/dashboard", isDoctor,TrycatchMiddleware(doctorController.dashboard) )
+.get("/dashboard", isDoctor,TrycatchMiddleware(doctorController.dashboard))
 .put("/users/:id", isDoctor,TrycatchMiddleware( doctorController.updateUser))
 .get("/users/:id/edit", isDoctor,TrycatchMiddleware(doctorController.loadEditUser) )
 .delete("/users/:id/destroy", isDoctor,TrycatchMiddleware(doctorController.deleteUser))
 
-.post("/createUser", isDoctor,TrycatchMiddleware(doctorController.createUser) )
-.get("/createUser", isDoctor,TrycatchMiddleware(doctorController.DoctorAddUser) )
+.post("/createUser", isDoctor,TrycatchMiddleware(doctorController.createUser))
+.get("/createUser", isDoctor,TrycatchMiddleware(doctorController.DoctorAddUser))
 
     // ===============================< patients >================================//
 

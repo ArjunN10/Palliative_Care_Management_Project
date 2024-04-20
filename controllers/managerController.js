@@ -1,16 +1,15 @@
-const Patients=require("../models/patientModel")
-const User=require("../models/userModel")
+const User = require("../models/userModel");
 const Manager=require("../models/managerModel")
+const Patients=require("../models/patientModel")
 const Medicine = require("../models/medicineModel");
-const MedicineDistribution=require("../models/MdcnDstrbtionModel")
+const bcrypt = require("bcrypt");
+const MedicineDistribution =require('../models/MdcnDstrbtionModel')
+const Attendance = require('../models/attendanceModel')
 const visitors=require("../models/visitorModel")
-const Feedback=require("../models/feedbackModel")
 const Appointments=require("../models/appointmentModel")
-const bcrypt=require("bcrypt")
-const {getAttendanceForTimeInterval}=require("../config/attendanceUtils")
+const Feedback=require("../models/feedbackModel")
 
 
-//pwd hashing here
 
 const securePassword =async (password) => {
   try {
@@ -23,193 +22,194 @@ const securePassword =async (password) => {
 
 
 
-
 module.exports={
 
-  securePassword,
 
-// ===============================< Login >================================//
-
-    loadLogin: async (req, res) => {
-        try {
-            res.render("admin/login", { error: null, message: null });
-        } catch (error) {
-            console.log(error.message);
-            res.status(500).send("Internal Server Error");
-        }
-    },
-
-
-    AdminLogin: async (req, res) => {
-        const { email, password } = req.body;
-        try {
-            if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-                req.session.admin = true;
-                return res.redirect("/admin/dashboard");
-            } else {
-                return res.redirect("/admin/login?error=Invalid email or password");
-            }
-        } catch (error) {
-            console.log(error.message);
-            res.status(500).send("Internal Server Error");
-        }
-    },
-    
-
-    
-    // ===============================< Admin Logout >================================//
-    
-    logoutAdmin:(req, res) => {
-      req.session.destroy();
-      res.redirect("/admin/login");
-    },
-
-    
-    // ===============================< Volunteer Management >================================//
-    
-          AdminDashboard : async (req, res) => {
-            const { q } = req.query;
-            try {
-              let users;
-              if (q && q.length > 0) {
-                users = await User.find({
-                  name: { $regex: ".*" + q + ".*" },
-                  is_volunteer:1,
-                  is_verified: { $in:[0, 1] }
-                });
-              } else {
-                users = await User.find({
-                  is_volunteer:1,
-                  is_varified: { $in:[0, 1] }
-                });
-              }
-              res.render("admin/dashboard", { users, q });
-            } catch (error) {
-              console.log(error.message);
-              res.status(500).send("Internal Server Error");
-            }
-          },
-    
-
-  AdminAddedVolunteer : async (req, res) => {
+loadLogin:(req, res) => {
+    res.render("manager/login", { error: null, message: null });  
+  },
+  
+  
+  ManagerLogin: async (req, res) => {
+    const { email, password } = req.body;
     try {
-      res.render("admin/createVolunteers", { error: null, message: null });
+      const user = await Manager.findOne({ email });
+      if (!user)
+        return res.render("manager/login", {
+          message: null,
+          error: "User not found.",
+        });
+  
+      const isMatch = await bcrypt.compare(password, user.password); 
+      if (!isMatch)
+        return res.render("manager/login", {
+          error: "Wrong password.",
+          message: null,
+        });
+      if (user.is_manager === 1 ) { 
+        req.session.manager = user._id;
+        return res.redirect("/manager/dashboard")
+      } else {
+        return res.redirect("/manager/login?error=" + encodeURIComponent("You are not a verified manager"));
+      }
     } catch (error) {
       console.log(error.message);
+      return res.status(500).send("Internal Server Error");
     }
   },
 
 
-createVolunteer : async (req, res) => {
-  const { name, email, password, mobile,  } = req.body;
-  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  try {
-    if (!email)
-      return res.render("admin/createVolunteers", { error: "Email is required" });
-    if (!emailRegex.test(email))
-      return res.render("admin/user_new", {
-        error: "Email must be a valid email!",
-      });
-      if(password<6){
-        return res.render("admin/createVolunteers", {
-          message: null,
-          error: "password must be atleast 6 letters",
-        });
-      }
-    const isExists = await User.findOne({ email });
-    if (isExists)
-      return res.render("admin/createVolunteers", {
-        error: "User already exists",
-        message: null,
-      });
-      const secPassword = await securePassword(req.body.password);
-    const user = new User({
-      name,
-      email,
-      mobile,
-      password:secPassword,
-      is_volunteer:1,
-      is_varified:1,
-    });
-    await user.save();
-    return res.redirect("/admin/dashboard");
-  } catch (error) {
-    console.log(error.message);
-  }
-},
+      // ===============================< Logout >================================//
     
-      loadEditVolunteer : async (req, res) => {
-        const { id } = req.params;
-        try {
-          const user = await User.findById(id);
-          res.render("admin/editVolunteers", { user });
-        } catch (error) {
-          console.log(error);
-        }
+      logoutManager:(req, res) => {
+        req.session.destroy();
+        res.redirect("/manager/login");
       },
 
 
-      updateVolunteer : async (req, res) => {
-        const { id } = req.params;
-        const { name, email, mobile, is_varified } = req.body;
+
+       // ===============================< Volunteer Management >================================//
+    
+       ManagerDashboard : async (req, res) => {
+        const { q } = req.query;
         try {
-          const user = await User.findByIdAndUpdate(
-            id,
-            {
-              $set: {
-                name,
-                email,
-                mobile,
-                is_varified,
-              },
-            },
-            { new: true }
-          );
-          res.redirect("/admin/dashboard");
-        } catch (error) {
-          console.log(error);
-        }
-      },
-
-      // deleteVolunteer: async (req, res) => {
-      //   const { id } = req.params;
-      //   try {
-      //     const user = await User.findOneAndDelete({ _id: id });
-      //     if (req.session.user_session === user._id) {
-      //       req.session.destroy();
-      //     }
-      //     return res.redirect("/admin/dashboard");
-      //   } catch (error) {
-      //     console.log(error.message);
-      //   }
-      // },
-
-
-      volunteertoggleVerification : async (req, res) => {
-        const userId = req.params.id;
-        const { is_verified } = req.body;
-      
-        try {
-          const volunteer = await User.findById(userId);
-          if (!volunteer) {
-            return res.status(404).json({ message: 'Volunteer not found' });
+          let users;
+          if (q && q.length > 0) {
+            users = await User.find({
+              name: { $regex: ".*" + q + ".*" },
+              is_volunteer:1,
+              is_verified: { $in:[0, 1] }
+            });
+          } else {
+            users = await User.find({
+              is_volunteer:1,
+              is_varified: { $in:[0, 1] }
+            });
           }
-      
-          volunteer.is_varified = is_verified === '0' ? false : true;
-          await volunteer.save();
-      
-          res.redirect('/admin/dashboard'); 
+          res.render("manager/dashboard", { users, q });
         } catch (error) {
-          console.error('Error toggling verification:', error);
-          res.status(500).json({ message: 'Internal server error' });
+          console.log(error.message);
+          res.status(500).send("Internal Server Error");
         }
       },
 
 
+ManagerAddedVolunteer : async (req, res) => {
+try {
+  res.render("manager/createVolunteers", { error: null, message: null });
+} catch (error) {
+  console.log(error.message);
+}
+},
 
 
+createVolunteer : async (req, res) => {
+const { name, email, password, mobile,  } = req.body;
+const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+try {
+if (!email)
+  return res.render("manager/createVolunteers", { error: "Email is required" });
+if (!emailRegex.test(email))
+  return res.render("manager/user_new", {
+    error: "Email must be a valid email!",
+  });
+  if(password<6){
+    return res.render("manager/createVolunteers", {
+      message: null,
+      error: "password must be atleast 6 letters",
+    });
+  }
+const isExists = await User.findOne({ email });
+if (isExists)
+  return res.render("manager/createVolunteers", {
+    error: "User already exists",
+    message: null,
+  });
+  const secPassword = await securePassword(req.body.password);
+const user = new User({
+  name,
+  email,
+  mobile,
+  password:secPassword,
+  is_volunteer:1,
+  is_varified:1,
+});
+await user.save();
+return res.redirect("/manager/dashboard");
+} catch (error) {
+console.log(error.message);
+}
+},
+
+  loadEditVolunteer : async (req, res) => {
+    const { id } = req.params;
+    try {
+      const user = await User.findById(id);
+      res.render("manager/editVolunteers", { user });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
 
+  updateVolunteer : async (req, res) => {
+    const { id } = req.params;
+    const { name, email, mobile, is_varified } = req.body;
+    try {
+      const user = await User.findByIdAndUpdate(
+        id,
+        {
+          $set: {
+            name,
+            email,
+            mobile,
+            is_varified,
+          },
+        },
+        { new: true }
+      );
+      res.redirect("/manager/dashboard");
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  // deleteVolunteer: async (req, res) => {
+  //   const { id } = req.params;
+  //   try {
+  //     const user = await User.findOneAndDelete({ _id: id });
+  //     if (req.session.user_session === user._id) {
+  //       req.session.destroy();
+  //     }
+  //     return res.redirect("/manager/dashboard");
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // },
+
+
+  volunteertoggleVerification : async (req, res) => {
+    const userId = req.params.id;
+    const { is_verified } = req.body;
+  
+    try {
+      const volunteer = await User.findById(userId);
+      if (!volunteer) {
+        return res.status(404).json({ message: 'Volunteer not found' });
+      }
+  
+      volunteer.is_varified = is_verified === '0' ? false : true;
+      await volunteer.save();
+  
+      res.redirect('/manager/dashboard'); 
+    } catch (error) {
+      console.error('Error toggling verification:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
+
+  
 // ===============================< Doctor Management >================================//
 
 
@@ -230,7 +230,7 @@ ViewDoctor: async (req, res) => {
         is_varified: { $in:['0', '1'] }
       });
     }
-    res.render("admin/doctors", { users, q });
+    res.render("manager/doctors", { users, q });
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Internal Server Error");
@@ -243,7 +243,7 @@ loadEditDoctor : async (req, res) => {
   const { id } = req.params;
   try {
     const user = await User.findById(id);
-    res.render("admin/editDoctor", { user });
+    res.render("manager/editDoctor", { user });
   } catch (error) {
     console.log(error);
   }
@@ -266,15 +266,15 @@ loadEditDoctor : async (req, res) => {
       },
       { new: true }
     );
-    res.redirect("/admin/doctors");
+    res.redirect("/manager/doctors");
   } catch (error) {
     console.log(error);
   }
 },
 
-AdminAddedDoctor : async (req, res) => {
+ManagerAddedDoctor : async (req, res) => {
   try {
-    res.render("admin/createDoctor", { error: null, message: null });
+    res.render("manager/createDoctor", { error: null, message: null });
   } catch (error) {
     console.log(error.message);
   }
@@ -286,20 +286,20 @@ createDoctor : async (req, res) => {
   const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   try {
     if (!email)
-      return res.render("admin/createDoctor", { error: "Email is required" });
+      return res.render("manager/createDoctor", { error: "Email is required" });
     if (!emailRegex.test(email))
-      return res.render("admin/user_new", {
+      return res.render("manager/user_new", {
         error: "Email must be a valid email!",
       });
       if(password<6){
-        return res.render("admin/createDoctor", {
+        return res.render("manager/createDoctor", {
           message: null,
           error: "password must be atleast 6 letters",
         });
       }
     const isExists = await User.findOne({ email });
     if (isExists)
-      return res.render("admin/createDoctor", {
+      return res.render("manager/createDoctor", {
         error: "User already exists",
         message: null,
       });
@@ -313,7 +313,7 @@ createDoctor : async (req, res) => {
       is_varified:1,
     });
     await user.save();
-    return res.redirect("/admin/doctors");
+    return res.redirect("/manager/doctors");
   } catch (error) {
     console.log(error.message);
   }
@@ -326,7 +326,7 @@ createDoctor : async (req, res) => {
 //     if (req.session.doctor_session === user._id) {
 //       req.session.destroy();
 //     }
-//     return res.redirect("/admin/doctors");
+//     return res.redirect("/manager/doctors");
 //   } catch (error) {
 //     console.log(error.message);
 //   }
@@ -346,12 +346,186 @@ doctortoggleVerification : async (req, res) => {
     doctor.is_varified = is_verified === '0' ? false : true;
     await doctor.save();
 
-    res.redirect('/admin/doctors'); 
+    res.redirect('/manager/doctors'); 
   } catch (error) {
     console.error('Error toggling verification:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 },
+
+
+
+// ===============================< L-Staff Management >================================//
+
+
+
+ViewLabStaff: async (req, res) => {
+  const { q } = req.query;
+  try {
+    let users;
+    if (q && q.length > 0) {
+      users = await User.find({
+        name: { $regex: ".*" + q + ".*" },
+        is_Lab_Staff: 1,
+        is_varified: { $in: [0, 1] },
+      });
+    } else {
+      users = await User.find({
+        is_Lab_Staff: 1,
+        is_varified: { $in: [0, 1] },
+      });
+    }
+    res.render("manager/staffs", { users, q });
+  } catch (error) {
+    console.log(error.message);
+  }
+},
+
+loadEditStaff : async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    res.render("manager/editStaff", { user });
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+
+ updateStaff : async (req, res) => {
+  const { id } = req.params;
+  const { name, email, mobile, is_varified } = req.body;
+  try {
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          name,
+          email,
+          mobile,
+          is_varified,
+        },
+      },
+      { new: true }
+    );
+    res.redirect("/manager/staffs");
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+
+
+ManagerAddedStaff : async (req, res) => {
+  try {
+    res.render("manager/createStaff", { error: null, message: null });
+  } catch (error) {
+    console.log(error.message);
+  }
+},
+
+
+
+ createStaff : async (req, res) => {
+  const { name, email, password, mobile,  } = req.body;
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  try {
+    if (!email)
+      return res.render("manager/createStaff", { error: "Email is required" });
+    if (!emailRegex.test(email))
+      return res.render("manager/user_new", {
+        error: "Email must be a valid email!",
+      });
+      if(password<6){
+        return res.render("manager/createStaff", {
+          message: null,
+          error: "password must be atleast 6 letters",
+        });
+      }
+    const isExists = await User.findOne({ email });
+    if (isExists)
+      return res.render("manager/createStaff", {
+        error: "User already exists",
+        message: null,
+      });
+      const secPassword = await securePassword(req.body.password);
+    const user = new User({
+      name,
+      email,
+      mobile,
+      password:secPassword,
+      is_Lab_Staff:1,
+      is_varified:1,
+    });
+    await user.save();
+    return res.redirect("/manager/staffs");
+  } catch (error) {
+    console.log(error.message);
+  }
+},
+
+
+searchStaff : async (req, res) => {
+  const { q } = req.body;
+  try {
+    let users;
+
+    if (q) {
+      users = await User.aggregate([
+        {
+          $match: {
+            name: { $regex: ".*" + q + ".*" }
+          }
+        },
+        {
+          $lookup: {
+            from: "medicines",
+            localField: "Medicines.medicine",
+            foreignField: "_id",
+            as: "Medicines.medicine"
+          }
+        }
+      ]);
+    } else {
+      users = await User.aggregate([
+        {
+          $lookup: {
+            from: "medicines",
+            localField: "Medicines.medicine",
+            foreignField: "_id",
+            as: "Medicines.medicine"
+          }
+        }
+      ]);
+    }
+
+    res.render("manager/staffs", { users, message: null, error: null });
+  } catch (error) {
+    console.log(error.message);
+  }
+},
+
+
+stafftoggleVerification : async (req, res) => {
+  const userId = req.params.id;
+  const { is_verified } = req.body;
+
+  try {
+    const staff = await User.findById(userId);
+    if (!staff) {
+      return res.status(404).json({ message: 'Volunteer not found' });
+    }
+
+    staff.is_varified = is_verified === '0' ? false : true;
+    await staff.save();
+
+    res.redirect('/manager/staffs'); 
+  } catch (error) {
+    console.error('Error toggling verification:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+},
+
 
 // ===============================< Patient Management >================================//
 
@@ -369,7 +543,7 @@ ViewPatientsList: async (req, res) => {
       },
     ]);
 
-    res.render("admin/patients", {
+    res.render("manager/patients", {
       patients,
       error: null,
       message: null,
@@ -414,194 +588,57 @@ searchPatient : async (req, res) => {
       ]);
     }
 
-    res.render("admin/patients", { patients, message: null, error: null });
+    res.render("manager/patients", { patients, message: null, error: null });
   } catch (error) {
     console.log(error.message);
   }
 },
 
 
-
-// ===============================< L-Staff Management >================================//
-
+// ===============================<Visitor Management >================================//
 
 
-ViewLabStaff: async (req, res) => {
+ViewVisitors: async (req, res) => {
   const { q } = req.query;
   try {
     let users;
     if (q && q.length > 0) {
-      users = await User.find({
+      users = await visitors.find({
         name: { $regex: ".*" + q + ".*" },
-        is_Lab_Staff: 1,
-        is_varified: { $in: [0, 1] },
+        is_visitor:1
       });
     } else {
-      users = await User.find({
-        is_Lab_Staff: 1,
-        is_varified: { $in: [0, 1] },
+      users = await visitors.find({
+        is_visitor:1
       });
     }
-    res.render("admin/staffs", { users, q });
+    res.render("manager/visitors", { users, q });
   } catch (error) {
     console.log(error.message);
-  }
-},
-
-loadEditStaff : async (req, res) => {
-  const { id } = req.params;
-  try {
-    const user = await User.findById(id);
-    res.render("admin/editStaff", { user });
-  } catch (error) {
-    console.log(error);
+    res.status(500).send("Internal Server Error");
   }
 },
 
 
- updateStaff : async (req, res) => {
-  const { id } = req.params;
-  const { name, email, mobile, is_varified } = req.body;
+getVisitorFeedback:async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(
-      id,
-      {
-        $set: {
-          name,
-          email,
-          mobile,
-          is_varified,
-        },
-      },
-      { new: true }
-    );
-    res.redirect("/admin/staffs");
+      const visitorId = req.params.id;
+
+      const visitor = await visitors.findById(visitorId);
+   
+
+      if (!visitor) {
+          return res.status(404).json({ message: 'Visitor not found' });     
+      }   
+
+      const latestFeedback = await Feedback.findOne({ userId: visitorId })  
+          .sort({ createdAt: -1 }) 
+          .populate('userId', 'name'); 
+
+      res.render("manager/feedbackDisplay",{ userFeedback:latestFeedback,user:visitor });
   } catch (error) {
-    console.log(error);
-  }
-},
-
-
- deleteStaff : async (req, res) => {
-  const { id } = req.params
-  try {
-    const user = await User.findOneAndDelete({ _id: id });
-    if (req.session.LaboratoryStaff_session === user._id) {
-      req.session.destroy();
-    }
-    return res.redirect("/admin/staffs");
-  } catch (error) {
-    console.log(error.message);
-  }
-},
-
-AdminAddedStaff : async (req, res) => {
-  try {
-    res.render("admin/createStaff", { error: null, message: null });
-  } catch (error) {
-    console.log(error.message);
-  }
-},
-
-
-
- createStaff : async (req, res) => {
-  const { name, email, password, mobile,  } = req.body;
-  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  try {
-    if (!email)
-      return res.render("admin/createStaff", { error: "Email is required" });
-    if (!emailRegex.test(email))
-      return res.render("admin/user_new", {
-        error: "Email must be a valid email!",
-      });
-      if(password<6){
-        return res.render("admin/createStaff", {
-          message: null,
-          error: "password must be atleast 6 letters",
-        });
-      }
-    const isExists = await User.findOne({ email });
-    if (isExists)
-      return res.render("admin/createStaff", {
-        error: "User already exists",
-        message: null,
-      });
-      const secPassword = await securePassword(req.body.password);
-    const user = new User({
-      name,
-      email,
-      mobile,
-      password:secPassword,
-      is_Lab_Staff:1,
-      is_varified:1,
-    });
-    await user.save();
-    return res.redirect("/admin/staffs");
-  } catch (error) {
-    console.log(error.message);
-  }
-},
-
-
-searchStaff : async (req, res) => {
-  const { q } = req.body;
-  try {
-    let users;
-
-    if (q) {
-      users = await User.aggregate([
-        {
-          $match: {
-            name: { $regex: ".*" + q + ".*" }
-          }
-        },
-        {
-          $lookup: {
-            from: "medicines",
-            localField: "Medicines.medicine",
-            foreignField: "_id",
-            as: "Medicines.medicine"
-          }
-        }
-      ]);
-    } else {
-      users = await User.aggregate([
-        {
-          $lookup: {
-            from: "medicines",
-            localField: "Medicines.medicine",
-            foreignField: "_id",
-            as: "Medicines.medicine"
-          }
-        }
-      ]);
-    }
-
-    res.render("admin/staffs", { users, message: null, error: null });
-  } catch (error) {
-    console.log(error.message);
-  }
-},
-
-
-stafftoggleVerification : async (req, res) => {
-  const userId = req.params.id;
-  const { is_verified } = req.body;
-
-  try {
-    const staff = await User.findById(userId);
-    if (!staff) {
-      return res.status(404).json({ message: 'Volunteer not found' });
-    }
-
-    staff.is_varified = is_verified === '0' ? false : true;
-    await staff.save();
-
-    res.redirect('/admin/staffs'); 
-  } catch (error) {
-    console.error('Error toggling verification:', error);
-    res.status(500).json({ message: 'Internal server error' });
+      console.error(error);
+      res.status(500).json({ message: 'Server Error' });
   }
 },
 
@@ -612,7 +649,7 @@ stafftoggleVerification : async (req, res) => {
 getMedicines : async (req, res) => {
   try {
     const medicines = await Medicine.find();
-    res.render("admin/medicines", {
+    res.render("manager/medicines", {
       medicines,
       message: null,
       error: null,
@@ -633,7 +670,7 @@ distributeMedicines : async (req, res) => {
 
     if (!patient) {
       req.flash("error", "patient not found");
-      res.redirect("/patientMedicines");
+      res.redirect("/manager/patientMedicines");
     }
 
     const countNumber = parseInt(count, 10);
@@ -644,11 +681,11 @@ distributeMedicines : async (req, res) => {
     }
     if (countNumber > selectedMedicine.stock) {
       req.flash("error", "please enter a count less than stock");
-      return res.redirect(`/patientMedicines/${patientId}`);
+      return res.redirect(`/manager/patientMedicines/${patientId}`);
     }
     if (countNumber < 1) {
       req.flash("error", "Invalid medicine count");
-      return res.redirect(`/patientMedicines/${patientId}`);
+      return res.redirect(`/manager/patientMedicines/${patientId}`);
     }
     const medicineDetails = {
       medicine: medicineId,
@@ -681,7 +718,7 @@ distributeMedicines : async (req, res) => {
       "success",
       `${selectedMedicine.name} is disitributed successfully`
     );
-    res.redirect(`/patientMedicines/${patientId}`);
+    res.redirect(`/manager/patientMedicines/${patientId}`);
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -693,19 +730,67 @@ distributioHistory : async (req, res) => {
   try {
     const medicineDistributions = await MedicineDistribution.find().populate("patient")
   
-    res.render("admin/medicineHistory", { medicineDistributions });
+    res.render("manager/medicineHistory", { medicineDistributions });
   } catch (error) {
     console.log(error.message);
   }
 },
 
 
+// ===============================<Appointment>================================//
+
+
+displayLatestAppointments :async (req, res) => {
+  try {
+      const page = req.query.page || 1; 
+      const limit = 4; 
+
+      // Calculating the skip value based on the page number and limit
+      const skip = (page - 1) * limit;
+
+      const appointments = await Appointments.find()
+          .sort({ date: -1 })
+          .skip(skip)
+          .limit(limit);
+
+      const totalAppointments = await Appointments.countDocuments();
+
+      const totalPages = Math.ceil(totalAppointments / limit);
+
+      res.render('manager/latestAppointments', {
+          appointments: appointments,
+          totalAppointments:totalAppointments,
+          currentPage: parseInt(page),
+          totalPages: totalPages
+      });
+  } catch (error) {
+      console.error('Error fetching latest appointments:', error);
+      res.status(500).send('An error occurred while fetching latest appointments');
+  }
+},
+
+
+updateAppointmentApproval: async (req, res) => {
+  const appointmentId = req.params.id;
+  try {
+      const appointment = await Appointments.findById(appointmentId);
+      if (!appointment) {
+          return res.status(404).json({ message: 'Appointment not found' });
+      }
+
+      appointment.is_Approved = appointment.is_Approved === 1 ? 0 : 1;
+
+      await appointment.save();
+
+      res.status(200).json({ message: 'Appointment approval status updated successfully' });
+  } catch (error) {
+      console.error('Error updating appointment approval status:', error);
+      res.status(500).json({ message: 'An error occurred while updating appointment approval status' });
+  }
+},
 
 
 // ===============================< Attendance Management >================================//
-
-
-
 
 
 DoctorsList: async (req, res) => {
@@ -724,7 +809,7 @@ DoctorsList: async (req, res) => {
         is_varified: { $in:['0', '1'] }
       });
     }
-    res.render("admin/doctorAttendance", { users, q });
+    res.render("manager/doctorAttendance", { users, q });
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Internal Server Error");
@@ -757,7 +842,7 @@ getDoctorAttendanceHistory: async (req, res) => {
       currentAttendance = getAttendanceForTimeInterval(doctor.attendanceHistory, 'month');
     }
 
-    res.render('admin/attendanceHistory', { 
+    res.render('manager/attendanceHistory', { 
       doctor: doctor, 
       percentage: percentage,
       currentAttendance: currentAttendance,
@@ -788,7 +873,7 @@ StaffList: async (req, res) => {
         is_varified: { $in:['0', '1'] }
       });
     }
-    res.render("admin/staffAttendance", { users, q });
+    res.render("manager/staffAttendance", { users, q });
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Internal Server Error");
@@ -822,7 +907,7 @@ getStaffAttendanceHistory: async (req, res) => {
       currentAttendance = getAttendanceForTimeInterval(staff.attendanceHistory, 'month');
     }
 
-    res.render('admin/staffAttendanceHistory', { 
+    res.render('manager/staffAttendanceHistory', { 
       staff: staff, 
       percentage: percentage,
       currentAttendance: currentAttendance,
@@ -852,7 +937,7 @@ VolunteerList: async (req, res) => {
         is_varified: { $in:['0', '1'] }
       });
     }
-    res.render("admin/volunteerAttendance", { users, q });
+    res.render("manager/volunteerAttendance", { users, q });
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Internal Server Error");
@@ -885,7 +970,7 @@ getVolunteerAttendanceHistory: async (req, res) => {
       currentAttendance = getAttendanceForTimeInterval(volunteer.attendanceHistory, 'month');
     }
 
-    res.render('admin/volunteerAttendanceHistory', { 
+    res.render('manager/volunteerAttendanceHistory', { 
       volunteer: volunteer, 
       percentage: percentage,
       currentAttendance: currentAttendance,
@@ -897,187 +982,11 @@ getVolunteerAttendanceHistory: async (req, res) => {
   }},
 
 
-// ===============================<Visitor Management >================================//
-
-
-  ViewVisitors: async (req, res) => {
-    const { q } = req.query;
-    try {
-      let users;
-      if (q && q.length > 0) {
-        users = await visitors.find({
-          name: { $regex: ".*" + q + ".*" },
-          is_visitor:1
-        });
-      } else {
-        users = await visitors.find({
-          is_visitor:1
-        });
-      }
-      res.render("admin/visitors", { users, q });
-    } catch (error) {
-      console.log(error.message);
-      res.status(500).send("Internal Server Error");
-    }
-  },
-
-  
-  getVisitorFeedback:async (req, res) => {
-    try {
-        const visitorId = req.params.id;
-
-        const visitor = await visitors.findById(visitorId);
-     
-
-        if (!visitor) {
-            return res.status(404).json({ message: 'Visitor not found' });     
-        }   
-
-        const latestFeedback = await Feedback.findOne({ userId: visitorId })  
-            .sort({ createdAt: -1 }) 
-            .populate('userId', 'name'); 
-
-        res.render("admin/feedbackDisplay",{ userFeedback:latestFeedback,user:visitor });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server Error' });
-    }
-},
-
-
-// ===============================<Appointment>================================//
-
-
-displayLatestAppointments :async (req, res) => {
-  try {
-      const page = req.query.page || 1; 
-      const limit = 4; 
-
-      // Calculate the skip value based on the page number and limit
-      const skip = (page - 1) * limit;
-
-      // Fetch latest appointments with pagination from the database
-      const appointments = await Appointments.find()
-          .sort({ date: -1 })
-          .skip(skip)
-          .limit(limit);
-
-      // Count total number of appointments 
-      const totalAppointments = await Appointments.countDocuments();
-
-      // Calculate total number of pages
-      const totalPages = Math.ceil(totalAppointments / limit);
-
-      // Render the view with appointments and pagination data
-      res.render('admin/latestAppointments', {
-          appointments: appointments,
-          totalAppointments:totalAppointments,
-          currentPage: parseInt(page),
-          totalPages: totalPages
-      });
-  } catch (error) {
-      console.error('Error fetching latest appointments:', error);
-      // Render an error page or return an error response
-      res.status(500).send('An error occurred while fetching latest appointments');
-  }
-},
-
-
-updateAppointmentApproval: async (req, res) => {
-  const appointmentId = req.params.id;
-  try {
-      // Find the appointment by ID
-      const appointment = await Appointments.findById(appointmentId);
-      if (!appointment) {
-          return res.status(404).json({ message: 'Appointment not found' });
-      }
-
-      // Toggle the is_Approved value
-      appointment.is_Approved = appointment.is_Approved === 1 ? 0 : 1;
-
-      // Save the updated appointment
-      await appointment.save();
-
-      // Send a success response
-      res.status(200).json({ message: 'Appointment approval status updated successfully' });
-  } catch (error) {
-      console.error('Error updating appointment approval status:', error);
-      res.status(500).json({ message: 'An error occurred while updating appointment approval status' });
-  }
-},
-
-
-// ===============================< Manager >================================//
-
-
-
-Viewmanager : async (req, res) => {
-  const { q } = req.query;
-  try {
-    let users;
-    if (q && q.length > 0) {
-      users = await Manager.find({
-        name: { $regex: ".*" + q + ".*" },
-        is_manager:1
-      });
-    } else {
-      users = await Manager.find({
-        is_manager:1,
-      });
-    }
-    res.render("admin/manager", { users, q });
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).send("Internal Server Error");
-  }
-},
-
-AddManager : async (req, res) => {
-  try {
-    res.render("admin/createManager", { error: null, message: null });
-  } catch (error) {
-    console.log(error.message);
-  }
-},
-
-
- createManager : async (req, res) => {
-  const { name, email, password, mobile, is_manager } = req.body;
-  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  try {
-    if (!email)
-      return res.render("admin/createManager", { error: "Email is required" });
-    if (!emailRegex.test(email))
-      return res.render("admin/user_new", {
-        error: "Email must be a valid email!",
-      });
-      if(password<6){
-        return res.render("admin/createManager", {
-          message: null,
-          error: "password must be atleast 6 letters",
-        });
-      }
-    const isExists = await Manager.findOne({ email });
-    if (isExists)
-      return res.render("admin/createManager", {
-        error: "User already exists",
-        message: null,
-      });
-      const secPassword = await securePassword(req.body.password);
-    const user = new Manager({
-      name,
-      email,
-      mobile,
-      password:secPassword,
-      is_manager,
-    });
-    await user.save();
-    return res.redirect("/admin/dashboard");
-  } catch (error) {
-    console.log(error.message);
-  }
-},
-
-
 
 }
+
+
+
+
+
+

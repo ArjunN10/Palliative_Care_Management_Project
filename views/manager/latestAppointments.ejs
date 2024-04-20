@@ -1,16 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<%- include('../layouts/header.ejs') %>
+
 
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Latest Appointments</title>
+    <title> Latest Appointments</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-image: url("/images/hero-bg.png");
+           background-repeat: no-repeat;
+           background-size: cover;
             margin: 0;
             padding: 20px;
             background-color: #f7f7f7;
@@ -50,6 +51,7 @@
 
         .appointment-details {
             margin-bottom: 10px;
+            
         }
 
         .appointment-number {
@@ -68,6 +70,8 @@
         .pagination ul {
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
         }
 
         .pagination li {
@@ -85,17 +89,18 @@
 
         .pagination li a:hover {
             background-color: #0056b3;
+          
         }
         .tick-icon {
             display: inline-block;
             cursor: pointer;
-            width: 24px; /* Adjust size as needed */
-            height: 24px; /* Adjust size as needed */
-            padding-top: 2px; /* Space between circle and tick */
+            width: 20px; 
+            height: 20px; 
+            /* padding-top: 0px;  */
             padding-left: 3px;
             padding-bottom: 3px;
-            border: 2px solid black; /* Outline color */
-            border-radius: 50%; /* Rounded corners for circle */
+            border: 2px solid black;
+            border-radius: 50%; 
         }
 
         .green-bg {
@@ -108,9 +113,9 @@
 <body>
     <div class="container">
         <div style="display: flex;">
-            <a href="/admin/dashboard" class=" btn " style="text-decoration: none;color: #333;margin-top: 20px;">&#9664; Back</a>
-            <h1 style="margin-left: 100px;">Latest Appointments</h1>
+            <a href="/manager/dashboard" class=" btn " style="text-decoration: none;color: #333;margin-top: 20px;">&#9664; Back</a>
         </div>
+        <h1 style="margin-left: 50px;">Latest Appointments</h1>
         <br />
         <div class="total-appointments">
             <b>Total Appointments: <%= totalAppointments %></b>
@@ -123,7 +128,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div class="appointment-number">Appointment <%= index + 1 %></div>
                 <div style="display: flex; align-items: center;">
-                    <h6 class="approve-text">Approved</h6>
+                    <h5 class="approve-text" style="padding-right: 5px;">Approved</h5>
                     <div class="tick-icon <%= isApproved ? 'green-bg' : '' %>" onclick="toggleTickColor(this, '<%= appointment._id %>')">
                         &#10004; <!-- Tick symbol -->
                     </div>
@@ -149,7 +154,7 @@
             <ul>
                 <% for (let i = 1; i <= totalPages; i++) { %>
                 <li>
-                    <a href="/admin/latest-appointments?page=<%= i %>"><%= i %></a>
+                    <a href="/manager/latest-appointments?page=<%= i %>"><%= i %></a>
                 </li>
                 <% } %>
             </ul>
@@ -161,9 +166,7 @@
     <script>
         function toggleTickColor(element, appointmentId) {
             element.classList.toggle('green-bg');
-            $.post(`/admin/approve-appointment/${appointmentId}`);
+            $.post(`/manager/approve-appointment/${appointmentId}`);
         }
     </script>
-</body>
 
-</html>

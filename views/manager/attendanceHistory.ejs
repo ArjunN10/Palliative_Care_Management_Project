@@ -1,0 +1,44 @@
+<%- include('../layouts/header.ejs') %>
+
+<div class="container">
+  <h1 class="mt-4">Attendance History of <%= doctor.name %></h1>
+  <p>Total Attendance Percentage: <%= percentage.toFixed(2) %>%</p>
+    <!-- Button to go back to attendance/doctors page -->
+    <a href="/manager/attendance/doctors" class="btn btn-secondary mb-4">
+        Back to Doctors
+      </a>
+
+  <!-- Form to select time interval -->
+  <form action="/manager/attendance/doctors/<%= doctor._id %>?interval=<%= interval %>" method="get" class="mb-4">
+    <div class="form-group">
+      <label for="interval">Select Interval:</label>
+      <select name="interval" id="interval" class="form-control">
+        <!-- <option value="week" <%= interval === 'week' ? 'selected' : '' %>><B></B>Weekly</option> -->
+        <option value="month" <%= interval === 'month' ? 'selected' : '' %>><B></B>Monthly</option>
+        <option value="year" <%= interval === 'year' ? 'selected' : '' %>><B></B>Yearly</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Show Attendance</button>
+  </form>
+
+
+  <!-- Table to display attendance history -->
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% currentAttendance.forEach(record => { %>
+        <tr>
+          <td><%= record.date.toLocaleDateString() %></td>
+          <td><%= record.status %></td>
+        </tr>
+     <% }); %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../layouts/footer.ejs') %>

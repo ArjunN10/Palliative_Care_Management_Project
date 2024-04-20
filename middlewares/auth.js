@@ -123,8 +123,6 @@ loggedOutVisitor :(req,res,next) => {
 },
 
 
-
-
 isVisitorVerified: async (req, res, next) => {
     try {
         if (req.user && req.user._id) {
@@ -141,9 +139,28 @@ isVisitorVerified: async (req, res, next) => {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
     }
-}
+},
 
-    
+
+// ===============================< Manager >================================//
+   
+
+isManager :(req,res,next) => {
+    if(req.session.manager){ 
+        req.manager = req.session.manager
+        next()
+    }else {
+        res.redirect('/manager/login')
+    }
+},
+
+loggedOutManager :(req,res,next) => { 
+    if(!req.session.manager){
+        next()
+    }else {
+        res.redirect('/manager')
+    }
+},
 
 
 }
