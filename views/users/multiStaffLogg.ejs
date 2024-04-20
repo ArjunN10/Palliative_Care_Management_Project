@@ -1,0 +1,117 @@
+<%- include('../layouts/header.ejs') %>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        text-align: center;
+    }
+
+    .profile-image {
+        margin-bottom: 20px;
+    }
+
+    .profile-image img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
+
+    .btn-group {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-toggle {
+        font-size: 18px;
+        background-color: #343a40;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        padding: 15px 30px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .dropdown-toggle:hover {
+        background-color: #23272b;
+    }
+
+    .dropdown-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        background-color: #ffffff;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        min-width: 200px;
+        display: none; /* Hide dropdown menu by default */
+    }
+
+    .dropdown-toggle.active + .dropdown-menu {
+        display: block; /* Show dropdown menu when active */
+    }
+
+    .dropdown-item {
+        display: block;
+        padding: 15px 30px;
+        font-size: 16px;
+        color: #212529;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+<body>
+    <div class="container">
+        <div class="profile-image">
+            <img src="/images/stafflogin1.jpg" alt="Profile Image">
+        </div>
+        <div>   
+            <div class="btn-group">
+                <button type="button" class="dropdown-toggle" onclick="toggleDropdown()">STAFF'S LOGIN</button>
+                <div class="dropdown-menu" style="text-align: center;">
+                    <button class="dropdown-item" >
+                        <a href="/manager/login" style="text-decoration: none;color: #343a40;">Manager</a>
+                    </button>
+                    <button class="dropdown-item">
+                        <a href="/doctor/login" style="text-decoration: none;color: #343a40;">Doctor</a>
+                    </button>
+                    <button class="dropdown-item">
+                        <a href="/volunteer/login" style="text-decoration: none;color: #343a40;">Volunteer</a>
+                    </button>
+                    <button class="dropdown-item">
+                        <a href="/staff/login" style="text-decoration: none;color: #343a40;">Lab Staff</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDropdown() {
+            var dropdownMenu = document.querySelector('.dropdown-menu');
+            var dropdownToggle = document.querySelector('.dropdown-toggle');
+            dropdownMenu.classList.toggle('active');
+            dropdownToggle.classList.toggle('active');
+        }
+    </script>
+</body>
+
+<%- include('../layouts/footer.ejs') %>

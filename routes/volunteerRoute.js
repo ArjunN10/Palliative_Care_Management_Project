@@ -15,7 +15,6 @@ user_route
 
     // ===============================< Login >================================//
 
-
 .get('/login',isLogout,TrycatchMiddleware( userController.loadLogin))
 .post('/login',isLogout,TrycatchMiddleware( userController.validLogin))
 
@@ -49,6 +48,9 @@ user_route
 .get("/markAttendence",isLogged,isVolunteerVerified,TrycatchMiddleware(userController.getAttendence)) 
 .post ("/markAttendence",isLogged,isVolunteerVerified,TrycatchMiddleware(userController.MarkAttendence))
 .get("/attendanceDisplay",isLogged,isVolunteerVerified,TrycatchMiddleware(userController.renderAttendenceDisplay))
+
+    // ===============================< Staff loggs >================================//
+.get("/staffs-login",TrycatchMiddleware(userController.MultiStaffLogg))
 
 module.exports = user_route;
 
