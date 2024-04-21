@@ -329,7 +329,7 @@ console.log(transporter)
       subject: process.env.EMAIL_SUBJECT,
       text: emailContent
   });
-  console.log(mailler,'lllllllllllllllllllllllllll')
+  // console.log(mailler,'lllllllllllllllllllllllllll')
   patient.test_result.push(newTest._id);
   await patient.save();
   res.redirect("/staff/result")
