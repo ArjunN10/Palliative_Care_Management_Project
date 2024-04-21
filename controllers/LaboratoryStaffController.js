@@ -197,7 +197,7 @@ const getAttendence = async (req,res) => {
 const MarkAttendence = async (req,res) => {
   const { status , role } = req.body
   
-  
+ 
   const sdate = new Date();
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   const dates = sdate.toLocaleDateString('en-US', options);

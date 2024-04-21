@@ -983,9 +983,129 @@ getVolunteerAttendanceHistory: async (req, res) => {
     res.status(500).send("Internal Server Error");
   }},
 
+  // ===============================< Mark attendance >================================//
+
+  loadAttendence : async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const user = await User.findById(id)
+      console.log(user)
+      res.render("manager/DocattendanceForm" ,{user});
+    } catch (error) {
+      console.log(error);
+    }
+  },                
+
+  DoctorMarkAttendence : async (req,res) => {
+    const { status , role } = req.body
+    const { id } = req.params;
+    console.log(id)
+    
+   
+    const sdate = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const dates = sdate.toLocaleDateString('en-US', options);
+  
+    const existingAttendance = await Attendance.findOne({
+      userId:id,
+      date : dates
+  });
+  console.log(existingAttendance)
+    if (existingAttendance) {
+      return res.status(400).json({ error: "Attendance already marked for today" });
+    }
+  
+    
+    const attendence = new Attendance ({ userId:id,status,date:dates,role})
+    await attendence.save()
+  
+    res.redirect("/manager/dashboard")
+  },
+
+  loadStaffAttendence : async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const user = await User.findById(id)
+      console.log(user)
+      res.render("manager/StaffattendanceForm" ,{user});
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  StaffMarkAttendence : async (req,res) => {
+    const { status , role } = req.body
+    const { id } = req.params;
+    console.log(id)
+    
+   
+    const sdate = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const dates = sdate.toLocaleDateString('en-US', options);
+  
+    const existingAttendance = await Attendance.findOne({
+      userId:id,
+      date : dates
+  });
+  console.log(existingAttendance)
+    if (existingAttendance) {
+      return res.status(400).json({ error: "Attendance already marked for today" });
+    }
+  
+    
+    const attendence = new Attendance ({ userId:id,status,date:dates,role})
+    await attendence.save()
+    console.log(attendence)
+  
+    res.redirect("/manager/dashboard")
+  },
+
+  loadVolunteerAttendence : async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const user = await User.findById(id)
+      console.log(user)
+      res.render("manager/VolunteerattendanceForm" ,{user});
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  VoluteerMarkAttendence : async (req,res) => {
+    const { status , role } = req.body
+    const { id } = req.params;
+    console.log(id)
+    
+   
+    const sdate = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const dates = sdate.toLocaleDateString('en-US', options);
+  
+    const existingAttendance = await Attendance.findOne({
+      userId:id,
+      date : dates
+  });
+  console.log(existingAttendance)
+    if (existingAttendance) {
+      return res.status(400).json({ error: "Attendance already marked for today" });
+    }
+  
+    
+    const attendence = new Attendance ({ userId:id,status,date:dates,role})
+    await attendence.save()
+    console.log(attendence)
+  
+    res.redirect("/manager/dashboard")
+  }
+
+
 
 
 }
+
 
 
 
