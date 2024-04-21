@@ -114,7 +114,7 @@ validLogin: async (req, res) => {
       req.session.volunteer = user._id;
       return res.redirect("/volunteer")
     } else {
-      return res.redirect("/volunteer/login?error=" + encodeURIComponent("You are not a verified Doctor"));
+      return res.redirect("/volunteer/login?error=" + encodeURIComponent("You are not a verified Volunteer"));
     }
   } catch (error) {
     console.log(error.message);
