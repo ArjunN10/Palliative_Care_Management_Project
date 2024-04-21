@@ -1,59 +1,88 @@
 <%- include('../layouts/header.ejs') %>
-
+   
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" style="font-style: italic;" href="/admin/dashboard">ADMIN DASHBOARD</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle ms-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                More
-            </a>
-            <ul class="dropdown-menu" style="background-color:ghostwhite;border-radius: 5%;border-style: double;">
-              <li><a class="dropdown-item" href="/admin/patients">Patient's</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/doctors">Doctor's</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/staffs">Laboratory Staffs</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/medicines">Medicines</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/distributionHistory">Medicine Distributions</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/attendance/doctors">Doctor Attendance </a></li>
-              <li><hr class="dropdown-divider"></li>
+  <div class="container-fluid">
+    <a class="navbar-brand" style="font-style: italic;" href="/admin/dashboard">ADMIN DASHBOARD</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-underline">
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/patients">Patient's</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/medicines">Medicines</a>
+        </li>
 
-              <li><a class="dropdown-item" href="/admin/attendance/staffs">Staff Attendance </a></li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/distributionHistory">Medicine Distributions</a>
+        </li>
 
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/attendance/volunteers">Volunteer Attendance </a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/visitors">Visitor's </a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/latest-appointments">Appointments </a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/admin/manager">Manager </a></li>
-            
-            </ul>
-          </li>
-        </ul>
-          </li>
-        </ul>
-        <form action="/admin/searchPatients" method="post">
-            <div class="d-flex">
-                <input type="search" name="q" placeholder="Search Patient" class="form-control rounded-pill" />
-                <button type="submit" class="btn btn-success rounded-pill ms-2">Search</button>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Staff
+          </button>
+          <ul class="dropdown-menu">
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/manager">Manager </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/doctors">Doctor's</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/staffs">Laboratory Staffs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/dashboard">Volunteers</a>
+            </li>
+          </ul>
+        </div>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Attendance
+              </button>
+              <ul class="dropdown-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="/admin/attendance/doctors">Doctor Attendance </a>
+                </li>
+    
+                <li class="nav-item">
+                  <a class="nav-link" href="/admin/attendance/staffs">Staff Attendance </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/admin/attendance/volunteers">Volunteer Attendance </a>
+                </li>
+    
+              </ul>
             </div>
-        </form>
-      </div>
+
+
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/visitors">Visitor's </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/admin/latest-appointments">Appointments </a>
+            </li>
+
+
+          </ul>
+          <form action="/admin/logout" method="post" >
+            <button type="submit" class="btn btn-danger rounded-pill ms-2 me-3">Logout</button>
+          </form>
     </div>
-    <form action="/admin/logout" method="post" class="btn btn-danger rounded-pill me-5 ms-1">
-      <button type="submit" class="dropdown-item p-0">Logout</button>
-    </form>
+    </div>
   </nav>
+
+
+    <div class="d-flex justify-content-end mt-2 align-items-center"> 
+      <form action="/admin/searchPatients" method="post" class="d-flex">
+        <input type="search" name="q" placeholder="Search Patient" class="form-control rounded-pill me-2" style="min-width: 200px;" />
+        <button type="submit" class="btn btn-success rounded-pill me-4">Search</button>
+      </form>
+    </div>
+      
 
 <div class="container mt-4">
   <h2 style="font-style: oblique;">PATIENTS LIST</h2>
