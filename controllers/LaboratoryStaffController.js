@@ -77,40 +77,36 @@ const searchPatient = async (req, res) => {
     let patients;
 
     if (q) {
-      patients = await Patient.aggregate([
+      patients = await LPatient.aggregate([
         {
           $match: {
             name: { $regex: ".*" + q + ".*" }
           }
         },
-        {
-          $lookup: {
-            from: "medicines",
-            localField: "Medicines.medicine",
-            foreignField: "_id",
-            as: "Medicines.medicine"
-          }
-        }
+        
       ]);
-    } else {
-      patients = await Patient.aggregate([
-        {
-          $lookup: {
-            from: "medicines",
-            localField: "Medicines.medicine",
-            foreignField: "_id",
-            as: "Medicines.medicine"
-          }
-        }
-      ]);
-    }
+    } 
 
     res.render("staff/dashboard", { patients, message: null, error: null });
   
 };
 
 const AddPatient = async (req,res) => {
-  let {name, mobile, disease, DoctorName} = req.body
+  let {name,email, mobile, disease, DoctorName} = req.body
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  if (!email)
+      return res.render("doctor/createUser", { error: "Email is required" });
+    if (!emailRegex.test(email))
+      return res.render("staff/addPatient", {
+        error: "Email must be a valid email!",
+      });
+     
+      const isExists = await LPatient.findOne({ email });
+    if (isExists)
+      return res.render("doctor/createUser", {
+        error: "User already exists",
+        message: null,
+      });
   
     function generateRandomID(length) {
       const charset = "0123456789";
@@ -129,6 +125,7 @@ const AddPatient = async (req,res) => {
       RegNo : generateRandomID(5) ,
       name,
       disease,
+      email,
       mobile,
       DoctorName,
       addingDate : Date.now()
@@ -141,23 +138,7 @@ const AddPatient = async (req,res) => {
 
 }; 
 
-const editPatient  = async (req, res) => {
-  const { id } = req.params;
-  
-    const patient = await LPatient.findById(id);
-    console.log(patient,'lllll')
 
-
-    
-
-   res.render("staff/editPatient", {
-      patient,
-      error: null,
-      message: null,
-    })
-    
-       
-}; 
 
 const updatePatient = async (req,res) => {
   
@@ -286,10 +267,11 @@ const getTestResult = async (req,res) => {
 }
 
 const uploadImage = async (req,res) => {
-  const { patientId, name,email, disease, test_result } = req.body;
+  const { name,email, disease, test_result } = req.body;
   const userId = req.session.LaboratoryStaff;
+  const { id } = req.params;
 
-  const patient = await LPatient.findById(patientId)
+  const patient = await LPatient.findById(id)
   if (!patient) {
     return res.status(404).json({ error: "Patient not found" });
   }
@@ -303,7 +285,7 @@ const uploadImage = async (req,res) => {
 console.log(transporter)
   const newTest = new Test({
     userId ,
-    patient : patientId,
+    patient : id,
     name,
     email,
     disease,
@@ -355,6 +337,20 @@ const logoutStaff = async (req, res) => {
 
 
 
+const loadtest = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await LPatient.findById(id)
+    console.log(user)
+    res.render("staff/testUpload" ,{user});
+  } catch (error) {
+    console.log(error);
+  }
+} 
+
+
+
 
 
 
@@ -371,7 +367,6 @@ module.exports = {
   AddPatient,
   getPatientsList,
   searchPatient,
-  editPatient,
   updatePatient,
   getAttendence,
   MarkAttendence,
@@ -379,10 +374,9 @@ module.exports = {
   uploadImage,
   getTestResult,
   getAllResult,
-  logoutStaff
+  logoutStaff,
+  loadtest
   
-
-
 }
 
 

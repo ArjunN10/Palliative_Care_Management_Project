@@ -22,11 +22,9 @@
         <li class="=nav-item">
           <a class="nav-link" href="/staff/attendanceDisplay">Attendence</a>
         </li>
-        <li class="=nav-item">
-          <a class="nav-link" href="/staff/testresult">Test result</a>
-        </li>
+      
         <li class="nav-item">
-          <a class="nav-link" href="/staff/result">Result management</a>
+          <a class="nav-link" href="/staff/result">Test Result History</a>
         </li>
             <!-- <li><hr class="dropdown-divider"></li> -->
         </ul>
@@ -57,10 +55,9 @@
                   <th>Reg.No</th>
                   <th>Name</th>
                   <th>Mobile</th>
-                  <th>Disease</th>
-                  <th>Doctor</th>
-                  <th>Medicines</th>
-                  <th>Added Date</th>
+                  <th>Email</th>
+
+                  <th>Test </th>
               </tr>
           </thead>
           <tbody>
@@ -69,13 +66,12 @@
                       <td><%= patient.RegNo %></td>
                       <td><%= patient.name %></td>
                       <td><%= patient.mobile %></td>
-                      <td><%= patient.disease %></td>
-                      <td><%= patient.DoctorName %></td>
+                      <td><%= patient.email %></td>
+
                      
                       
-                      <td><%= patient.addingDate.toDateString() %></td>
                       <td>
-                          <a href="/staff/dashboard/<%= patient._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
+                          <a href="/staff/form/<%= patient._id %>" class="btn btn-primary btn-sm rounded-pill">uplode test result</a>
                       </td>
                   </tr>
               <% }) %>
