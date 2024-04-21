@@ -3,6 +3,7 @@ const ManagerController=require('../controllers/managerController')
 const TrycatchMiddleware=require("../middlewares/TryCatch")
 const medicineController = require("../controllers/medicineController");
 const { loggedOutManager ,isManager} = require("../middlewares/auth");
+const managerController = require('../controllers/managerController');
 
 
 
@@ -39,7 +40,6 @@ router
 // ===============================< Staff Management >================================//
 
 .get("/staffs", isManager,TrycatchMiddleware(ManagerController.ViewLabStaff))
-
 .post("/createStaff", isManager,TrycatchMiddleware(ManagerController.createStaff))
 .get("/createStaff", isManager,TrycatchMiddleware(ManagerController.ManagerAddedStaff))
 .post("/searchStaff", isManager,TrycatchMiddleware(ManagerController.searchStaff))
@@ -88,6 +88,23 @@ router
 .get('/attendance/volunteers',isManager,TrycatchMiddleware(ManagerController.VolunteerList))  
 .get('/attendance/volunteers/:volunteerId', isManager, TrycatchMiddleware(ManagerController.getVolunteerAttendanceHistory))
 .get('/attendance/volunteers/:volunteerId/interval/:interval(week|month|year)', isManager, TrycatchMiddleware(ManagerController.getVolunteerAttendanceHistory))
+
+// ===============================< Mark Attendance >================================//
+
+//Marking doctor attendance
+.get ('/doctor/:id',isManager,TrycatchMiddleware(managerController.loadAttendence))
+.post('/doctor/:id' ,isManager,TrycatchMiddleware(ManagerController.DoctorMarkAttendence)) 
+
+//Marking Staff attendance
+.get ('/staff/:id',isManager,TrycatchMiddleware(managerController.loadStaffAttendence))
+.post('/staff/:id' ,isManager,TrycatchMiddleware(ManagerController.StaffMarkAttendence)) 
+
+//Marking Volunteer attendance
+.get ('/volunteers/:id',isManager,TrycatchMiddleware(managerController.loadVolunteerAttendence))
+.post('/volunteer/:id' ,isManager,TrycatchMiddleware(ManagerController.VoluteerMarkAttendence)) 
+
+
+
 
 
 

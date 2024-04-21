@@ -17,6 +17,8 @@
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/manager/doctors">Doctor's</a></li>
               <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/manager/dashboard">Volunteer</a></li>
+              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/manager/staffs">Laboratory Staffs</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/manager/medicines">Medicines</a></li>
@@ -63,6 +65,7 @@
                 <th>Doctor Verified</th>
                 <th>Actions</th>
                 <th>Edit</th>
+                <th>Mark attendance</th>
             </tr>
         </thead>
         <tbody>
@@ -93,7 +96,10 @@
                 <a href="/manager/doctors/<%= user._id %>/edit" class="btn btn-warning btn-sm rounded-pill">Edit</a>
               
             </td>
-            
+            <td>
+              <a href="/manager/doctor/<%= user._id %>" class="btn btn-primary btn-sm rounded-pill">Mark attendance</a>
+            </td>
+          
             </tr>
             <% }) %>
           </tbody>
