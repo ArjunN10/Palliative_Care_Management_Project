@@ -49,8 +49,8 @@
 
     <% result.forEach(patient => { %>
         <a href="mailto:<%= patient.email %>?subject=Report%20Request&body=Dear%20<%= patient.name %>,%0A%0AI hope this email finds you well.%0A%0AWe have completed the analysis of your test samples, and I am pleased to provide you with the results. Below, you will find the details:%0A%0A<%= patient.test_result[0].test_result %> (please copy the link)%0A%0AIf you have any questions or require further explanation regarding your test results, please do not hesitate to contact us. Our team is available to assist you.%0A%0ABest regards,%0Apariraksha%20palliative%20care"
-            style="text-decoration: none;color: #b8b4b4;" class="appointment-link">
-    <div>
+        style="text-decoration: none;color: #b8b4b4;" class="appointment-link">
+        <div>
         <p><strong>Name:</strong> <%= patient.name %></p>
         <p><strong>Mobile:</strong> <%= patient.mobile %></p>
         <p><strong>Disease:</strong> <%= patient.disease %></p>

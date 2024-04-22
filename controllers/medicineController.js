@@ -98,7 +98,7 @@ exports.deleteMedicine = async (req,res)=>{
 }
 
 
-exports.searchMedicine=async (req,res)=>{
+exports.searchMedicine=async (req,res)=> {
   const { q } = req.body
   try {
       let medicines;
