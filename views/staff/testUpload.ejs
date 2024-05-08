@@ -69,11 +69,10 @@
     </style>
 </head>
 <body>
-    <form action="/staff/upload-pdf" method="post" enctype="multipart/form-data">
+    <form action="/staff/upload-pdf/<%= user._id%>" method="post" enctype="multipart/form-data">
         <h1>Create Test Result</h1>
         
-        <label for="patientId">Patient ID:</label>
-        <input type="text" id="patientId" name="patientId" required>
+        
         
         <label for="name">Test Name:</label>
         <input type="text" id="name" name="name" required>

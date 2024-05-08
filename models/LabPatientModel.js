@@ -14,6 +14,10 @@ const LabpatientSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    required: true,
+  },
   disease: {
     type: String,
     required: true,
